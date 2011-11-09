@@ -16,7 +16,7 @@ public class StandardChannel implements Channel {
         this.name = name;
         this.nick = nick;
         this.distance = 0;
-        this.format = "";
+        this.format = "[#nick] #sender: #msg";
     }
 
     @Override
