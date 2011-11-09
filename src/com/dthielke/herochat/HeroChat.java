@@ -20,6 +20,11 @@ public class HeroChat extends JavaPlugin {
     private static final ChatterManager chttrMngr = new ChatterManager();
 
     @Override
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+        return cmdHndlr.dispatch(sender, label, args);
+    }
+
+    @Override
     public void onDisable() {
         log.info(getDescription().getName() + " version " + getDescription().getVersion() + " is disabled.");
     }
@@ -32,11 +37,6 @@ public class HeroChat extends JavaPlugin {
         registerEvents();
 
         setupDummyEnvironment();
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        return cmdHndlr.dispatch(sender, label, args);
     }
 
     private void registerCommands() {
@@ -60,16 +60,16 @@ public class HeroChat extends JavaPlugin {
         }
     }
 
-    public static CommandHandler getCommandHandler() {
-        return cmdHndlr;
-    }
-    
     public static ChannelManager getChannelManager() {
         return chnnlMngr;
     }
-    
+
     public static ChatterManager getChatterManager() {
         return chttrMngr;
+    }
+
+    public static CommandHandler getCommandHandler() {
+        return cmdHndlr;
     }
 
 }

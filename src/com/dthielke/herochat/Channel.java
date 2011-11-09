@@ -1,29 +1,41 @@
 package com.dthielke.herochat;
 
-import java.util.List;
+import java.util.Set;
 
 public interface Channel {
+
+    public boolean addMember(Chatter chatter);
+
+    public void addWorld(String world);
+
+    public int getDistance();
+
+    public Set<Chatter> getMembers();
 
     public String getName();
 
     public String getNick();
 
-    public int getDistance();
-    
-    public boolean addMember(Chatter chatter);
-    
-    public boolean removeMember(Chatter chatter);
+    public Set<String> getWorlds();
+
+    public boolean hasWorld(String world);
+
+    public boolean isLocal();
 
     public boolean isMember(Chatter chatter);
 
-    public boolean isBanned(Chatter chatter);
+    public boolean removeMember(Chatter chatter);
 
-    public boolean isMuted(Chatter chatter);
+    public void removeWorld(String world);
 
-    public void setBanned(Chatter chatter, boolean banned);
+    public void setDistance(int distance);
 
-    public void setMuted(Chatter chatter, boolean muted);
+    public void setName(String name);
 
-    public List<Chatter> getMembers();
+    public void setNick(String nick);
+
+    public String getFormat();
+
+    public void setFormat(String format);
 
 }

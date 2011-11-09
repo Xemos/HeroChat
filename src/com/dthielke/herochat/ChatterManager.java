@@ -12,19 +12,11 @@ public class ChatterManager {
     public boolean addChatter(Chatter chatter) {
         if (chatters.contains(chatter))
             return false;
-        
+
         chatters.add(chatter);
         return true;
     }
 
-    public boolean removeChatter(Chatter chatter) {
-        if (!chatters.contains(chatter))
-            return false;
-        
-        chatters.remove(chatter);
-        return true;
-    }
-    
     public Chatter getChatter(Player player) {
         for (Chatter chatter : chatters)
             if (player.equals(chatter.getPlayer()))
@@ -36,12 +28,20 @@ public class ChatterManager {
         for (Chatter chatter : chatters)
             if (identifier.equalsIgnoreCase(chatter.getName()))
                 return chatter;
-        
+
         return null;
     }
-    
+
     public List<Chatter> getChatters() {
         return chatters;
     }
-    
+
+    public boolean removeChatter(Chatter chatter) {
+        if (!chatters.contains(chatter))
+            return false;
+
+        chatters.remove(chatter);
+        return true;
+    }
+
 }

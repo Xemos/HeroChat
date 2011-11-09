@@ -1,16 +1,16 @@
 package com.dthielke.herochat;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
-
-import com.dthielke.herochat.StandardChannel.ChannelPermission;
 
 public class StandardChatter implements Chatter {
 
     private final Player player;
-    private List<Channel> channels = new ArrayList<Channel>();
+    private Set<Channel> channels = new HashSet<Channel>();
+    private Set<Channel> bans = new HashSet<Channel>();
+    private Set<Channel> mutes = new HashSet<Channel>();
     private Channel activeChannel;
 
     public StandardChatter(Player player) {
@@ -18,29 +18,43 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public List<Channel> getChannels() {
-        return channels;
+    public boolean addChannel(Channel channel) {
+        if (channels.contains(channel))
+            return false;
+
+        channels.add(channel);
+        if (!channel.isMember(this)) {
+            channel.addMember(this);
+        }
+
+        return true;
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
-    }
+    public Result canBan(Channel channel) {
+        if (!player.hasPermission(Permission.BAN.form(channel)))
+            return Result.NO_PERMISSION;
 
-    @Override
-    public String getName() {
-        return player.getName();
+        return Result.ALLOWED;
     }
 
     @Override
     public Result canJoin(Channel channel) {
         if (channel.isMember(this))
-            return Result.REDUNDANT;
+            return Result.INVALID;
 
-        if (!player.hasPermission(ChannelPermission.JOIN.form(channel)))
+        if (!player.hasPermission(Permission.JOIN.form(channel)))
             return Result.NO_PERMISSION;
 
-        if (channel.isBanned(this))
+        if (isBanned(channel))
+            return Result.BANNED;
+
+        return Result.ALLOWED;
+    }
+
+    @Override
+    public Result canKick(Channel channel) {
+        if (!player.hasPermission(Permission.KICK.form(channel)))
             return Result.NO_PERMISSION;
 
         return Result.ALLOWED;
@@ -49,9 +63,17 @@ public class StandardChatter implements Chatter {
     @Override
     public Result canLeave(Channel channel) {
         if (!channel.isMember(this))
-            return Result.REDUNDANT;
+            return Result.INVALID;
 
-        if (!player.hasPermission(ChannelPermission.LEAVE.form(channel)))
+        if (!player.hasPermission(Permission.LEAVE.form(channel)))
+            return Result.NO_PERMISSION;
+
+        return Result.ALLOWED;
+    }
+
+    @Override
+    public Result canMute(Channel channel) {
+        if (!player.hasPermission(Permission.MUTE.form(channel)))
             return Result.NO_PERMISSION;
 
         return Result.ALLOWED;
@@ -60,37 +82,13 @@ public class StandardChatter implements Chatter {
     @Override
     public Result canSpeak(Channel channel) {
         if (!channel.isMember(this))
+            return Result.INVALID;
+
+        if (!player.hasPermission(Permission.SPEAK.form(channel)))
             return Result.NO_PERMISSION;
 
-        if (!player.hasPermission(ChannelPermission.SPEAK.form(channel)))
-            return Result.NO_PERMISSION;
-
-        if (channel.isMuted(this))
-            return Result.NO_PERMISSION;
-
-        return Result.ALLOWED;
-    }
-
-    @Override
-    public Result canKick(Channel channel) {
-        if (!player.hasPermission(ChannelPermission.KICK.form(channel)))
-            return Result.NO_PERMISSION;
-
-        return Result.ALLOWED;
-    }
-
-    @Override
-    public Result canBan(Channel channel) {
-        if (!player.hasPermission(ChannelPermission.BAN.form(channel)))
-            return Result.NO_PERMISSION;
-
-        return Result.ALLOWED;
-    }
-
-    @Override
-    public Result canMute(Channel channel) {
-        if (!player.hasPermission(ChannelPermission.MUTE.form(channel)))
-            return Result.NO_PERMISSION;
+        if (isMuted(channel))
+            return Result.MUTED;
 
         return Result.ALLOWED;
     }
@@ -110,20 +108,53 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public Channel getActiveChannel() {
+        return activeChannel;
+    }
+
+    @Override
+    public Set<Channel> getBans() {
+        return bans;
+    }
+
+    @Override
+    public Set<Channel> getChannels() {
+        return channels;
+    }
+
+    @Override
+    public Set<Channel> getMutes() {
+        return mutes;
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
+
+    @Override
+    public boolean hasChannel(Channel channel) {
+        return channels.contains(channel);
+    }
+
+    @Override
     public int hashCode() {
         return player.hashCode();
     }
 
     @Override
-    public boolean addChannel(Channel channel) {
-        if (channels.contains(channel))
-            return false;
+    public boolean isBanned(Channel channel) {
+        return bans.contains(channel);
+    }
 
-        channels.add(channel);
-        if (!channel.isMember(this))
-            channel.addMember(this);
-        
-        return true;
+    @Override
+    public boolean isMuted(Channel channel) {
+        return mutes.contains(channel);
     }
 
     @Override
@@ -132,20 +163,11 @@ public class StandardChatter implements Chatter {
             return false;
 
         channels.remove(channel);
-        if (channel.isMember(this))
+        if (channel.isMember(this)) {
             channel.removeMember(this);
-        
-        return true;
-    }
-    
-    @Override
-    public boolean hasChannel(Channel channel) {
-        return channels.contains(channel);
-    }
+        }
 
-    @Override
-    public Channel getActiveChannel() {
-        return activeChannel;
+        return true;
     }
 
     @Override
@@ -155,6 +177,37 @@ public class StandardChatter implements Chatter {
 
         activeChannel = channel;
         return true;
+    }
+
+    @Override
+    public void setBanned(Channel channel, boolean banned) {
+        if (banned) {
+            if (!bans.contains(channel)) {
+                bans.add(channel);
+            }
+        } else {
+            if (bans.contains(channel)) {
+                bans.remove(channel);
+            }
+        }
+    }
+
+    @Override
+    public void setMuted(Channel channel, boolean muted) {
+        if (muted) {
+            if (!mutes.contains(channel)) {
+                mutes.add(channel);
+            }
+        } else {
+            if (mutes.contains(channel)) {
+                mutes.remove(channel);
+            }
+        }
+    }
+
+    @Override
+    public boolean isInRange(Chatter other, int distance) {
+        return player.getLocation().distanceSquared(other.getPlayer().getLocation()) <= distance;
     }
 
 }
