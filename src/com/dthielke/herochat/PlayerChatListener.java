@@ -10,7 +10,7 @@ public class PlayerChatListener extends PlayerListener {
         if (event.isCancelled())
             return;
         
-        MessageRouter.route(event);
+        MessageHandler.handle(event);
     }
 
 }

@@ -6,17 +6,39 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 
-public class MessageRouter {
+import com.dthielke.herochat.Chatter.Result;
+import com.dthielke.herochat.util.Messaging;
 
-    public static void route(PlayerChatEvent event) {
-        Chatter sender = HeroChat.getChatterManager().getChatter(event.getPlayer());
+public class MessageHandler {
+    
+    public static void handle(PlayerChatEvent event) {
+        Player player = event.getPlayer();
+        Chatter sender = HeroChat.getChatterManager().getChatter(player);
         if (sender == null) {
             throw new RuntimeException("Chatter (" + event.getPlayer().getName() + ") not found.");
         }
-
+        
         Channel channel = sender.getActiveChannel();
         if (channel == null) {
             throw new RuntimeException("Active channel for chatter (" + event.getPlayer().getName() + ") not found.");
+        }
+        
+        // see if the player can speak in the active channel
+        Result result = sender.canSpeak(channel);
+        switch(result) {
+            case INVALID:
+                Messaging.send(player, "You must join the channel before you can speak.");
+                break;
+            case MUTED:
+                Messaging.send(player, "You are muted.");
+                break;
+            case NO_PERMISSION:
+                Messaging.send(player, "You do not have permission.");
+                break;
+        }
+        if (result != Result.ALLOWED) {
+            event.setCancelled(true);
+            return;
         }
 
         // trim the recipient list
@@ -37,7 +59,6 @@ public class MessageRouter {
 
     public static void format(Channel channel, PlayerChatEvent event) {
         // default minecraft format is <%1$s> %2$s
-
         String format = channel.getFormat();
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
