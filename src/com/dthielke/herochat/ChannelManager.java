@@ -22,6 +22,10 @@ public class ChannelManager {
 
         return null;
     }
+    
+    public boolean hasChannel(String identifier) {
+        return getChannel(identifier) != null;
+    }
 
     public List<Channel> getChannels() {
         return channels;

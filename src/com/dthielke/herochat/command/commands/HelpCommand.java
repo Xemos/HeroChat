@@ -1,9 +1,5 @@
 /**
- * Copyright (C) 2011 DThielke <dave.thielke@gmail.com>
- * 
- * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/ or send a letter to
- * Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
+ * Copyright (C) 2011 David Thielke <dave.thielke@gmail.com>
  **/
 
 package com.dthielke.herochat.command.commands;
@@ -25,9 +21,9 @@ public class HelpCommand extends BasicCommand {
     public HelpCommand() {
         super("Help");
         setDescription("Displays the help menu");
-        setUsage("/hero help §8[page#]");
+        setUsage("/ch help §8[page#]");
         setArgumentRange(0, 1);
-        setIdentifiers("hero", "hero help");
+        setIdentifiers("ch", "ch help");
     }
 
     @Override
