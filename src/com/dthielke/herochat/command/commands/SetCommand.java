@@ -30,7 +30,7 @@ public class SetCommand extends BasicCommand {
 
         ChannelManager channelMngr = HeroChat.getChannelManager();
         Channel channel = channelMngr.getChannel(name);
-        if (name == null) {
+        if (channel == null) {
             Messaging.send(sender, "Channel not found.");
             return true;
         }
