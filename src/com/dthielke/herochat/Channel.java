@@ -2,6 +2,8 @@ package com.dthielke.herochat;
 
 import java.util.Set;
 
+import org.bukkit.World;
+
 public interface Channel {
 
     public boolean addMember(Chatter chatter);
@@ -19,6 +21,8 @@ public interface Channel {
     public Set<String> getWorlds();
 
     public boolean hasWorld(String world);
+    
+    public boolean hasWorld(World world);
 
     public boolean isLocal();
 

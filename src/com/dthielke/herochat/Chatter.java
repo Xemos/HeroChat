@@ -55,7 +55,8 @@ public interface Chatter {
         INVALID,
         BANNED,
         MUTED,
-        ALLOWED;
+        ALLOWED,
+        BAD_WORLD;
     }
     
     public enum Permission {

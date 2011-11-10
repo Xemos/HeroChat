@@ -35,6 +35,9 @@ public class MessageHandler {
             case NO_PERMISSION:
                 Messaging.send(player, "You do not have permission.");
                 break;
+            case BAD_WORLD:
+                Messaging.send(player, "Channel not available to this world.");
+                break;
         }
         if (result != Result.ALLOWED) {
             event.setCancelled(true);
@@ -49,6 +52,8 @@ public class MessageHandler {
             if (!intendedRecipients.contains(recipient)) {
                 iter.remove();
             } else if (channel.isLocal() && !sender.isInRange(recipient, channel.getDistance())) {
+                iter.remove();
+            } else if (!channel.hasWorld(recipient.getPlayer().getWorld())) {
                 iter.remove();
             }
         }

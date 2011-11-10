@@ -20,11 +20,11 @@ import com.dthielke.herochat.util.Messaging;
 public class LeaveCommand extends BasicCommand {
 
     public LeaveCommand() {
-        super("Join");
-        setDescription("Joins a channel");
-        setUsage("/ch join §8<channel>");
+        super("Leave");
+        setDescription("Leaves a channel");
+        setUsage("/ch leave §8<channel>");
         setArgumentRange(1, 1);
-        setIdentifiers("ch join");
+        setIdentifiers("ch leave");
     }
 
     @Override
@@ -40,22 +40,25 @@ public class LeaveCommand extends BasicCommand {
             return true;
         }
 
-        Chatter chatter = HeroChat.getChatterManager().getChatter(player);
-        Result result = chatter.canJoin(channel);
+        Chatter chatter = HeroChat.getChatterManager().getChatter(player);        
+        Result result = chatter.canLeave(channel);
         switch (result) {
             case INVALID:
-                Messaging.send(sender, "You are already in this channel.");
+                Messaging.send(sender, "You are not in this channel.");
                 return true;
             case NO_PERMISSION:
                 Messaging.send(sender, "Insufficient permission.");
                 return true;
-            case BANNED:
-                Messaging.send(sender, "You are banned from this channel.");
-                return true;
+        }
+        
+        int channelCount = chatter.getChannels().size();
+        if (channelCount == 1) {
+            Messaging.send(sender, "You must stay in at least one channel.");
+            return true;
         }
 
-        chatter.addChannel(channel);
-        PlayerChatEvent event = new PlayerChatEvent(player, "joined the channel.");
+        chatter.removeChannel(channel);
+        PlayerChatEvent event = new PlayerChatEvent(player, "left the channel.");
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         return true;

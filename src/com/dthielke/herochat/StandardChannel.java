@@ -3,6 +3,8 @@ package com.dthielke.herochat;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.World;
+
 public class StandardChannel implements Channel {
 
     private String name;
@@ -90,7 +92,12 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean hasWorld(String world) {
-        return worlds.contains(world);
+        return worlds.isEmpty() || worlds.contains(world);
+    }
+    
+    @Override
+    public boolean hasWorld(World world) {
+        return worlds.isEmpty() || worlds.contains(world.getName());
     }
 
     @Override
