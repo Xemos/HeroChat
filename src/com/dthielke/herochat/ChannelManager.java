@@ -12,6 +12,7 @@ public class ChannelManager {
 
     private List<Channel> channels = new ArrayList<Channel>();
     private Map<Chatter.Permission, Permission> wildcardPermissions = new EnumMap<Chatter.Permission, Permission>(Chatter.Permission.class);
+    private Channel defaultChannel;
 
     public ChannelManager() {
         registerChannelPermissions();
@@ -30,6 +31,11 @@ public class ChannelManager {
             perm.recalculatePermissibles();
         }
 
+        // set the default channel if we don't have one yet
+        if (defaultChannel == null) {
+            defaultChannel = channel;
+        }
+
         return true;
     }
 
@@ -43,6 +49,10 @@ public class ChannelManager {
 
     public List<Channel> getChannels() {
         return channels;
+    }
+
+    public Channel getDefaultChannel() {
+        return defaultChannel;
     }
 
     public boolean hasChannel(String identifier) {
@@ -72,5 +82,9 @@ public class ChannelManager {
         }
 
         return true;
+    }
+
+    public void setDefaultChannel(Channel channel) {
+        defaultChannel = channel;
     }
 }

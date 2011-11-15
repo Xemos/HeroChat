@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public interface Chatter {
 
-    public boolean addChannel(Channel channel);
+    public boolean addChannel(Channel channel, boolean announce);
 
     public Result canBan(Channel channel);
 
@@ -34,7 +34,7 @@ public interface Chatter {
 
     public boolean isInRange(Chatter other, int distance);
 
-    public boolean removeChannel(Channel channel);
+    public boolean removeChannel(Channel channel, boolean announce);
 
     public boolean setActiveChannel(Channel channel);
 

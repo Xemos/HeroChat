@@ -4,10 +4,8 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
@@ -54,10 +52,7 @@ public class JoinCommand extends BasicCommand {
                 return true;
         }
 
-        chatter.addChannel(channel);
-        PlayerChatEvent event = new PlayerChatEvent(player, "joined the channel.");
-        Bukkit.getServer().getPluginManager().callEvent(event);
-
+        channel.addMember(chatter, true);
         return true;
     }
 

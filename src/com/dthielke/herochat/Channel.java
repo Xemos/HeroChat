@@ -17,9 +17,11 @@ public interface Channel {
     // same guarantee. In this case, the best thing we have to work with are
     // player names.
 
-    public boolean addMember(Chatter chatter);
+    public boolean addMember(Chatter chatter, boolean announce);
 
     public void addWorld(String world);
+
+    public void announce(String message);
 
     public ChatColor getColor();
 
@@ -49,7 +51,11 @@ public interface Channel {
 
     public boolean isMuted(String name);
 
-    public boolean removeMember(Chatter chatter);
+    public boolean removeMember(Chatter chatter, boolean announce);
+    
+    public boolean kickMember(Chatter chatter, boolean announce);
+    
+    public boolean banMember(Chatter chatter, boolean announce);
 
     public void removeWorld(String world);
 

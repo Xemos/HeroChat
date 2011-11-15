@@ -11,16 +11,19 @@ import com.dthielke.herochat.util.Messaging;
 
 public class MessageHandler {
 
-    public static void format(Channel channel, PlayerChatEvent event) {
+    public static String format(Channel channel) {
+        return format(channel, channel.getFormat());
+    }
+
+    public static String format(Channel channel, String format) {
         // default minecraft format is <%1$s> %2$s
-        String format = channel.getFormat();
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
         format = format.replace("#color", channel.getColor().toString());
         format = format.replace("#sender", "%1$s");
         format = format.replace("#msg", "%2$s");
         format = format.replace("&", "\u00a7");
-        event.setFormat(format);
+        return format;
     }
 
     public static void handle(PlayerChatEvent event) {
@@ -69,7 +72,7 @@ public class MessageHandler {
         }
 
         // apply channel formatting
-        format(channel, event);
+        event.setFormat(format(channel));
     }
 
 }

@@ -4,10 +4,8 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
@@ -56,11 +54,8 @@ public class LeaveCommand extends BasicCommand {
             Messaging.send(sender, "You must stay in at least one channel.");
             return true;
         }
-
-        chatter.removeChannel(channel);
-        PlayerChatEvent event = new PlayerChatEvent(player, "left the channel.");
-        Bukkit.getServer().getPluginManager().callEvent(event);
-
+        
+        channel.removeMember(chatter, true);
         return true;
     }
 

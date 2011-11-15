@@ -8,6 +8,9 @@ import org.bukkit.World;
 
 public class StandardChannel implements Channel {
 
+    private static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
+    private static final String MESSAGE_FORMAT = "#color[#nick] &f#sender#color: #msg";
+
     private String name;
     private String nick;
     private String format;
@@ -24,17 +27,21 @@ public class StandardChannel implements Channel {
         this.nick = nick;
         this.color = ChatColor.WHITE;
         this.distance = 0;
-        this.format = "#color[#nick] #sender: #msg";
+        this.format = MESSAGE_FORMAT;
     }
 
     @Override
-    public boolean addMember(Chatter chatter) {
+    public boolean addMember(Chatter chatter, boolean announce) {
         if (members.contains(chatter))
             return false;
 
         members.add(chatter);
         if (!chatter.hasChannel(this)) {
-            chatter.addChannel(this);
+            chatter.addChannel(this, announce);
+        }
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has joined the channel.");
         }
 
         return true;
@@ -44,6 +51,14 @@ public class StandardChannel implements Channel {
     public void addWorld(String world) {
         if (!worlds.contains(world)) {
             worlds.add(world);
+        }
+    }
+
+    @Override
+    public void announce(String message) {
+        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT).replace("%2$s", message);
+        for (Chatter member : members) {
+            member.getPlayer().sendMessage(message);
         }
     }
 
@@ -142,13 +157,17 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean removeMember(Chatter chatter) {
+    public boolean removeMember(Chatter chatter, boolean announce) {
         if (!members.contains(chatter))
             return false;
 
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has left the channel.");
+        }
+
         members.remove(chatter);
         if (chatter.hasChannel(this)) {
-            chatter.removeChannel(this);
+            chatter.removeChannel(this, announce);
         }
 
         return true;
@@ -211,6 +230,32 @@ public class StandardChannel implements Channel {
     @Override
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    @Override
+    public boolean kickMember(Chatter chatter, boolean announce) {
+        if (!members.contains(chatter))
+            return false;
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has been kicked.");
+        }
+
+        removeMember(chatter, false);
+        return true;
+    }
+
+    @Override
+    public boolean banMember(Chatter chatter, boolean announce) {
+        if (!members.contains(chatter))
+            return false;
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has been banned.");
+        }
+
+        removeMember(chatter, false);
+        return true;
     }
 
 }

@@ -11,10 +11,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dthielke.herochat.command.CommandHandler;
+import com.dthielke.herochat.command.commands.BanCommand;
 import com.dthielke.herochat.command.commands.CreateCommand;
 import com.dthielke.herochat.command.commands.FocusCommand;
 import com.dthielke.herochat.command.commands.HelpCommand;
 import com.dthielke.herochat.command.commands.JoinCommand;
+import com.dthielke.herochat.command.commands.KickCommand;
 import com.dthielke.herochat.command.commands.LeaveCommand;
 import com.dthielke.herochat.command.commands.ListCommand;
 import com.dthielke.herochat.command.commands.SetCommand;
@@ -53,6 +55,8 @@ public class HeroChat extends JavaPlugin {
         cmdHndlr.addCommand(new ListCommand());
         cmdHndlr.addCommand(new CreateCommand());
         cmdHndlr.addCommand(new SetCommand());
+        cmdHndlr.addCommand(new KickCommand());
+        cmdHndlr.addCommand(new BanCommand());
         cmdHndlr.addCommand(new HelpCommand());
     }
 
@@ -69,7 +73,7 @@ public class HeroChat extends JavaPlugin {
         for (Player player : getServer().getOnlinePlayers()) {
             Chatter chatter = new StandardChatter(player);
             chttrMngr.addChatter(chatter);
-            chatter.addChannel(channel);
+            chatter.addChannel(channel, false);
             chatter.setActiveChannel(channel);
         }
     }

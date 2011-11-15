@@ -16,13 +16,13 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean addChannel(Channel channel) {
+    public boolean addChannel(Channel channel, boolean announce) {
         if (channels.contains(channel))
             return false;
 
         channels.add(channel);
         if (!channel.isMember(this)) {
-            channel.addMember(this);
+            channel.addMember(this, announce);
         }
 
         return true;
@@ -164,13 +164,13 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean removeChannel(Channel channel) {
+    public boolean removeChannel(Channel channel, boolean announce) {
         if (!channels.contains(channel))
             return false;
 
         channels.remove(channel);
         if (channel.isMember(this)) {
-            channel.removeMember(this);
+            channel.removeMember(this, announce);
         }
 
         return true;

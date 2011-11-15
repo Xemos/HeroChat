@@ -49,12 +49,11 @@ public class FocusCommand extends BasicCommand {
                     Messaging.send(sender, "You are banned from this channel.");
                     return true;
             }
-            chatter.addChannel(channel);
+            channel.addMember(chatter, true);
         }
 
         chatter.setActiveChannel(channel);
-        Messaging.send(player, "Active channel changed.");
-
+        Messaging.send(player, "Now chatting in $1.", channel.getName());
         return true;
     }
 
