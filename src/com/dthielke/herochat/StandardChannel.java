@@ -63,8 +63,18 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public ChatColor getColor() {
+        return color;
+    }
+
+    @Override
     public int getDistance() {
         return distance;
+    }
+
+    @Override
+    public String getFormat() {
+        return format;
     }
 
     @Override
@@ -107,6 +117,11 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public boolean isBanned(String name) {
+        return bans.contains(name.toLowerCase());
+    }
+
+    @Override
     public boolean isLocal() {
         return distance != 0;
     }
@@ -114,6 +129,16 @@ public class StandardChannel implements Channel {
     @Override
     public boolean isMember(Chatter chatter) {
         return members.contains(chatter);
+    }
+
+    @Override
+    public boolean isModerator(String name) {
+        return moderators.contains(name.toLowerCase());
+    }
+
+    @Override
+    public boolean isMuted(String name) {
+        return mutes.contains(name.toLowerCase());
     }
 
     @Override
@@ -137,8 +162,45 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setBanned(String name, boolean banned) {
+        if (banned) {
+            bans.add(name.toLowerCase());
+        } else {
+            bans.remove(name.toLowerCase());
+        }
+    }
+
+    @Override
+    public void setColor(ChatColor color) {
+        this.color = color;
+    }
+
+    @Override
     public void setDistance(int distance) {
         this.distance = distance < 0 ? 0 : distance;
+    }
+
+    @Override
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    @Override
+    public void setModerator(String name, boolean moderator) {
+        if (moderator) {
+            moderators.add(name.toLowerCase());
+        } else {
+            moderators.remove(name.toLowerCase());
+        }
+    }
+
+    @Override
+    public void setMuted(String name, boolean muted) {
+        if (muted) {
+            mutes.add(name.toLowerCase());
+        } else {
+            mutes.remove(name.toLowerCase());
+        }
     }
 
     @Override
@@ -149,65 +211,6 @@ public class StandardChannel implements Channel {
     @Override
     public void setNick(String nick) {
         this.nick = nick;
-    }
-
-    @Override
-    public String getFormat() {
-        return format;
-    }
-
-    @Override
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    @Override
-    public boolean isBanned(String name) {
-        return bans.contains(name.toLowerCase());
-    }
-
-    @Override
-    public boolean isMuted(String name) {
-        return mutes.contains(name.toLowerCase());
-    }
-
-    @Override
-    public boolean isModerator(String name) {
-        return moderators.contains(name.toLowerCase());
-    }
-
-    @Override
-    public void setBanned(String name, boolean banned) {
-        if (banned)
-            bans.add(name.toLowerCase());
-        else
-            bans.remove(name.toLowerCase());
-    }
-
-    @Override
-    public void setMuted(String name, boolean muted) {
-        if (muted)
-            mutes.add(name.toLowerCase());
-        else
-            mutes.remove(name.toLowerCase());
-    }
-
-    @Override
-    public void setModerator(String name, boolean moderator) {
-        if (moderator)
-            moderators.add(name.toLowerCase());
-        else
-            moderators.remove(name.toLowerCase());
-    }
-
-    @Override
-    public ChatColor getColor() {
-        return color;
-    }
-
-    @Override
-    public void setColor(ChatColor color) {
-        this.color = color;
     }
 
 }

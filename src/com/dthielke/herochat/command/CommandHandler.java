@@ -71,12 +71,12 @@ public class CommandHandler {
         ident = ident.toLowerCase();
         if (identifiers.containsKey(ident))
             return identifiers.get(ident);
-        
+
         for (Command cmd : commands.values()) {
             if (cmd.isIdentifier(executor, ident))
                 return cmd;
         }
-        
+
         return null;
     }
 
@@ -109,7 +109,7 @@ public class CommandHandler {
     public static boolean hasPermission(CommandSender sender, String permission) {
         if (sender.isOp())
             return true;
-        
+
         if (!(sender instanceof Player) || permission == null || permission.isEmpty())
             return true;
 

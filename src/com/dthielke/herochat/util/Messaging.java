@@ -81,12 +81,12 @@ public final class Messaging {
         colors = Collections.unmodifiableMap(tmpMap);
     }
 
-    public static ChatColor parseColor(String input) {
-        return colors.get(input.toLowerCase().replace("&", ""));
-    }
-
     public static void broadcast(String msg, Object... params) {
         Bukkit.getServer().broadcastMessage(parameterizeMessage(msg, params));
+    }
+
+    public static ChatColor parseColor(String input) {
+        return colors.get(input.toLowerCase().replace("&", ""));
     }
 
     public static void send(CommandSender player, String msg, Object... params) {

@@ -21,7 +21,11 @@ public interface Channel {
 
     public void addWorld(String world);
 
+    public ChatColor getColor();
+
     public int getDistance();
+
+    public String getFormat();
 
     public Set<Chatter> getMembers();
 
@@ -35,38 +39,34 @@ public interface Channel {
 
     public boolean hasWorld(World world);
 
+    public boolean isBanned(String name);
+
     public boolean isLocal();
 
     public boolean isMember(Chatter chatter);
 
-    public boolean removeMember(Chatter chatter);
-
-    public boolean isBanned(String name);
+    public boolean isModerator(String name);
 
     public boolean isMuted(String name);
 
-    public boolean isModerator(String name);
-
-    public void setBanned(String name, boolean banned);
-
-    public void setMuted(String name, boolean muted);
-
-    public void setModerator(String name, boolean moderator);
+    public boolean removeMember(Chatter chatter);
 
     public void removeWorld(String world);
 
+    public void setBanned(String name, boolean banned);
+
+    public void setColor(ChatColor color);
+
     public void setDistance(int distance);
+
+    public void setFormat(String format);
+
+    public void setModerator(String name, boolean moderator);
+
+    public void setMuted(String name, boolean muted);
 
     public void setName(String name);
 
     public void setNick(String nick);
-
-    public String getFormat();
-
-    public void setFormat(String format);
-
-    public ChatColor getColor();
-
-    public void setColor(ChatColor color);
 
 }

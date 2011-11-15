@@ -38,15 +38,6 @@ public interface Chatter {
 
     boolean hasChannel(Channel channel);
 
-    public enum Result {
-        NO_PERMISSION,
-        INVALID,
-        BANNED,
-        MUTED,
-        ALLOWED,
-        BAD_WORLD;
-    }
-
     public enum Permission {
         JOIN("join"),
         LEAVE("leave"),
@@ -81,6 +72,15 @@ public interface Chatter {
                 names.put(permission, permission.name);
             }
         }
+    }
+
+    public enum Result {
+        NO_PERMISSION,
+        INVALID,
+        BANNED,
+        MUTED,
+        ALLOWED,
+        BAD_WORLD;
     }
 
 }

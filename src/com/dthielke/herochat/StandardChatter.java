@@ -139,6 +139,11 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public boolean isInRange(Chatter other, int distance) {
+        return player.getLocation().distanceSquared(other.getPlayer().getLocation()) <= distance;
+    }
+
+    @Override
     public boolean removeChannel(Channel channel) {
         if (!channels.contains(channel))
             return false;
@@ -158,11 +163,6 @@ public class StandardChatter implements Chatter {
 
         activeChannel = channel;
         return true;
-    }
-
-    @Override
-    public boolean isInRange(Chatter other, int distance) {
-        return player.getLocation().distanceSquared(other.getPlayer().getLocation()) <= distance;
     }
 
 }

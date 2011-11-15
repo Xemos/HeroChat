@@ -11,17 +11,27 @@ import com.dthielke.herochat.util.Messaging;
 
 public class MessageHandler {
 
+    public static void format(Channel channel, PlayerChatEvent event) {
+        // default minecraft format is <%1$s> %2$s
+        String format = channel.getFormat();
+        format = format.replace("#name", channel.getName());
+        format = format.replace("#nick", channel.getNick());
+        format = format.replace("#color", channel.getColor().toString());
+        format = format.replace("#sender", "%1$s");
+        format = format.replace("#msg", "%2$s");
+        format = format.replace("&", "\u00a7");
+        event.setFormat(format);
+    }
+
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
-        if (sender == null) {
+        if (sender == null)
             throw new RuntimeException("Chatter (" + event.getPlayer().getName() + ") not found.");
-        }
 
         Channel channel = sender.getActiveChannel();
-        if (channel == null) {
+        if (channel == null)
             throw new RuntimeException("Active channel for chatter (" + event.getPlayer().getName() + ") not found.");
-        }
 
         // see if the player can speak in the active channel
         Result result = sender.canSpeak(channel);
@@ -60,18 +70,6 @@ public class MessageHandler {
 
         // apply channel formatting
         format(channel, event);
-    }
-
-    public static void format(Channel channel, PlayerChatEvent event) {
-        // default minecraft format is <%1$s> %2$s
-        String format = channel.getFormat();
-        format = format.replace("#name", channel.getName());
-        format = format.replace("#nick", channel.getNick());
-        format = format.replace("#color", channel.getColor().toString());
-        format = format.replace("#sender", "%1$s");
-        format = format.replace("#msg", "%2$s");
-        format = format.replace("&", "\u00a7");
-        event.setFormat(format);
     }
 
 }

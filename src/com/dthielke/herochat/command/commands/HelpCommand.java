@@ -41,8 +41,9 @@ public class HelpCommand extends BasicCommand {
         // Filter out Skills from the command list.
         for (Command command : sortCommands) {
             if (command.isShownOnHelpMenu()) {
-                if (CommandHandler.hasPermission(sender, command.getPermission()))
+                if (CommandHandler.hasPermission(sender, command.getPermission())) {
                     commands.add(command);
+                }
             }
         }
 

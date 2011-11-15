@@ -51,7 +51,7 @@ public class FocusCommand extends BasicCommand {
             }
             chatter.addChannel(channel);
         }
-        
+
         chatter.setActiveChannel(channel);
         Messaging.send(player, "Active channel changed.");
 

@@ -40,7 +40,7 @@ public class LeaveCommand extends BasicCommand {
             return true;
         }
 
-        Chatter chatter = HeroChat.getChatterManager().getChatter(player);        
+        Chatter chatter = HeroChat.getChatterManager().getChatter(player);
         Result result = chatter.canLeave(channel);
         switch (result) {
             case INVALID:
@@ -50,7 +50,7 @@ public class LeaveCommand extends BasicCommand {
                 Messaging.send(sender, "Insufficient permission.");
                 return true;
         }
-        
+
         int channelCount = chatter.getChannels().size();
         if (channelCount == 1) {
             Messaging.send(sender, "You must stay in at least one channel.");

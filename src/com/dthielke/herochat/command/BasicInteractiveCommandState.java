@@ -6,7 +6,7 @@ public abstract class BasicInteractiveCommandState implements InteractiveCommand
     private int minArguments = 0;
     private int maxArguments = 0;
 
-    public BasicInteractiveCommandState(String...identifiers) {
+    public BasicInteractiveCommandState(String... identifiers) {
         this.identifiers = identifiers;
     }
 

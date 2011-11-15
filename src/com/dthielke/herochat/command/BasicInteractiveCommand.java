@@ -33,16 +33,16 @@ public abstract class BasicInteractiveCommand extends BasicCommand implements In
         }
 
         InteractiveCommandState state = states[stateIndex];
-        
+
         if (stateIndex > 0) {
             if (this.getCancelIdentifier().equalsIgnoreCase(identifier)) {
                 Messaging.send(executor, "Exiting command.");
                 userStates.remove(executor);
                 onCommandCancelled(executor);
                 return true;
-            } 
+            }
         }
-        
+
         if (args.length < state.getMinArguments() || args.length > state.getMaxArguments() || !state.execute(executor, identifier, args)) {
             if (stateIndex > 0) {
                 Messaging.send(executor, "Invalid input - try again or type $1 to exit.", "/" + this.getCancelIdentifier());
@@ -91,7 +91,7 @@ public abstract class BasicInteractiveCommand extends BasicCommand implements In
     @Override
     public final void setIdentifiers(String... identifiers) {}
 
-    public final void setStates(InteractiveCommandState...states) {
+    public final void setStates(InteractiveCommandState... states) {
         if (states.length == 0)
             throw new IllegalArgumentException("An interactive command must have at least one state.");
 

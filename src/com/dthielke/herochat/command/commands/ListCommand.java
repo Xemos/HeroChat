@@ -39,8 +39,9 @@ public class ListCommand extends BasicCommand {
 
         // Filter out Skills from the command list.
         for (Channel channel : HeroChat.getChannelManager().getChannels()) {
-            if (sender.hasPermission(Permission.JOIN.form(channel)))
+            if (sender.hasPermission(Permission.JOIN.form(channel))) {
                 channels.add(channel);
+            }
         }
 
         int numPages = channels.size() / CHANNELS_PER_PAGE;

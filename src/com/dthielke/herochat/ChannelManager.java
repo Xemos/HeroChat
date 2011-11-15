@@ -41,12 +41,21 @@ public class ChannelManager {
         return null;
     }
 
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
     public boolean hasChannel(String identifier) {
         return getChannel(identifier) != null;
     }
 
-    public List<Channel> getChannels() {
-        return channels;
+    public void registerChannelPermissions() {
+        // setup empty wildcard permissions
+        for (Chatter.Permission p : Chatter.Permission.values()) {
+            Permission perm = new Permission(p.formWildcard());
+            Bukkit.getServer().getPluginManager().addPermission(perm);
+            wildcardPermissions.put(p, perm);
+        }
     }
 
     public boolean removeChannel(Channel channel) {
@@ -63,14 +72,5 @@ public class ChannelManager {
         }
 
         return true;
-    }
-
-    public void registerChannelPermissions() {
-        // setup empty wildcard permissions
-        for (Chatter.Permission p : Chatter.Permission.values()) {
-            Permission perm = new Permission(p.formWildcard());
-            Bukkit.getServer().getPluginManager().addPermission(perm);
-            wildcardPermissions.put(p, perm);
-        }
     }
 }

@@ -9,7 +9,7 @@ public class PlayerChatListener extends PlayerListener {
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled())
             return;
-        
+
         MessageHandler.handle(event);
     }
 
