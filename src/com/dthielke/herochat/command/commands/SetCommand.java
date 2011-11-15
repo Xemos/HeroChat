@@ -6,9 +6,12 @@ package com.dthielke.herochat.command.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
+import com.dthielke.herochat.Chatter;
+import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
@@ -21,7 +24,6 @@ public class SetCommand extends BasicCommand {
         setUsage("/ch set §8<channel> <setting> <value>");
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
-        setPermission("herochat.set");
         setNotes("\u00a7cSettings:\u00a7e name, nick, format, distance, color");
     }
 
@@ -36,6 +38,15 @@ public class SetCommand extends BasicCommand {
         if (channel == null) {
             Messaging.send(sender, "Channel not found.");
             return true;
+        }
+
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            Chatter chatter = HeroChat.getChatterManager().getChatter(player);
+            if (chatter.canModify(channel) != Result.ALLOWED) {
+                Messaging.send(sender, "Insufficient permission.");
+                return true;
+            }
         }
 
         if (setting.equals("name")) {

@@ -60,7 +60,7 @@ public class ListCommand extends BasicCommand {
         }
         for (int c = start; c < end; c++) {
             Channel channel = channels.get(c);
-            sender.sendMessage("  §a[" + channel.getNick() + "] " + channel.getName());
+            sender.sendMessage(channel.getColor() + "  [" + channel.getNick() + "] " + channel.getName());
         }
         return true;
     }

@@ -18,6 +18,8 @@ public interface Chatter {
 
     public Result canLeave(Channel channel);
 
+    public Result canModify(Channel channel);
+
     public Result canMute(Channel channel);
 
     public Result canSpeak(Channel channel);
@@ -44,7 +46,8 @@ public interface Chatter {
         SPEAK("speak"),
         KICK("kick"),
         BAN("ban"),
-        MUTE("mute");
+        MUTE("mute"),
+        MODIFY("modify");
 
         private static Map<Permission, String> names;
         private String name;

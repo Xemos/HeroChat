@@ -30,10 +30,13 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canBan(Channel channel) {
-        if (!player.hasPermission(Permission.BAN.form(channel)))
-            return Result.NO_PERMISSION;
+        if (player.hasPermission(Permission.BAN.form(channel)))
+            return Result.ALLOWED;
 
-        return Result.ALLOWED;
+        if (channel.isModerator(player.getName()))
+            return Result.ALLOWED;
+
+        return Result.NO_PERMISSION;
     }
 
     @Override
@@ -52,10 +55,13 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canKick(Channel channel) {
-        if (!player.hasPermission(Permission.KICK.form(channel)))
-            return Result.NO_PERMISSION;
+        if (player.hasPermission(Permission.KICK.form(channel)))
+            return Result.ALLOWED;
 
-        return Result.ALLOWED;
+        if (channel.isModerator(player.getName()))
+            return Result.ALLOWED;
+
+        return Result.NO_PERMISSION;
     }
 
     @Override
@@ -70,11 +76,25 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public Result canMute(Channel channel) {
-        if (!player.hasPermission(Permission.MUTE.form(channel)))
-            return Result.NO_PERMISSION;
+    public Result canModify(Channel channel) {
+        if (player.hasPermission(Permission.MODIFY.form(channel)))
+            return Result.ALLOWED;
 
-        return Result.ALLOWED;
+        if (channel.isModerator(player.getName()))
+            return Result.ALLOWED;
+
+        return Result.NO_PERMISSION;
+    }
+
+    @Override
+    public Result canMute(Channel channel) {
+        if (player.hasPermission(Permission.MUTE.form(channel)))
+            return Result.ALLOWED;
+
+        if (channel.isModerator(player.getName()))
+            return Result.ALLOWED;
+
+        return Result.NO_PERMISSION;
     }
 
     @Override
