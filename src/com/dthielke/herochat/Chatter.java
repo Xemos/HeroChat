@@ -24,11 +24,7 @@ public interface Chatter {
 
     public Channel getActiveChannel();
 
-    public Set<Channel> getBans();
-
     public Set<Channel> getChannels();
-
-    public Set<Channel> getMutes();
 
     public String getName();
 
@@ -36,17 +32,9 @@ public interface Chatter {
 
     public boolean isInRange(Chatter other, int distance);
 
-    public boolean isBanned(Channel channel);
-
-    public boolean isMuted(Channel channel);
-
     public boolean removeChannel(Channel channel);
 
     public boolean setActiveChannel(Channel channel);
-
-    public void setBanned(Channel channel, boolean banned);
-
-    public void setMuted(Channel channel, boolean muted);
 
     boolean hasChannel(Channel channel);
 

@@ -20,6 +20,7 @@ public class SetCommand extends BasicCommand {
         setUsage("/ch set §8<channel> <setting> <value>");
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
+        setPermission("herochat.set");
     }
 
     @Override

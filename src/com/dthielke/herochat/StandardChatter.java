@@ -9,8 +9,6 @@ public class StandardChatter implements Chatter {
 
     private final Player player;
     private Set<Channel> channels = new HashSet<Channel>();
-    private Set<Channel> bans = new HashSet<Channel>();
-    private Set<Channel> mutes = new HashSet<Channel>();
     private Channel activeChannel;
 
     public StandardChatter(Player player) {
@@ -46,7 +44,7 @@ public class StandardChatter implements Chatter {
         if (!player.hasPermission(Permission.JOIN.form(channel)))
             return Result.NO_PERMISSION;
 
-        if (isBanned(channel))
+        if (channel.isBanned(player.getName()))
             return Result.BANNED;
 
         return Result.ALLOWED;
@@ -87,7 +85,7 @@ public class StandardChatter implements Chatter {
         if (!player.hasPermission(Permission.SPEAK.form(channel)))
             return Result.NO_PERMISSION;
 
-        if (isMuted(channel))
+        if (channel.isMuted(player.getName()))
             return Result.MUTED;
 
         if (!channel.hasWorld(player.getWorld()))
@@ -116,18 +114,8 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public Set<Channel> getBans() {
-        return bans;
-    }
-
-    @Override
     public Set<Channel> getChannels() {
         return channels;
-    }
-
-    @Override
-    public Set<Channel> getMutes() {
-        return mutes;
     }
 
     @Override
@@ -151,16 +139,6 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean isBanned(Channel channel) {
-        return bans.contains(channel);
-    }
-
-    @Override
-    public boolean isMuted(Channel channel) {
-        return mutes.contains(channel);
-    }
-
-    @Override
     public boolean removeChannel(Channel channel) {
         if (!channels.contains(channel))
             return false;
@@ -180,32 +158,6 @@ public class StandardChatter implements Chatter {
 
         activeChannel = channel;
         return true;
-    }
-
-    @Override
-    public void setBanned(Channel channel, boolean banned) {
-        if (banned) {
-            if (!bans.contains(channel)) {
-                bans.add(channel);
-            }
-        } else {
-            if (bans.contains(channel)) {
-                bans.remove(channel);
-            }
-        }
-    }
-
-    @Override
-    public void setMuted(Channel channel, boolean muted) {
-        if (muted) {
-            if (!mutes.contains(channel)) {
-                mutes.add(channel);
-            }
-        } else {
-            if (mutes.contains(channel)) {
-                mutes.remove(channel);
-            }
-        }
     }
 
     @Override

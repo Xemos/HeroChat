@@ -21,6 +21,7 @@ public class CreateCommand extends BasicCommand {
         setUsage("/ch create §8<name>");
         setArgumentRange(1, 1);
         setIdentifiers("ch create");
+        setPermission("herochat.create");
     }
 
     @Override
