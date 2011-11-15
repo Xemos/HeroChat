@@ -55,7 +55,7 @@ public class CommandHandler {
                 }
             }
 
-            if (!hasPermission(sender, cmd.getPermission())) {
+            if (!cmd.getPermission().isEmpty() && !sender.hasPermission(cmd.getPermission())) {
                 Messaging.send(sender, "Insufficient permission.");
                 return true;
             }

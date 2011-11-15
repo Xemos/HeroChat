@@ -4,6 +4,7 @@
 
 package com.dthielke.herochat.command.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.dthielke.herochat.Channel;
@@ -21,12 +22,13 @@ public class SetCommand extends BasicCommand {
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
         setPermission("herochat.set");
+        setNotes("\u00a7cSettings:\u00a7e name, nick, format, distance, color");
     }
 
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args) {
         String name = args[0];
-        String setting = args[1];
+        String setting = args[1].toLowerCase();
         String value = args[2];
 
         ChannelManager channelMngr = HeroChat.getChannelManager();
@@ -36,30 +38,38 @@ public class SetCommand extends BasicCommand {
             return true;
         }
 
-        if (setting.equalsIgnoreCase("name")) {
+        if (setting.equals("name")) {
             if (channelMngr.hasChannel(value)) {
                 Messaging.send(sender, "Identifier taken.");
             } else {
                 channel.setName(value);
                 Messaging.send(sender, "Name changed.");
             }
-        } else if (setting.equalsIgnoreCase("nick")) {
+        } else if (setting.equals("nick")) {
             if (channelMngr.hasChannel(value)) {
                 Messaging.send(sender, "Identifier taken.");
             } else {
                 channel.setNick(value);
                 Messaging.send(sender, "Nick changed.");
             }
-        } else if (setting.equalsIgnoreCase("format")) {
+        } else if (setting.equals("format")) {
             channel.setFormat(value);
             Messaging.send(sender, "Format changed.");
-        } else if (setting.equalsIgnoreCase("distance")) {
+        } else if (setting.equals("distance")) {
             try {
                 int distance = Integer.parseInt(value);
                 channel.setDistance(distance);
                 Messaging.send(sender, "Distance changed.");
             } catch (NumberFormatException e) {
                 Messaging.send(sender, "Invalid distance.");
+            }
+        } else if (setting.equals("color")) {
+            ChatColor color = Messaging.parseColor(value);
+            if (color == null) {
+                Messaging.send(sender, "Invalid color.");
+            } else {
+                channel.setColor(color);
+                Messaging.send(sender, "Color changed.");
             }
         }
 

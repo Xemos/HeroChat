@@ -44,6 +44,8 @@ public class CreateCommand extends BasicCommand {
         Channel channel = new StandardChannel(name, nick);
         channelMngr.addChannel(channel);
 
+        Messaging.send(sender, "Channel created.");
+
         return true;
     }
 

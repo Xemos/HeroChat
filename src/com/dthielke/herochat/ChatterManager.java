@@ -24,9 +24,9 @@ public class ChatterManager {
         return null;
     }
 
-    public Chatter getChatter(String identifier) {
+    public Chatter getChatter(String name) {
         for (Chatter chatter : chatters)
-            if (identifier.equalsIgnoreCase(chatter.getName()))
+            if (name.equalsIgnoreCase(chatter.getName()))
                 return chatter;
 
         return null;

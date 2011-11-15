@@ -10,22 +10,22 @@ import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.util.Messaging;
 
 public class MessageHandler {
-    
+
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
         if (sender == null) {
             throw new RuntimeException("Chatter (" + event.getPlayer().getName() + ") not found.");
         }
-        
+
         Channel channel = sender.getActiveChannel();
         if (channel == null) {
             throw new RuntimeException("Active channel for chatter (" + event.getPlayer().getName() + ") not found.");
         }
-        
+
         // see if the player can speak in the active channel
         Result result = sender.canSpeak(channel);
-        switch(result) {
+        switch (result) {
             case INVALID:
                 Messaging.send(player, "You must join the channel before you can speak.");
                 break;
@@ -67,6 +67,7 @@ public class MessageHandler {
         String format = channel.getFormat();
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
+        format = format.replace("#color", channel.getColor().toString());
         format = format.replace("#sender", "%1$s");
         format = format.replace("#msg", "%2$s");
         format = format.replace("&", "\u00a7");

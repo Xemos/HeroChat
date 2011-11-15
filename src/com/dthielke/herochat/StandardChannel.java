@@ -3,6 +3,7 @@ package com.dthielke.herochat;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 
 public class StandardChannel implements Channel {
@@ -10,6 +11,7 @@ public class StandardChannel implements Channel {
     private String name;
     private String nick;
     private String format;
+    private ChatColor color;
     private int distance;
     private Set<Chatter> members = new HashSet<Chatter>();
     private Set<String> worlds = new HashSet<String>();
@@ -20,8 +22,9 @@ public class StandardChannel implements Channel {
     public StandardChannel(String name, String nick) {
         this.name = name;
         this.nick = nick;
+        this.color = ChatColor.WHITE;
         this.distance = 0;
-        this.format = "[#nick] #sender: #msg";
+        this.format = "#color[#nick] #sender: #msg";
     }
 
     @Override
@@ -195,6 +198,16 @@ public class StandardChannel implements Channel {
             moderators.add(name.toLowerCase());
         else
             moderators.remove(name.toLowerCase());
+    }
+
+    @Override
+    public ChatColor getColor() {
+        return color;
+    }
+
+    @Override
+    public void setColor(ChatColor color) {
+        this.color = color;
     }
 
 }

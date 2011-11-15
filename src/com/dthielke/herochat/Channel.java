@@ -2,6 +2,7 @@ package com.dthielke.herochat;
 
 import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 
 public interface Channel {
@@ -63,5 +64,9 @@ public interface Channel {
     public String getFormat();
 
     public void setFormat(String format);
+
+    public ChatColor getColor();
+
+    public void setColor(ChatColor color);
 
 }

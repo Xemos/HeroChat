@@ -23,7 +23,7 @@ public class HelpCommand extends BasicCommand {
         setDescription("Displays the help menu");
         setUsage("/ch help §8[page#]");
         setArgumentRange(0, 1);
-        setIdentifiers("ch", "ch help");
+        setIdentifiers("ch help");
     }
 
     @Override

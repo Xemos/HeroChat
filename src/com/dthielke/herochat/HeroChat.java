@@ -2,6 +2,7 @@ package com.dthielke.herochat;
 
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -15,6 +16,7 @@ import com.dthielke.herochat.command.commands.FocusCommand;
 import com.dthielke.herochat.command.commands.HelpCommand;
 import com.dthielke.herochat.command.commands.JoinCommand;
 import com.dthielke.herochat.command.commands.LeaveCommand;
+import com.dthielke.herochat.command.commands.ListCommand;
 import com.dthielke.herochat.command.commands.SetCommand;
 
 public class HeroChat extends JavaPlugin {
@@ -45,12 +47,13 @@ public class HeroChat extends JavaPlugin {
     }
 
     private void registerCommands() {
-        cmdHndlr.addCommand(new HelpCommand());
         cmdHndlr.addCommand(new FocusCommand());
         cmdHndlr.addCommand(new JoinCommand());
         cmdHndlr.addCommand(new LeaveCommand());
+        cmdHndlr.addCommand(new ListCommand());
         cmdHndlr.addCommand(new CreateCommand());
         cmdHndlr.addCommand(new SetCommand());
+        cmdHndlr.addCommand(new HelpCommand());
     }
 
     private void registerEvents() {
@@ -60,6 +63,7 @@ public class HeroChat extends JavaPlugin {
 
     private void setupDummyEnvironment() {
         Channel channel = new StandardChannel("Dummy", "D");
+        channel.setColor(ChatColor.GREEN);
         chnnlMngr.addChannel(channel);
 
         for (Player player : getServer().getOnlinePlayers()) {
