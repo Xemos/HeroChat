@@ -89,7 +89,7 @@ public class StandardChatter implements Chatter {
 
         if (isMuted(channel))
             return Result.MUTED;
-        
+
         if (!channel.hasWorld(player.getWorld()))
             return Result.BAD_WORLD;
 

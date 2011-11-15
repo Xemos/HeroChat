@@ -33,7 +33,7 @@ public interface Chatter {
     public String getName();
 
     public Player getPlayer();
-    
+
     public boolean isInRange(Chatter other, int distance);
 
     public boolean isBanned(Channel channel);
@@ -58,7 +58,7 @@ public interface Chatter {
         ALLOWED,
         BAD_WORLD;
     }
-    
+
     public enum Permission {
         JOIN("join"),
         LEAVE("leave"),
@@ -76,6 +76,10 @@ public interface Chatter {
 
         public String form(Channel channel) {
             return "herochat." + name + "." + channel.getName().toLowerCase();
+        }
+
+        public String formWildcard() {
+            return "herochat." + name + ".*";
         }
 
         @Override

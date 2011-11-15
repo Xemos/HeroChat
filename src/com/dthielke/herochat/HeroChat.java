@@ -10,7 +10,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dthielke.herochat.command.CommandHandler;
+import com.dthielke.herochat.command.commands.CreateCommand;
+import com.dthielke.herochat.command.commands.FocusCommand;
 import com.dthielke.herochat.command.commands.HelpCommand;
+import com.dthielke.herochat.command.commands.JoinCommand;
+import com.dthielke.herochat.command.commands.LeaveCommand;
+import com.dthielke.herochat.command.commands.SetCommand;
 
 public class HeroChat extends JavaPlugin {
 
@@ -41,6 +46,11 @@ public class HeroChat extends JavaPlugin {
 
     private void registerCommands() {
         cmdHndlr.addCommand(new HelpCommand());
+        cmdHndlr.addCommand(new FocusCommand());
+        cmdHndlr.addCommand(new JoinCommand());
+        cmdHndlr.addCommand(new LeaveCommand());
+        cmdHndlr.addCommand(new CreateCommand());
+        cmdHndlr.addCommand(new SetCommand());
     }
 
     private void registerEvents() {
