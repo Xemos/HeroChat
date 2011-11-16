@@ -6,7 +6,6 @@ package com.dthielke.herochat.command.commands;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.Chatter;
-import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
@@ -14,14 +13,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BanCommand extends BasicCommand {
+public class ModCommand extends BasicCommand {
 
-    public BanCommand() {
-        super("Ban");
-        setDescription("Bans a user from a channel");
-        setUsage("/ch ban §8[channel] <player>");
+    public ModCommand() {
+        super("Mod");
+        setDescription("Grants moderator status");
+        setUsage("/ch mod §8[channel] <player>");
         setArgumentRange(1, 2);
-        setIdentifiers("ch ban");
+        setIdentifiers("ch mod");
         setNotes("\u00a7cNote:\u00a7e If no channel is given, your active", "      channel is used.");
     }
 
@@ -48,7 +47,7 @@ public class BanCommand extends BasicCommand {
             }
         }
 
-        if (chatter != null && chatter.canBan(channel) != Result.ALLOWED) {
+        if (!(sender.hasPermission("herochat.mod") || (chatter != null && channel.isModerator(chatter.getPlayer().getName())))) {
             Messaging.send(sender, "Insufficient permission.");
             return true;
         }
@@ -56,29 +55,16 @@ public class BanCommand extends BasicCommand {
         String targetName = args[args.length - 1];
         Player targetPlayer = Bukkit.getServer().getPlayer(targetName);
 
-        if (channel.isBanned(targetName)) {
-            channel.setBanned(targetName, false);
-            Messaging.send(sender, "Player unbanned.");
+        if (channel.isModerator(targetName)) {
+            channel.setModerator(targetName, false);
+            Messaging.send(sender, "Revoked mod status.");
             if (targetPlayer != null)
-                Messaging.send(targetPlayer, "Unbanned from $1.", channel.getName());
+                Messaging.send(targetPlayer, "You are no longer moderating $1.", channel.getName());
         } else {
-            if (targetPlayer != null) {
-                Chatter target = HeroChat.getChatterManager().getChatter(targetPlayer);
-                channel.banMember(target, true);
-
-                if (target.getChannels().isEmpty()) {
-                    HeroChat.getChannelManager().getDefaultChannel().addMember(chatter, true);
-                }
-
-                if (channel.equals(target.getActiveChannel())) {
-                    Channel focus = target.getChannels().iterator().next();
-                    target.setActiveChannel(focus);
-                    Messaging.send(targetPlayer, "Now chatting in $1.", focus.getName());
-                }
-            } else {
-                channel.setBanned(targetName, true);
-            }
-            Messaging.send(sender, "Player banned.");
+            channel.setModerator(targetName, true);
+            Messaging.send(sender, "Granted mod status.");
+            if (targetPlayer != null)
+                Messaging.send(targetPlayer, "You are now moderating $1.", channel.getName());
         }
 
         return true;

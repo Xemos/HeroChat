@@ -14,14 +14,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class BanCommand extends BasicCommand {
+public class MuteCommand extends BasicCommand {
 
-    public BanCommand() {
-        super("Ban");
-        setDescription("Bans a user from a channel");
-        setUsage("/ch ban §8[channel] <player>");
+    public MuteCommand() {
+        super("Mute");
+        setDescription("Mutes a user in a channel");
+        setUsage("/ch mute §8[channel] <player>");
         setArgumentRange(1, 2);
-        setIdentifiers("ch ban");
+        setIdentifiers("ch mute");
         setNotes("\u00a7cNote:\u00a7e If no channel is given, your active", "      channel is used.");
     }
 
@@ -48,7 +48,7 @@ public class BanCommand extends BasicCommand {
             }
         }
 
-        if (chatter != null && chatter.canBan(channel) != Result.ALLOWED) {
+        if (chatter != null && chatter.canMute(channel) != Result.ALLOWED) {
             Messaging.send(sender, "Insufficient permission.");
             return true;
         }
@@ -56,29 +56,16 @@ public class BanCommand extends BasicCommand {
         String targetName = args[args.length - 1];
         Player targetPlayer = Bukkit.getServer().getPlayer(targetName);
 
-        if (channel.isBanned(targetName)) {
-            channel.setBanned(targetName, false);
-            Messaging.send(sender, "Player unbanned.");
+        if (channel.isMuted(targetName)) {
+            channel.setMuted(targetName, false);
+            Messaging.send(sender, "Player unmuted.");
             if (targetPlayer != null)
-                Messaging.send(targetPlayer, "Unbanned from $1.", channel.getName());
+                Messaging.send(targetPlayer, "Unmuted in $1.", channel.getName());
         } else {
-            if (targetPlayer != null) {
-                Chatter target = HeroChat.getChatterManager().getChatter(targetPlayer);
-                channel.banMember(target, true);
-
-                if (target.getChannels().isEmpty()) {
-                    HeroChat.getChannelManager().getDefaultChannel().addMember(chatter, true);
-                }
-
-                if (channel.equals(target.getActiveChannel())) {
-                    Channel focus = target.getChannels().iterator().next();
-                    target.setActiveChannel(focus);
-                    Messaging.send(targetPlayer, "Now chatting in $1.", focus.getName());
-                }
-            } else {
-                channel.setBanned(targetName, true);
-            }
-            Messaging.send(sender, "Player banned.");
+            channel.setMuted(targetName, true);
+            Messaging.send(sender, "Player muted.");
+            if (targetPlayer != null)
+                Messaging.send(targetPlayer, "Muted in $1.", channel.getName());
         }
 
         return true;
