@@ -13,11 +13,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class HeroChat extends JavaPlugin {
-
     private static final Logger log = Logger.getLogger("Minecraft");
     private static final CommandHandler cmdHndlr = new CommandHandler();
     private static final ChannelManager chnnlMngr = new ChannelManager();
     private static final ChatterManager chttrMngr = new ChatterManager();
+
+    public static ChannelManager getChannelManager() {
+        return chnnlMngr;
+    }
+
+    public static ChatterManager getChatterManager() {
+        return chttrMngr;
+    }
+
+    public static CommandHandler getCommandHandler() {
+        return cmdHndlr;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
@@ -74,17 +85,4 @@ public class HeroChat extends JavaPlugin {
             chatter.setActiveChannel(channel);
         }
     }
-
-    public static ChannelManager getChannelManager() {
-        return chnnlMngr;
-    }
-
-    public static ChatterManager getChatterManager() {
-        return chttrMngr;
-    }
-
-    public static CommandHandler getCommandHandler() {
-        return cmdHndlr;
-    }
-
 }

@@ -4,19 +4,17 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.Chatter;
 import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class KickCommand extends BasicCommand {
-
     public KickCommand() {
         super("Kick");
         setDescription("Kicks a user from a channel");
@@ -81,5 +79,4 @@ public class KickCommand extends BasicCommand {
 
         return true;
     }
-
 }

@@ -6,13 +6,51 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class StandardChatter implements Chatter {
-
     private final Player player;
     private Set<Channel> channels = new HashSet<Channel>();
     private Channel activeChannel;
 
     public StandardChatter(Player player) {
         this.player = player;
+    }
+
+    @Override
+    public Channel getActiveChannel() {
+        return activeChannel;
+    }
+
+    @Override
+    public void setActiveChannel(Channel channel) {
+        activeChannel = channel;
+    }
+
+    @Override
+    public Set<Channel> getChannels() {
+        return channels;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this)
+            return true;
+
+        if (other == null)
+            return false;
+
+        if (!(other instanceof Chatter))
+            return false;
+
+        return player.equals(((Chatter) other).getPlayer());
+    }
+
+    @Override
+    public int hashCode() {
+        return player.hashCode();
     }
 
     @Override
@@ -134,47 +172,13 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this)
-            return true;
-
-        if (other == null)
-            return false;
-
-        if (!(other instanceof Chatter))
-            return false;
-
-        return player.equals(((Chatter) other).getPlayer());
-    }
-
-    @Override
-    public Channel getActiveChannel() {
-        return activeChannel;
-    }
-
-    @Override
-    public Set<Channel> getChannels() {
-        return channels;
-    }
-
-    @Override
     public String getName() {
         return player.getName();
     }
 
     @Override
-    public Player getPlayer() {
-        return player;
-    }
-
-    @Override
     public boolean hasChannel(Channel channel) {
         return channels.contains(channel);
-    }
-
-    @Override
-    public int hashCode() {
-        return player.hashCode();
     }
 
     @Override
@@ -194,10 +198,4 @@ public class StandardChatter implements Chatter {
 
         return true;
     }
-
-    @Override
-    public void setActiveChannel(Channel channel) {
-        activeChannel = channel;
-    }
-
 }

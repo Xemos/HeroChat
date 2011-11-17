@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import java.util.Set;
 
 public interface Chatter {
-
     public boolean addChannel(Channel channel, boolean announce);
 
     public Result canBan(Channel channel);
@@ -30,13 +29,13 @@ public interface Chatter {
 
     public Player getPlayer();
 
+    boolean hasChannel(Channel channel);
+
     public boolean isInRange(Chatter other, int distance);
 
     public boolean removeChannel(Channel channel, boolean announce);
 
     public void setActiveChannel(Channel channel);
-
-    boolean hasChannel(Channel channel);
 
     public enum Permission {
         JOIN("join"),
@@ -80,5 +79,4 @@ public interface Chatter {
         ALLOWED,
         BAD_WORLD
     }
-
 }

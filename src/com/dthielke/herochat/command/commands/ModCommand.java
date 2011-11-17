@@ -14,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class ModCommand extends BasicCommand {
-
     public ModCommand() {
         super("Mod");
         setDescription("Grants moderator status");
@@ -69,5 +68,4 @@ public class ModCommand extends BasicCommand {
 
         return true;
     }
-
 }

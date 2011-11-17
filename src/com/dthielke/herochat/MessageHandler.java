@@ -1,31 +1,14 @@
 package com.dthielke.herochat;
 
-import java.util.Iterator;
-import java.util.Set;
-
+import com.dthielke.herochat.Chatter.Result;
+import com.dthielke.herochat.util.Messaging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 
-import com.dthielke.herochat.Chatter.Result;
-import com.dthielke.herochat.util.Messaging;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MessageHandler {
-
-    public static String format(Channel channel) {
-        return format(channel, channel.getFormat());
-    }
-
-    public static String format(Channel channel, String format) {
-        // default minecraft format is <%1$s> %2$s
-        format = format.replace("#name", channel.getName());
-        format = format.replace("#nick", channel.getNick());
-        format = format.replace("#color", channel.getColor().toString());
-        format = format.replace("#sender", "%1$s");
-        format = format.replace("#msg", "%2$s");
-        format = format.replace("&", "\u00a7");
-        return format;
-    }
-
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
@@ -60,7 +43,7 @@ public class MessageHandler {
         // trim the recipient list
         Set<Player> recipients = event.getRecipients();
         Set<Chatter> intendedRecipients = channel.getMembers();
-        for (Iterator<Player> iter = recipients.iterator(); iter.hasNext();) {
+        for (Iterator<Player> iter = recipients.iterator(); iter.hasNext(); ) {
             Chatter recipient = HeroChat.getChatterManager().getChatter(iter.next());
             if (!intendedRecipients.contains(recipient)) {
                 iter.remove();
@@ -75,4 +58,18 @@ public class MessageHandler {
         event.setFormat(format(channel));
     }
 
+    public static String format(Channel channel) {
+        return format(channel, channel.getFormat());
+    }
+
+    public static String format(Channel channel, String format) {
+        // default minecraft format is <%1$s> %2$s
+        format = format.replace("#name", channel.getName());
+        format = format.replace("#nick", channel.getNick());
+        format = format.replace("#color", channel.getColor().toString());
+        format = format.replace("#sender", "%1$s");
+        format = format.replace("#msg", "%2$s");
+        format = format.replace("&", "\u00a7");
+        return format;
+    }
 }

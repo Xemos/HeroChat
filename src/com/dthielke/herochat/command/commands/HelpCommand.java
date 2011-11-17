@@ -4,18 +4,16 @@
 
 package com.dthielke.herochat.command.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.command.Command;
 import com.dthielke.herochat.command.CommandHandler;
+import org.bukkit.command.CommandSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HelpCommand extends BasicCommand {
-
     private static final int CMDS_PER_PAGE = 8;
 
     public HelpCommand() {
@@ -32,7 +30,8 @@ public class HelpCommand extends BasicCommand {
         if (args.length != 0) {
             try {
                 page = Integer.parseInt(args[0]) - 1;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         }
 
         List<Command> sortCommands = HeroChat.getCommandHandler().getCommands();
@@ -69,5 +68,4 @@ public class HelpCommand extends BasicCommand {
         sender.sendMessage("§cFor more info on a particular command, type §f/<command> ?");
         return true;
     }
-
 }

@@ -6,7 +6,6 @@ import org.bukkit.World;
 import java.util.Set;
 
 public interface Channel {
-
     // NOTE TO FUTURE SELF:
     // You may be wondering why the member functions operate on chatter objects
     // while ban, mute, and moderator functions operate on strings. A player is
@@ -22,6 +21,8 @@ public interface Channel {
     public void addWorld(String world);
 
     public void announce(String message);
+
+    public boolean banMember(Chatter chatter, boolean announce);
 
     public ChatColor getColor();
 
@@ -51,15 +52,11 @@ public interface Channel {
 
     public boolean isMuted(String name);
 
-    public boolean removeMember(Chatter chatter, boolean announce);
+    public boolean isShortcutAllowed();
 
     public boolean kickMember(Chatter chatter, boolean announce);
 
-    public boolean banMember(Chatter chatter, boolean announce);
-
-    public boolean isShortcutAllowed();
-
-    public void setShortcutAllowed(boolean shortcutAllowed);
+    public boolean removeMember(Chatter chatter, boolean announce);
 
     public void removeWorld(String world);
 
@@ -79,4 +76,5 @@ public interface Channel {
 
     public void setNick(String nick);
 
+    public void setShortcutAllowed(boolean shortcutAllowed);
 }

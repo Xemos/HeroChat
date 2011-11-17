@@ -1,14 +1,12 @@
 package com.dthielke.herochat.command;
 
+import com.dthielke.herochat.util.Messaging;
+import org.bukkit.command.CommandSender;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.command.CommandSender;
-
-import com.dthielke.herochat.util.Messaging;
-
 public abstract class BasicInteractiveCommand extends BasicCommand implements InteractiveCommand {
-
     private InteractiveCommandState[] states = new InteractiveCommandState[0];
     private Map<CommandSender, Integer> userStates = new HashMap<CommandSender, Integer>();
 
@@ -86,10 +84,12 @@ public abstract class BasicInteractiveCommand extends BasicCommand implements In
     }
 
     @Override
-    public final void setArgumentRange(int min, int max) {}
+    public final void setArgumentRange(int min, int max) {
+    }
 
     @Override
-    public final void setIdentifiers(String... identifiers) {}
+    public final void setIdentifiers(String... identifiers) {
+    }
 
     public final void setStates(InteractiveCommandState... states) {
         if (states.length == 0)
@@ -98,5 +98,4 @@ public abstract class BasicInteractiveCommand extends BasicCommand implements In
         this.states = states;
         super.setArgumentRange(states[0].getMinArguments(), states[0].getMaxArguments());
     }
-
 }

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class StandardChannel implements Channel {
-
     private static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
     private static final String MESSAGE_FORMAT = "#color[#nick] &f#sender#color: #msg";
 
@@ -33,35 +32,68 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean addMember(Chatter chatter, boolean announce) {
-        if (members.contains(chatter))
-            return false;
-
-        members.add(chatter);
-        if (!chatter.hasChannel(this)) {
-            chatter.addChannel(this, announce);
-        }
-
-        if (announce) {
-            announce(chatter.getPlayer().getName() + " has joined the channel.");
-        }
-
-        return true;
+    public ChatColor getColor() {
+        return color;
     }
 
     @Override
-    public void addWorld(String world) {
-        if (!worlds.contains(world)) {
-            worlds.add(world);
-        }
+    public void setColor(ChatColor color) {
+        this.color = color;
     }
 
     @Override
-    public void announce(String message) {
-        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT).replace("%2$s", message);
-        for (Chatter member : members) {
-            member.getPlayer().sendMessage(message);
-        }
+    public int getDistance() {
+        return distance;
+    }
+
+    @Override
+    public String getFormat() {
+        return format;
+    }
+
+    @Override
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    @Override
+    public Set<Chatter> getMembers() {
+        return members;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getNick() {
+        return nick;
+    }
+
+    @Override
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    @Override
+    public Set<String> getWorlds() {
+        return worlds;
+    }
+
+    @Override
+    public boolean isShortcutAllowed() {
+        return shortcutAllowed;
+    }
+
+    @Override
+    public void setShortcutAllowed(boolean shortcutAllowed) {
+        this.shortcutAllowed = shortcutAllowed;
     }
 
     @Override
@@ -80,47 +112,84 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public ChatColor getColor() {
-        return color;
-    }
-
-    @Override
-    public int getDistance() {
-        return distance;
-    }
-
-    @Override
-    public String getFormat() {
-        return format;
-    }
-
-    @Override
-    public Set<Chatter> getMembers() {
-        return members;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getNick() {
-        return nick;
-    }
-
-    @Override
-    public Set<String> getWorlds() {
-        return worlds;
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (name == null ? 0 : name.toLowerCase().hashCode());
         result = prime * result + (nick == null ? 0 : nick.toLowerCase().hashCode());
         return result;
+    }
+
+    @Override
+    public boolean addMember(Chatter chatter, boolean announce) {
+        if (members.contains(chatter))
+            return false;
+
+        members.add(chatter);
+        if (!chatter.hasChannel(this)) {
+            chatter.addChannel(this, announce);
+        }
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has joined the channel.");
+        }
+
+        return true;
+    }
+
+    @Override
+    public void announce(String message) {
+        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT).replace("%2$s", message);
+        for (Chatter member : members) {
+            member.getPlayer().sendMessage(message);
+        }
+    }
+
+    @Override
+    public void addWorld(String world) {
+        if (!worlds.contains(world)) {
+            worlds.add(world);
+        }
+    }
+
+    @Override
+    public boolean banMember(Chatter chatter, boolean announce) {
+        if (!members.contains(chatter))
+            return false;
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has been banned.");
+        }
+
+        removeMember(chatter, false);
+        setBanned(chatter.getPlayer().getName(), true);
+        return true;
+    }
+
+    @Override
+    public boolean removeMember(Chatter chatter, boolean announce) {
+        if (!members.contains(chatter))
+            return false;
+
+        if (announce) {
+            announce(chatter.getPlayer().getName() + " has left the channel.");
+        }
+
+        members.remove(chatter);
+        if (chatter.hasChannel(this)) {
+            chatter.removeChannel(this, announce);
+        }
+
+        return true;
+    }
+
+    @Override
+    public void setBanned(String name, boolean banned) {
+        if (banned) {
+            bans.add(name.toLowerCase());
+        } else {
+            bans.remove(name.toLowerCase());
+        }
     }
 
     @Override
@@ -159,19 +228,15 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean removeMember(Chatter chatter, boolean announce) {
+    public boolean kickMember(Chatter chatter, boolean announce) {
         if (!members.contains(chatter))
             return false;
 
         if (announce) {
-            announce(chatter.getPlayer().getName() + " has left the channel.");
+            announce(chatter.getPlayer().getName() + " has been kicked.");
         }
 
-        members.remove(chatter);
-        if (chatter.hasChannel(this)) {
-            chatter.removeChannel(this, announce);
-        }
-
+        removeMember(chatter, false);
         return true;
     }
 
@@ -183,27 +248,8 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setBanned(String name, boolean banned) {
-        if (banned) {
-            bans.add(name.toLowerCase());
-        } else {
-            bans.remove(name.toLowerCase());
-        }
-    }
-
-    @Override
-    public void setColor(ChatColor color) {
-        this.color = color;
-    }
-
-    @Override
     public void setDistance(int distance) {
         this.distance = distance < 0 ? 0 : distance;
-    }
-
-    @Override
-    public void setFormat(String format) {
-        this.format = format;
     }
 
     @Override
@@ -223,52 +269,4 @@ public class StandardChannel implements Channel {
             mutes.remove(name.toLowerCase());
         }
     }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    @Override
-    public boolean kickMember(Chatter chatter, boolean announce) {
-        if (!members.contains(chatter))
-            return false;
-
-        if (announce) {
-            announce(chatter.getPlayer().getName() + " has been kicked.");
-        }
-
-        removeMember(chatter, false);
-        return true;
-    }
-
-    @Override
-    public boolean banMember(Chatter chatter, boolean announce) {
-        if (!members.contains(chatter))
-            return false;
-
-        if (announce) {
-            announce(chatter.getPlayer().getName() + " has been banned.");
-        }
-
-        removeMember(chatter, false);
-        setBanned(chatter.getPlayer().getName(), true);
-        return true;
-    }
-
-    @Override
-    public boolean isShortcutAllowed() {
-        return shortcutAllowed;
-    }
-
-    @Override
-    public void setShortcutAllowed(boolean shortcutAllowed) {
-        this.shortcutAllowed = shortcutAllowed;
-    }
-
 }

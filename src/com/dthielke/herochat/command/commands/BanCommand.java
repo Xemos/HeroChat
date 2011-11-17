@@ -15,7 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class BanCommand extends BasicCommand {
-
     public BanCommand() {
         super("Ban");
         setDescription("Bans a user from a channel");
@@ -86,5 +85,4 @@ public class BanCommand extends BasicCommand {
 
         return true;
     }
-
 }

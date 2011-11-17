@@ -1,13 +1,16 @@
 package com.dthielke.herochat;
 
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.entity.Player;
-
 public class ChatterManager {
-
     private List<Chatter> chatters = new ArrayList<Chatter>();
+
+    public List<Chatter> getChatters() {
+        return chatters;
+    }
 
     public boolean addChatter(Chatter chatter) {
         if (chatters.contains(chatter))
@@ -32,10 +35,6 @@ public class ChatterManager {
         return null;
     }
 
-    public List<Chatter> getChatters() {
-        return chatters;
-    }
-
     public boolean removeChatter(Chatter chatter) {
         if (!chatters.contains(chatter))
             return false;
@@ -43,5 +42,4 @@ public class ChatterManager {
         chatters.remove(chatter);
         return true;
     }
-
 }

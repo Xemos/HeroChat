@@ -1,7 +1,6 @@
 package com.dthielke.herochat.command;
 
 public abstract class BasicInteractiveCommandState implements InteractiveCommandState {
-
     private String[] identifiers;
     private int minArguments = 0;
     private int maxArguments = 0;
@@ -40,5 +39,4 @@ public abstract class BasicInteractiveCommandState implements InteractiveCommand
         this.minArguments = min;
         this.maxArguments = max;
     }
-
 }

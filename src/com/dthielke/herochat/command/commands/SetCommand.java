@@ -16,7 +16,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetCommand extends BasicCommand {
-
     public SetCommand() {
         super("Set Channel Setting");
         setDescription("Modifies a setting of an existing channel");
@@ -93,5 +92,4 @@ public class SetCommand extends BasicCommand {
 
         return true;
     }
-
 }

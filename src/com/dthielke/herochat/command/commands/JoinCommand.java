@@ -4,9 +4,6 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
 import com.dthielke.herochat.Chatter;
@@ -14,9 +11,10 @@ import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class JoinCommand extends BasicCommand {
-
     public JoinCommand() {
         super("Join");
         setDescription("Joins a channel");
@@ -55,5 +53,4 @@ public class JoinCommand extends BasicCommand {
         channel.addMember(chatter, true);
         return true;
     }
-
 }

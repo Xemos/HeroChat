@@ -5,6 +5,13 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerListener;
 
 public class PlayerChatListener extends PlayerListener {
+    @Override
+    public void onPlayerChat(PlayerChatEvent event) {
+        if (event.isCancelled())
+            return;
+
+        MessageHandler.handle(event);
+    }
 
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
@@ -19,13 +26,4 @@ public class PlayerChatListener extends PlayerListener {
             HeroChat.getCommandHandler().dispatch(event.getPlayer(), "ch qm", args);
         }
     }
-
-    @Override
-    public void onPlayerChat(PlayerChatEvent event) {
-        if (event.isCancelled())
-            return;
-
-        MessageHandler.handle(event);
-    }
-
 }

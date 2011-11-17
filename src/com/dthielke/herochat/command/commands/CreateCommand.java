@@ -4,18 +4,16 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.StandardChannel;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class CreateCommand extends BasicCommand {
-
     public CreateCommand() {
         super("Create Channel");
         setDescription("Creates a new channel");
@@ -53,12 +51,11 @@ public class CreateCommand extends BasicCommand {
 
         Channel channel = new StandardChannel(name, nick);
         if (sender instanceof Player) {
-            channel.setModerator(((Player) sender).getName(), true);
+            channel.setModerator(sender.getName(), true);
         }
         channelMngr.addChannel(channel);
         Messaging.send(sender, "Channel created.");
 
         return true;
     }
-
 }

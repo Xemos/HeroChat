@@ -15,7 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class MuteCommand extends BasicCommand {
-
     public MuteCommand() {
         super("Mute");
         setDescription("Mutes a user in a channel");
@@ -73,5 +72,4 @@ public class MuteCommand extends BasicCommand {
 
         return true;
     }
-
 }

@@ -3,7 +3,6 @@ package com.dthielke.herochat.command;
 import org.bukkit.command.CommandSender;
 
 public abstract class BasicCommand implements Command {
-
     private String name;
     private String description = "";
     private String usage = "";
@@ -18,16 +17,21 @@ public abstract class BasicCommand implements Command {
     }
 
     @Override
-    public void cancelInteraction(CommandSender executor) {}
-
-    @Override
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public String[] getIdentifiers() {
         return identifiers;
+    }
+
+    public void setIdentifiers(String... identifiers) {
+        this.identifiers = identifiers;
     }
 
     @Override
@@ -50,14 +54,30 @@ public abstract class BasicCommand implements Command {
         return notes;
     }
 
+    public void setNotes(String... notes) {
+        this.notes = notes;
+    }
+
     @Override
     public String getPermission() {
         return permission;
     }
 
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
     @Override
     public String getUsage() {
         return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    @Override
+    public void cancelInteraction(CommandSender executor) {
     }
 
     @Override
@@ -88,25 +108,4 @@ public abstract class BasicCommand implements Command {
         this.minArguments = min;
         this.maxArguments = max;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setIdentifiers(String... identifiers) {
-        this.identifiers = identifiers;
-    }
-
-    public void setNotes(String... notes) {
-        this.notes = notes;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public void setUsage(String usage) {
-        this.usage = usage;
-    }
-
 }

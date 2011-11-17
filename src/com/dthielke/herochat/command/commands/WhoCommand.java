@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class WhoCommand extends BasicCommand {
-
     public WhoCommand() {
         super("Who");
         setDescription("Lists players in a channel");
@@ -79,5 +78,4 @@ public class WhoCommand extends BasicCommand {
 
         return true;
     }
-
 }

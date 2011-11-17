@@ -4,9 +4,6 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
 import com.dthielke.herochat.Chatter;
@@ -14,9 +11,10 @@ import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class FocusCommand extends BasicCommand {
-
     public FocusCommand() {
         super("Focus");
         setDescription("Changes your active channel");
@@ -56,5 +54,4 @@ public class FocusCommand extends BasicCommand {
         Messaging.send(player, "Now chatting in $1.", channel.getName());
         return true;
     }
-
 }

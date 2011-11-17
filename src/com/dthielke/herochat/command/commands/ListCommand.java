@@ -4,18 +4,16 @@
 
 package com.dthielke.herochat.command.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.Chatter.Permission;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
+import org.bukkit.command.CommandSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListCommand extends BasicCommand {
-
     private static final int CHANNELS_PER_PAGE = 8;
 
     public ListCommand() {
@@ -32,7 +30,8 @@ public class ListCommand extends BasicCommand {
         if (args.length != 0) {
             try {
                 page = Integer.parseInt(args[0]) - 1;
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         }
 
         List<Channel> channels = new ArrayList<Channel>();
@@ -64,5 +63,4 @@ public class ListCommand extends BasicCommand {
         }
         return true;
     }
-
 }

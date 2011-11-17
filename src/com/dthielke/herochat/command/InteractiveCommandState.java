@@ -3,7 +3,6 @@ package com.dthielke.herochat.command;
 import org.bukkit.command.CommandSender;
 
 public interface InteractiveCommandState {
-
     public boolean execute(CommandSender executor, String identifier, String[] args);
 
     public int getMaxArguments();
@@ -12,5 +11,4 @@ public interface InteractiveCommandState {
 
     // public String getIdentifier();
     public boolean isIdentifier(String input);
-
 }

@@ -3,7 +3,6 @@ package com.dthielke.herochat.command;
 import org.bukkit.command.CommandSender;
 
 public interface Command {
-
     public void cancelInteraction(CommandSender executor);
 
     public boolean execute(CommandSender executor, String identifier, String[] args);
@@ -31,5 +30,4 @@ public interface Command {
     public boolean isInteractive();
 
     public boolean isShownOnHelpMenu();
-
 }

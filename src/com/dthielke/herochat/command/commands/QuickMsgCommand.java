@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class QuickMsgCommand extends BasicCommand {
-
     public QuickMsgCommand() {
         super("Quick Message");
         setDescription("Sends a message without changing your active channel");
@@ -46,5 +45,4 @@ public class QuickMsgCommand extends BasicCommand {
         chatter.setActiveChannel(active);
         return true;
     }
-
 }
