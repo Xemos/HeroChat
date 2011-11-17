@@ -16,7 +16,7 @@ public class StandardChannel implements Channel {
     private String format;
     private ChatColor color;
     private int distance;
-    private boolean quickMessagable;
+    private boolean shortcutAllowed;
     private Set<Chatter> members = new HashSet<Chatter>();
     private Set<String> worlds = new HashSet<String>();
     private Set<String> bans = new HashSet<String>();
@@ -28,7 +28,7 @@ public class StandardChannel implements Channel {
         this.nick = nick;
         this.color = ChatColor.WHITE;
         this.distance = 0;
-        this.quickMessagable = false;
+        this.shortcutAllowed = false;
         this.format = MESSAGE_FORMAT;
     }
 
@@ -262,13 +262,13 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean isQuickMessagable() {
-        return quickMessagable;
+    public boolean isShortcutAllowed() {
+        return shortcutAllowed;
     }
 
     @Override
-    public void setQuickMessagable(boolean quickMessagable) {
-        this.quickMessagable = quickMessagable;
+    public void setShortcutAllowed(boolean shortcutAllowed) {
+        this.shortcutAllowed = shortcutAllowed;
     }
 
 }

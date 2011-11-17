@@ -43,6 +43,7 @@ public class HeroChat extends JavaPlugin {
         cmdHndlr.addCommand(new FocusCommand());
         cmdHndlr.addCommand(new JoinCommand());
         cmdHndlr.addCommand(new LeaveCommand());
+        cmdHndlr.addCommand(new QuickMsgCommand());
         cmdHndlr.addCommand(new ListCommand());
         cmdHndlr.addCommand(new WhoCommand());
         cmdHndlr.addCommand(new CreateCommand());
@@ -50,12 +51,15 @@ public class HeroChat extends JavaPlugin {
         cmdHndlr.addCommand(new MuteCommand());
         cmdHndlr.addCommand(new KickCommand());
         cmdHndlr.addCommand(new BanCommand());
+        cmdHndlr.addCommand(new ModCommand());
         cmdHndlr.addCommand(new HelpCommand());
     }
 
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvent(Type.PLAYER_CHAT, new PlayerChatListener(), Priority.High, this);
+        PlayerChatListener pcl = new PlayerChatListener();
+        pm.registerEvent(Type.PLAYER_CHAT, pcl, Priority.High, this);
+        pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, pcl, Priority.Normal, this);
     }
 
     private void setupDummyEnvironment() {

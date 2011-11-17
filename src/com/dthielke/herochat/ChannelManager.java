@@ -1,21 +1,47 @@
 package com.dthielke.herochat;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 
-public class ChannelManager {
+import java.util.*;
 
+public class ChannelManager {
     private List<Channel> channels = new ArrayList<Channel>();
-    private Map<Chatter.Permission, Permission> wildcardPermissions = new EnumMap<Chatter.Permission, Permission>(Chatter.Permission.class);
     private Channel defaultChannel;
+    private Map<Chatter.Permission, Permission> wildcardPermissions = new EnumMap<Chatter.Permission, Permission>(Chatter.Permission.class);
+    private Set<Chatter.Permission> modPermissions = EnumSet.noneOf(Chatter.Permission.class);
 
     public ChannelManager() {
         registerChannelPermissions();
+    }
+
+    public void registerChannelPermissions() {
+        // setup empty wildcard permissions
+        for (Chatter.Permission p : Chatter.Permission.values()) {
+            Permission perm = new Permission(p.formWildcard());
+            Bukkit.getServer().getPluginManager().addPermission(perm);
+            wildcardPermissions.put(p, perm);
+        }
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public Channel getDefaultChannel() {
+        return defaultChannel;
+    }
+
+    public void setDefaultChannel(Channel channel) {
+        defaultChannel = channel;
+    }
+
+    public Set<Chatter.Permission> getModPermissions() {
+        return modPermissions;
+    }
+
+    public void setModPermissions(Set<Chatter.Permission> modPermissions) {
+        this.modPermissions = modPermissions;
     }
 
     public boolean addChannel(Channel channel) {
@@ -39,33 +65,24 @@ public class ChannelManager {
         return true;
     }
 
-    public Channel getChannel(String identifier) {
-        for (Channel channel : channels)
-            if (identifier.equalsIgnoreCase(channel.getName()) || identifier.equalsIgnoreCase(channel.getNick()))
-                return channel;
-
-        return null;
+    public void addModPermission(Chatter.Permission permission) {
+        modPermissions.add(permission);
     }
 
-    public List<Channel> getChannels() {
-        return channels;
-    }
-
-    public Channel getDefaultChannel() {
-        return defaultChannel;
+    public boolean checkModPermission(Chatter.Permission permission) {
+        return modPermissions.contains(permission);
     }
 
     public boolean hasChannel(String identifier) {
         return getChannel(identifier) != null;
     }
 
-    public void registerChannelPermissions() {
-        // setup empty wildcard permissions
-        for (Chatter.Permission p : Chatter.Permission.values()) {
-            Permission perm = new Permission(p.formWildcard());
-            Bukkit.getServer().getPluginManager().addPermission(perm);
-            wildcardPermissions.put(p, perm);
-        }
+    public Channel getChannel(String identifier) {
+        for (Channel channel : channels)
+            if (identifier.equalsIgnoreCase(channel.getName()) || identifier.equalsIgnoreCase(channel.getNick()))
+                return channel;
+
+        return null;
     }
 
     public boolean removeChannel(Channel channel) {
@@ -82,9 +99,5 @@ public class ChannelManager {
         }
 
         return true;
-    }
-
-    public void setDefaultChannel(Channel channel) {
-        defaultChannel = channel;
     }
 }

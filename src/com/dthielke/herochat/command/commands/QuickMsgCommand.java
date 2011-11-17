@@ -9,10 +9,8 @@ import com.dthielke.herochat.Chatter;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
 
 public class QuickMsgCommand extends BasicCommand {
 
@@ -44,8 +42,8 @@ public class QuickMsgCommand extends BasicCommand {
 
         Channel active = chatter.getActiveChannel();
         chatter.setActiveChannel(channel);
-        PlayerChatEvent event = new PlayerChatEvent(player, msg.trim());
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        player.chat(msg.trim());
+        chatter.setActiveChannel(active);
         return true;
     }
 

@@ -1,10 +1,8 @@
 package com.dthielke.herochat;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.entity.Player;
+
+import java.util.Set;
 
 public interface Chatter {
 
@@ -18,7 +16,7 @@ public interface Chatter {
 
     public Result canLeave(Channel channel);
 
-    public Result canModify(Channel channel);
+    public Result canModify(String setting, Channel channel);
 
     public Result canMute(Channel channel);
 
@@ -36,7 +34,7 @@ public interface Chatter {
 
     public boolean removeChannel(Channel channel, boolean announce);
 
-    public boolean setActiveChannel(Channel channel);
+    public void setActiveChannel(Channel channel);
 
     boolean hasChannel(Channel channel);
 
@@ -47,9 +45,13 @@ public interface Chatter {
         KICK("kick"),
         BAN("ban"),
         MUTE("mute"),
-        MODIFY("modify");
+        MODIFY_NAME("modify.name"),
+        MODIFY_NICK("modify.nick"),
+        MODIFY_COLOR("modify.color"),
+        MODIFY_DISTANCE("modify.distance"),
+        MODIFY_FORMAT("modify.format"),
+        MODIFY_SHORTCUT("modify.shortcut");
 
-        private static Map<Permission, String> names;
         private String name;
 
         private Permission(String name) {
@@ -68,13 +70,6 @@ public interface Chatter {
         public String toString() {
             return name;
         }
-
-        static {
-            names = new HashMap<Permission, String>();
-            for (Permission permission : Permission.values()) {
-                names.put(permission, permission.name);
-            }
-        }
     }
 
     public enum Result {
@@ -83,7 +78,7 @@ public interface Chatter {
         BANNED,
         MUTED,
         ALLOWED,
-        BAD_WORLD;
+        BAD_WORLD
     }
 
 }

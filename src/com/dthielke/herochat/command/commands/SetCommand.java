@@ -42,7 +42,7 @@ public class SetCommand extends BasicCommand {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             Chatter chatter = HeroChat.getChatterManager().getChatter(player);
-            if (chatter.canModify(channel) != Result.ALLOWED) {
+            if (chatter.canModify(setting, channel) != Result.ALLOWED) {
                 Messaging.send(sender, "Insufficient permission.");
                 return true;
             }
@@ -81,12 +81,12 @@ public class SetCommand extends BasicCommand {
                 channel.setColor(color);
                 Messaging.send(sender, "Color changed.");
             }
-        } else if (setting.equals("qm")) {
-            if (channel.isQuickMessagable()) {
-                channel.setQuickMessagable(false);
+        } else if (setting.equals("shortcut")) {
+            if (value.equals("0")) {
+                channel.setShortcutAllowed(false);
                 Messaging.send(sender, "Quick messaging disabled.");
             } else {
-                channel.setQuickMessagable(true);
+                channel.setShortcutAllowed(true);
                 Messaging.send(sender, "Quick messaging enabled.");
             }
         }

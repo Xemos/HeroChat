@@ -8,15 +8,15 @@ public class PlayerChatListener extends PlayerListener {
 
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled())
             return;
-        }
+
         String input = event.getMessage().substring(1);
         String[] args = input.split(" ");
         Channel channel = HeroChat.getChannelManager().getChannel(args[0]);
-        if (channel != null && channel.isQuickMessagable()) {
+        if (channel != null && channel.isShortcutAllowed()) {
             event.setCancelled(true);
-            HeroChat.getCommandHandler().dispatch(event.getPlayer(), "qm", args);
+            HeroChat.getCommandHandler().dispatch(event.getPlayer(), "ch qm", args);
         }
     }
 

@@ -1,9 +1,9 @@
 package com.dthielke.herochat;
 
+import org.bukkit.entity.Player;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.bukkit.entity.Player;
 
 public class StandardChatter implements Chatter {
 
@@ -76,11 +76,30 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public Result canModify(Channel channel) {
-        if (player.hasPermission(Permission.MODIFY.form(channel)))
+    public Result canModify(String setting, Channel channel) {
+        setting = setting.toLowerCase();
+        Permission permission;
+
+        if (setting.equals("name")) {
+            permission = Permission.MODIFY_NAME;
+        } else if (setting.equals("nick")) {
+            permission = Permission.MODIFY_NICK;
+        } else if (setting.equals("format")) {
+            permission = Permission.MODIFY_FORMAT;
+        } else if (setting.equals("distance")) {
+            permission = Permission.MODIFY_DISTANCE;
+        } else if (setting.equals("color")) {
+            permission = Permission.MODIFY_COLOR;
+        } else if (setting.equals("shortcut")) {
+            permission = Permission.MODIFY_SHORTCUT;
+        } else {
+            return Result.INVALID;
+        }
+
+        if (player.hasPermission(permission.form(channel)))
             return Result.ALLOWED;
 
-        if (channel.isModerator(player.getName()))
+        if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(permission))
             return Result.ALLOWED;
 
         return Result.NO_PERMISSION;
@@ -177,12 +196,8 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean setActiveChannel(Channel channel) {
-        if (!channels.contains(channel))
-            return false;
-
+    public void setActiveChannel(Channel channel) {
         activeChannel = channel;
-        return true;
     }
 
 }

@@ -57,9 +57,9 @@ public interface Channel {
 
     public boolean banMember(Chatter chatter, boolean announce);
 
-    public boolean isQuickMessagable();
+    public boolean isShortcutAllowed();
 
-    public void setQuickMessagable(boolean quickMessagable);
+    public void setShortcutAllowed(boolean shortcutAllowed);
 
     public void removeWorld(String world);
 
