@@ -68,7 +68,7 @@ public class KickCommand extends BasicCommand {
         Messaging.send(sender, "Player kicked.");
 
         if (target.getChannels().isEmpty()) {
-            HeroChat.getChannelManager().getDefaultChannel().addMember(chatter, true);
+            HeroChat.getChannelManager().getDefaultChannel().addMember(target, true);
         }
 
         if (channel.equals(target.getActiveChannel())) {

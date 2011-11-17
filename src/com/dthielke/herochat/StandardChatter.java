@@ -172,6 +172,17 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public Result canRemove(Channel channel) {
+        if (player.hasPermission(Permission.REMOVE.form(channel)))
+            return Result.ALLOWED;
+
+        if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.REMOVE))
+            return Result.ALLOWED;
+
+        return Result.NO_PERMISSION;
+    }
+
+    @Override
     public String getName() {
         return player.getName();
     }

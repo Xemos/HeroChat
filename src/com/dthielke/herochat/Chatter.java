@@ -21,6 +21,8 @@ public interface Chatter {
 
     public Result canSpeak(Channel channel);
 
+    public Result canRemove(Channel channel);
+
     public Channel getActiveChannel();
 
     public Set<Channel> getChannels();
@@ -44,6 +46,7 @@ public interface Chatter {
         KICK("kick"),
         BAN("ban"),
         MUTE("mute"),
+        REMOVE("remove"),
         MODIFY_NAME("modify.name"),
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
