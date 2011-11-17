@@ -1,7 +1,7 @@
 package com.dthielke.herochat;
 
-import java.util.logging.Logger;
-
+import com.dthielke.herochat.command.CommandHandler;
+import com.dthielke.herochat.command.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,16 +10,7 @@ import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.dthielke.herochat.command.CommandHandler;
-import com.dthielke.herochat.command.commands.BanCommand;
-import com.dthielke.herochat.command.commands.CreateCommand;
-import com.dthielke.herochat.command.commands.FocusCommand;
-import com.dthielke.herochat.command.commands.HelpCommand;
-import com.dthielke.herochat.command.commands.JoinCommand;
-import com.dthielke.herochat.command.commands.KickCommand;
-import com.dthielke.herochat.command.commands.LeaveCommand;
-import com.dthielke.herochat.command.commands.ListCommand;
-import com.dthielke.herochat.command.commands.SetCommand;
+import java.util.logging.Logger;
 
 public class HeroChat extends JavaPlugin {
 
@@ -53,8 +44,10 @@ public class HeroChat extends JavaPlugin {
         cmdHndlr.addCommand(new JoinCommand());
         cmdHndlr.addCommand(new LeaveCommand());
         cmdHndlr.addCommand(new ListCommand());
+        cmdHndlr.addCommand(new WhoCommand());
         cmdHndlr.addCommand(new CreateCommand());
         cmdHndlr.addCommand(new SetCommand());
+        cmdHndlr.addCommand(new MuteCommand());
         cmdHndlr.addCommand(new KickCommand());
         cmdHndlr.addCommand(new BanCommand());
         cmdHndlr.addCommand(new HelpCommand());

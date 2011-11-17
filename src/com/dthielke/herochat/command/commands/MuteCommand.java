@@ -27,18 +27,19 @@ public class MuteCommand extends BasicCommand {
 
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args) {
-        Channel channel = null;
+        Channel channel;
         Chatter chatter = null;
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
             chatter = HeroChat.getChatterManager().getChatter(player);
-            channel = chatter.getActiveChannel();
         }
 
         if (args.length == 1) {
             if (chatter != null) {
                 channel = chatter.getActiveChannel();
+            } else {
+                channel = HeroChat.getChannelManager().getDefaultChannel();
             }
         } else {
             channel = HeroChat.getChannelManager().getChannel(args[0]);
@@ -55,6 +56,8 @@ public class MuteCommand extends BasicCommand {
 
         String targetName = args[args.length - 1];
         Player targetPlayer = Bukkit.getServer().getPlayer(targetName);
+        if (targetPlayer != null)
+            targetName = targetPlayer.getName();
 
         if (channel.isMuted(targetName)) {
             channel.setMuted(targetName, false);

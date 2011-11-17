@@ -1,10 +1,10 @@
 package com.dthielke.herochat;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class StandardChannel implements Channel {
 
@@ -255,6 +255,7 @@ public class StandardChannel implements Channel {
         }
 
         removeMember(chatter, false);
+        setBanned(chatter.getPlayer().getName(), true);
         return true;
     }
 
