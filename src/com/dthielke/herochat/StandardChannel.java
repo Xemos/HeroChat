@@ -16,6 +16,7 @@ public class StandardChannel implements Channel {
     private String format;
     private ChatColor color;
     private int distance;
+    private boolean quickMessagable;
     private Set<Chatter> members = new HashSet<Chatter>();
     private Set<String> worlds = new HashSet<String>();
     private Set<String> bans = new HashSet<String>();
@@ -27,6 +28,7 @@ public class StandardChannel implements Channel {
         this.nick = nick;
         this.color = ChatColor.WHITE;
         this.distance = 0;
+        this.quickMessagable = false;
         this.format = MESSAGE_FORMAT;
     }
 
@@ -257,6 +259,16 @@ public class StandardChannel implements Channel {
         removeMember(chatter, false);
         setBanned(chatter.getPlayer().getName(), true);
         return true;
+    }
+
+    @Override
+    public boolean isQuickMessagable() {
+        return quickMessagable;
+    }
+
+    @Override
+    public void setQuickMessagable(boolean quickMessagable) {
+        this.quickMessagable = quickMessagable;
     }
 
 }

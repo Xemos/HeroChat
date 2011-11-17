@@ -1,9 +1,9 @@
 package com.dthielke.herochat;
 
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+
+import java.util.Set;
 
 public interface Channel {
 
@@ -52,10 +52,14 @@ public interface Channel {
     public boolean isMuted(String name);
 
     public boolean removeMember(Chatter chatter, boolean announce);
-    
+
     public boolean kickMember(Chatter chatter, boolean announce);
-    
+
     public boolean banMember(Chatter chatter, boolean announce);
+
+    public boolean isQuickMessagable();
+
+    public void setQuickMessagable(boolean quickMessagable);
 
     public void removeWorld(String world);
 

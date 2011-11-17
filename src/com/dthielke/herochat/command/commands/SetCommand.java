@@ -4,10 +4,6 @@
 
 package com.dthielke.herochat.command.commands;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelManager;
 import com.dthielke.herochat.Chatter;
@@ -15,6 +11,9 @@ import com.dthielke.herochat.Chatter.Result;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import com.dthielke.herochat.util.Messaging;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class SetCommand extends BasicCommand {
 
@@ -24,7 +23,7 @@ public class SetCommand extends BasicCommand {
         setUsage("/ch set §8<channel> <setting> <value>");
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
-        setNotes("\u00a7cSettings:\u00a7e name, nick, format, distance, color");
+        setNotes("\u00a7cSettings:\u00a7e name, nick, format, distance, color, qm");
     }
 
     @Override
@@ -81,6 +80,14 @@ public class SetCommand extends BasicCommand {
             } else {
                 channel.setColor(color);
                 Messaging.send(sender, "Color changed.");
+            }
+        } else if (setting.equals("qm")) {
+            if (channel.isQuickMessagable()) {
+                channel.setQuickMessagable(false);
+                Messaging.send(sender, "Quick messaging disabled.");
+            } else {
+                channel.setQuickMessagable(true);
+                Messaging.send(sender, "Quick messaging enabled.");
             }
         }
 
