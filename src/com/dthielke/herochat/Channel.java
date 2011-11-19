@@ -26,6 +26,8 @@ public interface Channel {
 
     public boolean banMember(Chatter chatter, boolean announce);
 
+    public Set<String> getBans();
+
     public ChatColor getColor();
 
     public int getDistance();
@@ -33,6 +35,10 @@ public interface Channel {
     public String getFormat();
 
     public Set<Chatter> getMembers();
+
+    public Set<String> getModerators();
+
+    public Set<String> getMutes();
 
     public String getName();
 
@@ -64,6 +70,8 @@ public interface Channel {
 
     public void setBanned(String name, boolean banned);
 
+    public void setBans(Set<String> bans);
+
     public void setColor(ChatColor color);
 
     public void setDistance(int distance);
@@ -72,11 +80,17 @@ public interface Channel {
 
     public void setModerator(String name, boolean moderator);
 
+    public void setModerators(Set<String> moderators);
+
     public void setMuted(String name, boolean muted);
+
+    public void setMutes(Set<String> mutes);
 
     public void setName(String name);
 
     public void setNick(String nick);
 
     public void setShortcutAllowed(boolean shortcutAllowed);
+
+    public void setWorlds(Set<String> worlds);
 }

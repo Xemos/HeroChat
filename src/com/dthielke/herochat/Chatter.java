@@ -19,9 +19,9 @@ public interface Chatter {
 
     public Result canMute(Channel channel);
 
-    public Result canSpeak(Channel channel);
-
     public Result canRemove(Channel channel);
+
+    public Result canSpeak(Channel channel);
 
     public Channel getActiveChannel();
 

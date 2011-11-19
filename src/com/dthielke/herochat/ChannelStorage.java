@@ -1,27 +1,15 @@
 package com.dthielke.herochat;
 
-import org.bukkit.ChatColor;
-
 public interface ChannelStorage {
-    public void addWorld(Channel channel, String world);
+    public void addChannel(Channel channel);
 
-    public void removeWorld(Channel channel, String world);
+    public Channel load(String name);
 
-    public void setBanned(Channel channel, String name, boolean banned);
+    public void notify(Channel channel);
 
-    public void setColor(Channel channel, ChatColor color);
+    public void removeChannel(Channel channel);
 
-    public void setDistance(Channel channel, int distance);
+    public void update();
 
-    public void setFormat(Channel channel, String format);
-
-    public void setModerator(Channel channel, String name, boolean moderator);
-
-    public void setMuted(Channel channel, String name, boolean muted);
-
-    public void setName(Channel channel, String name);
-
-    public void setNick(Channel channel, String nick);
-
-    public void setShortcutAllowed(Channel channel, boolean shortcutAllowed);
+    public void update(Channel channel);
 }
