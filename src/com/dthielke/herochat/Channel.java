@@ -22,6 +22,8 @@ public interface Channel {
 
     public void announce(String message);
 
+    public void attachStorage(ChannelStorage storage);
+
     public boolean banMember(Chatter chatter, boolean announce);
 
     public ChatColor getColor();
