@@ -45,7 +45,6 @@ public class YMLChannelStorage implements ChannelStorage {
             color = ChatColor.valueOf(config.getString("color", "WHITE"));
         } catch (IllegalArgumentException e) {
             color = ChatColor.WHITE;
-            ;
         }
         int distance = config.getInt("distance", 0);
         boolean shortcutAllowed = config.getBoolean("shortcutAllowed", false);
