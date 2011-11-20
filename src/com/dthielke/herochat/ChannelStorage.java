@@ -5,7 +5,7 @@ public interface ChannelStorage {
 
     public Channel load(String name);
 
-    public void notify(Channel channel);
+    public void flagUpdate(Channel channel);
 
     public void removeChannel(Channel channel);
 

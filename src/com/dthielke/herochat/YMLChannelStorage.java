@@ -24,11 +24,11 @@ public class YMLChannelStorage implements ChannelStorage {
         Configuration config = new Configuration(file);
         config.load();
         configs.put(channel, config);
-        notify(channel);
+        flagUpdate(channel);
     }
 
     @Override
-    public void notify(Channel channel) {
+    public void flagUpdate(Channel channel) {
         updates.add(channel);
     }
 
@@ -53,7 +53,7 @@ public class YMLChannelStorage implements ChannelStorage {
         Set<String> mutes = new HashSet<String>(config.getStringList("mutes", null));
         Set<String> moderators = new HashSet<String>(config.getStringList("moderators", null));
 
-        Channel channel = new StandardChannel(name, nick);
+        Channel channel = new StandardChannel(this, name, nick);
         channel.setFormat(format);
         channel.setColor(color);
         channel.setDistance(distance);
@@ -62,13 +62,14 @@ public class YMLChannelStorage implements ChannelStorage {
         channel.setBans(bans);
         channel.setMutes(mutes);
         channel.setModerators(moderators);
+        addChannel(channel);
         return channel;
     }
 
     @Override
     public void removeChannel(Channel channel) {
         configs.remove(channel);
-        notify(channel);
+        flagUpdate(channel);
     }
 
     @Override

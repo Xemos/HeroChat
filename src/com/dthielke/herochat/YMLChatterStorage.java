@@ -22,11 +22,11 @@ public class YMLChatterStorage implements ChatterStorage {
         Configuration config = new Configuration(file);
         config.load();
         configs.put(chatter, config);
-        notify(chatter);
+        flagUpdate(chatter);
     }
 
     @Override
-    public void notify(Chatter chatter) {
+    public void flagUpdate(Chatter chatter) {
         updates.add(chatter);
     }
 
@@ -52,16 +52,17 @@ public class YMLChatterStorage implements ChatterStorage {
                 channels.add(channel);
         }
 
-        Chatter chatter = new StandardChatter(player);
+        Chatter chatter = new StandardChatter(this, player);
         chatter.setActiveChannel(activeChannel);
         chatter.setChannels(channels);
+        addChatter(chatter);
         return chatter;
     }
 
     @Override
     public void removeChatter(Chatter chatter) {
         configs.remove(chatter);
-        notify(chatter);
+        flagUpdate(chatter);
     }
 
     @Override

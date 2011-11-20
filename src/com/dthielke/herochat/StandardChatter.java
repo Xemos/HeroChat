@@ -11,7 +11,8 @@ public class StandardChatter implements Chatter {
     private Channel activeChannel;
     private ChatterStorage storage;
 
-    public StandardChatter(Player player) {
+    public StandardChatter(ChatterStorage storage, Player player) {
+        this.storage = storage;
         this.player = player;
     }
 
@@ -23,6 +24,7 @@ public class StandardChatter implements Chatter {
     @Override
     public void setActiveChannel(Channel channel) {
         activeChannel = channel;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -33,6 +35,7 @@ public class StandardChatter implements Chatter {
     @Override
     public void setChannels(Set<Channel> channels) {
         this.channels = channels;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -73,6 +76,8 @@ public class StandardChatter implements Chatter {
         if (!channel.isMember(this)) {
             channel.addMember(this, announce);
         }
+
+        storage.flagUpdate(this);
 
         return true;
     }
@@ -222,6 +227,8 @@ public class StandardChatter implements Chatter {
         if (channel.isMember(this)) {
             channel.removeMember(this, announce);
         }
+
+        storage.flagUpdate(this);
 
         return true;
     }

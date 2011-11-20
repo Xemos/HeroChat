@@ -23,7 +23,8 @@ public class StandardChannel implements Channel {
     private Set<String> moderators = new HashSet<String>();
     private ChannelStorage storage;
 
-    public StandardChannel(String name, String nick) {
+    public StandardChannel(ChannelStorage storage, String name, String nick) {
+        this.storage = storage;
         this.name = name;
         this.nick = nick;
         this.color = ChatColor.WHITE;
@@ -40,6 +41,7 @@ public class StandardChannel implements Channel {
     @Override
     public void setBans(Set<String> bans) {
         this.bans = bans;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class StandardChannel implements Channel {
     @Override
     public void setColor(ChatColor color) {
         this.color = color;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -75,6 +78,7 @@ public class StandardChannel implements Channel {
     @Override
     public void setModerators(Set<String> moderators) {
         this.moderators = moderators;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -85,6 +89,7 @@ public class StandardChannel implements Channel {
     @Override
     public void setMutes(Set<String> mutes) {
         this.mutes = mutes;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -110,6 +115,7 @@ public class StandardChannel implements Channel {
     @Override
     public void setWorlds(Set<String> worlds) {
         this.worlds = worlds;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -170,7 +176,7 @@ public class StandardChannel implements Channel {
     public void addWorld(String world) {
         if (!worlds.contains(world)) {
             worlds.add(world);
-            storage.notify(this);
+            storage.flagUpdate(this);
         }
     }
 
@@ -216,7 +222,7 @@ public class StandardChannel implements Channel {
             bans.add(name.toLowerCase());
         else
             bans.remove(name.toLowerCase());
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -277,13 +283,13 @@ public class StandardChannel implements Channel {
     @Override
     public void setDistance(int distance) {
         this.distance = distance < 0 ? 0 : distance;
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
     public void setFormat(String format) {
         this.format = format;
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -292,7 +298,7 @@ public class StandardChannel implements Channel {
             moderators.add(name.toLowerCase());
         else
             moderators.remove(name.toLowerCase());
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -301,24 +307,24 @@ public class StandardChannel implements Channel {
             mutes.add(name.toLowerCase());
         else
             mutes.remove(name.toLowerCase());
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
     public void setName(String name) {
         this.name = name;
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
     public void setNick(String nick) {
         this.nick = nick;
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 
     @Override
     public void setShortcutAllowed(boolean shortcutAllowed) {
         this.shortcutAllowed = shortcutAllowed;
-        storage.notify(this);
+        storage.flagUpdate(this);
     }
 }

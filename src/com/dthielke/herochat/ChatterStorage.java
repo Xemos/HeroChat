@@ -5,7 +5,7 @@ public interface ChatterStorage {
 
     public Chatter load(String name);
 
-    public void notify(Chatter chatter);
+    public void flagUpdate(Chatter chatter);
 
     public void removeChatter(Chatter chatter);
 
