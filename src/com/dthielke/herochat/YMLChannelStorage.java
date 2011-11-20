@@ -75,6 +75,7 @@ public class YMLChannelStorage implements ChannelStorage {
     public void update() {
         for (Channel channel : updates)
             update(channel);
+        updates.clear();
     }
 
     @Override

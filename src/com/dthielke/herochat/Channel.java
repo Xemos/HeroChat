@@ -44,6 +44,8 @@ public interface Channel {
 
     public String getNick();
 
+    public ChannelStorage getStorage();
+
     public Set<String> getWorlds();
 
     public boolean hasWorld(String world);

@@ -98,6 +98,11 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public ChannelStorage getStorage() {
+        return storage;
+    }
+
+    @Override
     public Set<String> getWorlds() {
         return worlds;
     }

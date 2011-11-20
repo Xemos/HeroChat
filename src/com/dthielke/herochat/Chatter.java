@@ -7,6 +7,8 @@ import java.util.Set;
 public interface Chatter {
     public boolean addChannel(Channel channel, boolean announce);
 
+    public void attachStorage(ChatterStorage storage);
+
     public Result canBan(Channel channel);
 
     public Result canJoin(Channel channel);
@@ -31,6 +33,8 @@ public interface Chatter {
 
     public Player getPlayer();
 
+    public ChatterStorage getStorage();
+
     boolean hasChannel(Channel channel);
 
     public boolean isInRange(Chatter other, int distance);
@@ -38,6 +42,8 @@ public interface Chatter {
     public boolean removeChannel(Channel channel, boolean announce);
 
     public void setActiveChannel(Channel channel);
+
+    public void setChannels(Set<Channel> channels);
 
     public enum Permission {
         JOIN("join"),

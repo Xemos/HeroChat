@@ -9,6 +9,7 @@ public class StandardChatter implements Chatter {
     private final Player player;
     private Set<Channel> channels = new HashSet<Channel>();
     private Channel activeChannel;
+    private ChatterStorage storage;
 
     public StandardChatter(Player player) {
         this.player = player;
@@ -30,8 +31,18 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public void setChannels(Set<Channel> channels) {
+        this.channels = channels;
+    }
+
+    @Override
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public ChatterStorage getStorage() {
+        return storage;
     }
 
     @Override
@@ -64,6 +75,11 @@ public class StandardChatter implements Chatter {
         }
 
         return true;
+    }
+
+    @Override
+    public void attachStorage(ChatterStorage storage) {
+        this.storage = storage;
     }
 
     @Override
