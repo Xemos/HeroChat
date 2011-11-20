@@ -32,7 +32,9 @@ public class YMLChatterStorage implements ChatterStorage {
 
     @Override
     public Chatter load(String name) {
-        File file = new File(chatterFolder, name);
+        File folder = new File(chatterFolder, name.substring(0, 1).toLowerCase());
+        folder.mkdirs();
+        File file = new File(folder, name);
         Configuration config = new Configuration(file);
         config.load();
 
@@ -76,7 +78,8 @@ public class YMLChatterStorage implements ChatterStorage {
     public void update(Chatter chatter) {
         Configuration config = configs.get(chatter);
         if (config == null) {
-            File file = new File(chatterFolder, chatter.getName());
+            File folder = new File(chatterFolder, chatter.getName().substring(0, 1).toLowerCase());
+            File file = new File(folder, chatter.getName());
             file.delete();
         } else {
             config.setProperty("name", chatter.getName());
