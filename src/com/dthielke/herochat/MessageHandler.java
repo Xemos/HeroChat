@@ -75,8 +75,6 @@ public class MessageHandler {
     }
 
     public static String format(Channel channel, String format, String preExtras, String postExtras) {
-        System.out.println(preExtras + postExtras);
-
         // default minecraft format is <%1$s> %2$s
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
