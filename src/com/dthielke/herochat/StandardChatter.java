@@ -22,20 +22,8 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public void setActiveChannel(Channel channel) {
-        activeChannel = channel;
-        storage.flagUpdate(this);
-    }
-
-    @Override
     public Set<Channel> getChannels() {
         return channels;
-    }
-
-    @Override
-    public void setChannels(Set<Channel> channels) {
-        this.channels = channels;
-        storage.flagUpdate(this);
     }
 
     @Override
@@ -231,5 +219,11 @@ public class StandardChatter implements Chatter {
         storage.flagUpdate(this);
 
         return true;
+    }
+
+    @Override
+    public void setActiveChannel(Channel channel) {
+        activeChannel = channel;
+        storage.flagUpdate(this);
     }
 }

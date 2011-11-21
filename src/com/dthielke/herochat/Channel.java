@@ -88,8 +88,6 @@ public interface Channel {
 
     public void setMutes(Set<String> mutes);
 
-    public void setName(String name);
-
     public void setNick(String nick);
 
     public void setShortcutAllowed(boolean shortcutAllowed);

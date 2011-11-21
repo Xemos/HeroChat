@@ -10,7 +10,7 @@ public class StandardChannel implements Channel {
     public static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
     public static final String MESSAGE_FORMAT = "#color[#nick] &f#sender#color: #msg";
 
-    private String name;
+    private final String name;
     private String nick;
     private String format;
     private ChatColor color;
@@ -39,20 +39,8 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setBans(Set<String> bans) {
-        this.bans = bans;
-        storage.flagUpdate(this);
-    }
-
-    @Override
     public ChatColor getColor() {
         return color;
-    }
-
-    @Override
-    public void setColor(ChatColor color) {
-        this.color = color;
-        storage.flagUpdate(this);
     }
 
     @Override
@@ -76,20 +64,8 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setModerators(Set<String> moderators) {
-        this.moderators = moderators;
-        storage.flagUpdate(this);
-    }
-
-    @Override
     public Set<String> getMutes() {
         return mutes;
-    }
-
-    @Override
-    public void setMutes(Set<String> mutes) {
-        this.mutes = mutes;
-        storage.flagUpdate(this);
     }
 
     @Override
@@ -110,12 +86,6 @@ public class StandardChannel implements Channel {
     @Override
     public Set<String> getWorlds() {
         return worlds;
-    }
-
-    @Override
-    public void setWorlds(Set<String> worlds) {
-        this.worlds = worlds;
-        storage.flagUpdate(this);
     }
 
     @Override
@@ -281,6 +251,18 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setBans(Set<String> bans) {
+        this.bans = bans;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public void setColor(ChatColor color) {
+        this.color = color;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public void setDistance(int distance) {
         this.distance = distance < 0 ? 0 : distance;
         storage.flagUpdate(this);
@@ -302,6 +284,12 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setModerators(Set<String> moderators) {
+        this.moderators = moderators;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public void setMuted(String name, boolean muted) {
         if (muted)
             mutes.add(name.toLowerCase());
@@ -311,8 +299,8 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setMutes(Set<String> mutes) {
+        this.mutes = mutes;
         storage.flagUpdate(this);
     }
 
@@ -325,6 +313,12 @@ public class StandardChannel implements Channel {
     @Override
     public void setShortcutAllowed(boolean shortcutAllowed) {
         this.shortcutAllowed = shortcutAllowed;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public void setWorlds(Set<String> worlds) {
+        this.worlds = worlds;
         storage.flagUpdate(this);
     }
 }

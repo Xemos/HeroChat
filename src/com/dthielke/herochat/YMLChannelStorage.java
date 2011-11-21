@@ -4,10 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class YMLChannelStorage implements ChannelStorage {
     private Map<Channel, Configuration> configs = new HashMap<Channel, Configuration>();
@@ -19,22 +16,20 @@ public class YMLChannelStorage implements ChannelStorage {
     }
 
     @Override
-    public void addChannel(Channel channel) {
-        File file = new File(channelFolder, channel.getName());
-        Configuration config = new Configuration(file);
-        config.load();
-        configs.put(channel, config);
-        flagUpdate(channel);
-    }
-
-    @Override
-    public void flagUpdate(Channel channel) {
-        updates.add(channel);
+    public Set<Channel> loadChannels() {
+        Set<Channel> channels = new HashSet<Channel>();
+        for (String name : channelFolder.list()) {
+            name = name.substring(0, name.lastIndexOf('.'));
+            Channel channel = load(name);
+            addChannel(channel);
+            channels.add(channel);
+        }
+        return channels;
     }
 
     @Override
     public Channel load(String name) {
-        File file = new File(channelFolder, name);
+        File file = new File(channelFolder, name + ".yml");
         Configuration config = new Configuration(file);
         config.load();
 
@@ -67,6 +62,22 @@ public class YMLChannelStorage implements ChannelStorage {
     }
 
     @Override
+    public void addChannel(Channel channel) {
+        if (configs.containsKey(channel))
+            return;
+        File file = new File(channelFolder, channel.getName() + ".yml");
+        Configuration config = new Configuration(file);
+        config.load();
+        configs.put(channel, config);
+        flagUpdate(channel);
+    }
+
+    @Override
+    public void flagUpdate(Channel channel) {
+        updates.add(channel);
+    }
+
+    @Override
     public void removeChannel(Channel channel) {
         configs.remove(channel);
         flagUpdate(channel);
@@ -74,9 +85,8 @@ public class YMLChannelStorage implements ChannelStorage {
 
     @Override
     public void update() {
-        for (Channel channel : updates)
+        for (Channel channel : updates.toArray(new Channel[0]))
             update(channel);
-        updates.clear();
     }
 
     @Override
@@ -92,11 +102,12 @@ public class YMLChannelStorage implements ChannelStorage {
             config.setProperty("color", channel.getColor().name());
             config.setProperty("distance", channel.getDistance());
             config.setProperty("shortcutAllowed", channel.isShortcutAllowed());
-            config.setProperty("worlds", channel.getWorlds());
-            config.setProperty("bans", channel.getBans());
-            config.setProperty("mutes", channel.getMutes());
-            config.setProperty("moderators", channel.getModerators());
+            config.setProperty("worlds", new ArrayList<String>(channel.getWorlds()));
+            config.setProperty("bans", new ArrayList<String>(channel.getBans()));
+            config.setProperty("mutes", new ArrayList<String>(channel.getMutes()));
+            config.setProperty("moderators", new ArrayList<String>(channel.getModerators()));
             config.save();
         }
+        updates.remove(channel);
     }
 }

@@ -43,8 +43,6 @@ public interface Chatter {
 
     public void setActiveChannel(Channel channel);
 
-    public void setChannels(Set<Channel> channels);
-
     public enum Permission {
         JOIN("join"),
         LEAVE("leave"),

@@ -10,6 +10,7 @@ public class ChannelManager {
     private Channel defaultChannel;
     private Map<Chatter.Permission, Permission> wildcardPermissions = new EnumMap<Chatter.Permission, Permission>(Chatter.Permission.class);
     private Set<Chatter.Permission> modPermissions = EnumSet.noneOf(Chatter.Permission.class);
+    private ChannelStorage storage;
 
     public ChannelManager() {
         registerChannelPermissions();
@@ -44,25 +45,12 @@ public class ChannelManager {
         this.modPermissions = modPermissions;
     }
 
-    public boolean addChannel(Channel channel) {
-        if (channels.contains(channel))
-            return false;
+    public ChannelStorage getStorage() {
+        return storage;
+    }
 
-        channels.add(channel);
-
-        // add the channel to the wildcard permissions
-        for (Chatter.Permission p : Chatter.Permission.values()) {
-            Permission perm = wildcardPermissions.get(p);
-            perm.getChildren().put(p.form(channel), true);
-            perm.recalculatePermissibles();
-        }
-
-        // set the default channel if we don't have one yet
-        if (defaultChannel == null) {
-            defaultChannel = channel;
-        }
-
-        return true;
+    public void setStorage(ChannelStorage storage) {
+        this.storage = storage;
     }
 
     public void addModPermission(Chatter.Permission permission) {
@@ -83,6 +71,34 @@ public class ChannelManager {
                 return channel;
 
         return null;
+    }
+
+    public void loadChannels() {
+        for (Channel channel : storage.loadChannels())
+            addChannel(channel);
+    }
+
+    public boolean addChannel(Channel channel) {
+        if (channels.contains(channel))
+            return false;
+
+        channels.add(channel);
+
+        // add the channel to the wildcard permissions
+        for (Chatter.Permission p : Chatter.Permission.values()) {
+            Permission perm = wildcardPermissions.get(p);
+            perm.getChildren().put(p.form(channel), true);
+            perm.recalculatePermissibles();
+        }
+
+        // set the default channel if we don't have one yet
+        if (defaultChannel == null) {
+            defaultChannel = channel;
+        }
+
+        storage.addChannel(channel);
+
+        return true;
     }
 
     public boolean removeChannel(Channel channel) {

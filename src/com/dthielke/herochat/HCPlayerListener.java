@@ -1,16 +1,19 @@
 package com.dthielke.herochat;
 
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.*;
 
-public class PlayerChatListener extends PlayerListener {
+public class HCPlayerListener extends PlayerListener {
     @Override
     public void onPlayerChat(PlayerChatEvent event) {
         if (event.isCancelled())
             return;
 
         MessageHandler.handle(event);
+    }
+
+    @Override
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        HeroChat.getChatterManager().removeChatter(event.getPlayer());
     }
 
     @Override
@@ -25,5 +28,10 @@ public class PlayerChatListener extends PlayerListener {
             event.setCancelled(true);
             HeroChat.getCommandHandler().dispatch(event.getPlayer(), "ch qm", args);
         }
+    }
+
+    @Override
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        HeroChat.getChatterManager().addChatter(event.getPlayer());
     }
 }

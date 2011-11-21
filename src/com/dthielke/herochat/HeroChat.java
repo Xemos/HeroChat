@@ -10,34 +10,38 @@ import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 public class HeroChat extends JavaPlugin {
     private static final Logger log = Logger.getLogger("Minecraft");
-    private static final CommandHandler cmdHndlr = new CommandHandler();
-    private static final ChannelManager chnnlMngr = new ChannelManager();
-    private static final ChatterManager chttrMngr = new ChatterManager();
+    private static final CommandHandler commandHandler = new CommandHandler();
+    private static final ChannelManager channelManager = new ChannelManager();
+    private static final ChatterManager chatterManager = new ChatterManager();
 
     public static ChannelManager getChannelManager() {
-        return chnnlMngr;
+        return channelManager;
     }
 
     public static ChatterManager getChatterManager() {
-        return chttrMngr;
+        return chatterManager;
     }
 
     public static CommandHandler getCommandHandler() {
-        return cmdHndlr;
+        return commandHandler;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        return cmdHndlr.dispatch(sender, label, args);
+        return commandHandler.dispatch(sender, label, args);
     }
 
     @Override
     public void onDisable() {
         log.info(getDescription().getName() + " version " + getDescription().getVersion() + " is disabled.");
+
+        channelManager.getStorage().update();
+        chatterManager.getStorage().update();
     }
 
     @Override
@@ -47,43 +51,53 @@ public class HeroChat extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        setupDummyEnvironment();
+        setupStorage();
+        channelManager.loadChannels();
+        for (Player player : getServer().getOnlinePlayers())
+            chatterManager.addChatter(player);
     }
 
     private void registerCommands() {
-        cmdHndlr.addCommand(new FocusCommand());
-        cmdHndlr.addCommand(new JoinCommand());
-        cmdHndlr.addCommand(new LeaveCommand());
-        cmdHndlr.addCommand(new QuickMsgCommand());
-        cmdHndlr.addCommand(new ListCommand());
-        cmdHndlr.addCommand(new WhoCommand());
-        cmdHndlr.addCommand(new CreateCommand());
-        cmdHndlr.addCommand(new RemoveCommand());
-        cmdHndlr.addCommand(new SetCommand());
-        cmdHndlr.addCommand(new MuteCommand());
-        cmdHndlr.addCommand(new KickCommand());
-        cmdHndlr.addCommand(new BanCommand());
-        cmdHndlr.addCommand(new ModCommand());
-        cmdHndlr.addCommand(new HelpCommand());
+        commandHandler.addCommand(new FocusCommand());
+        commandHandler.addCommand(new JoinCommand());
+        commandHandler.addCommand(new LeaveCommand());
+        commandHandler.addCommand(new QuickMsgCommand());
+        commandHandler.addCommand(new ListCommand());
+        commandHandler.addCommand(new WhoCommand());
+        commandHandler.addCommand(new CreateCommand());
+        commandHandler.addCommand(new RemoveCommand());
+        commandHandler.addCommand(new SetCommand());
+        commandHandler.addCommand(new MuteCommand());
+        commandHandler.addCommand(new KickCommand());
+        commandHandler.addCommand(new BanCommand());
+        commandHandler.addCommand(new ModCommand());
+        commandHandler.addCommand(new HelpCommand());
     }
 
     private void registerEvents() {
         PluginManager pm = this.getServer().getPluginManager();
-        PlayerChatListener pcl = new PlayerChatListener();
+        HCPlayerListener pcl = new HCPlayerListener();
+        pm.registerEvent(Type.PLAYER_JOIN, pcl, Priority.Normal, this);
+        pm.registerEvent(Type.PLAYER_QUIT, pcl, Priority.Normal, this);
         pm.registerEvent(Type.PLAYER_CHAT, pcl, Priority.High, this);
         pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, pcl, Priority.Normal, this);
     }
 
-    private void setupDummyEnvironment() {
-        Channel channel = new StandardChannel("Dummy", "D");
-        channel.setColor(ChatColor.GREEN);
-        chnnlMngr.addChannel(channel);
+    private void setupStorage() {
+        File channelFolder = new File(getDataFolder(), "channels");
+        channelFolder.mkdirs();
+        ChannelStorage channelStorage = new YMLChannelStorage(channelFolder);
+        channelManager.setStorage(channelStorage);
 
-        for (Player player : getServer().getOnlinePlayers()) {
-            Chatter chatter = new StandardChatter(player);
-            chttrMngr.addChatter(chatter);
-            chatter.addChannel(channel, false);
-            chatter.setActiveChannel(channel);
-        }
+        File chatterFolder = new File(getDataFolder(), "chatters");
+        chatterFolder.mkdirs();
+        ChatterStorage chatterStorage = new YMLChatterStorage(chatterFolder);
+        chatterManager.setStorage(chatterStorage);
+    }
+
+    private void setupDummyEnvironment() {
+        Channel channel = new StandardChannel(channelManager.getStorage(), "Dummy", "D");
+        channel.setColor(ChatColor.GREEN);
+        channelManager.addChannel(channel);
     }
 }

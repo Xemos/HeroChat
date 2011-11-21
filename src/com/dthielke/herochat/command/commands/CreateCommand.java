@@ -49,7 +49,7 @@ public class CreateCommand extends BasicCommand {
             }
         }
 
-        Channel channel = new StandardChannel(name, nick);
+        Channel channel = new StandardChannel(channelMngr.getStorage(), name, nick);
         if (sender instanceof Player) {
             channel.setModerator(sender.getName(), true);
         }

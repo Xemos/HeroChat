@@ -22,7 +22,7 @@ public class SetCommand extends BasicCommand {
         setUsage("/ch set §8<channel> <setting> <value>");
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
-        setNotes("\u00a7cSettings:\u00a7e name, nick, format, distance, color, qm");
+        setNotes("\u00a7cSettings:\u00a7e nick, format, distance, color, qm");
     }
 
     @Override
@@ -47,14 +47,7 @@ public class SetCommand extends BasicCommand {
             }
         }
 
-        if (setting.equals("name")) {
-            if (channelMngr.hasChannel(value)) {
-                Messaging.send(sender, "Identifier taken.");
-            } else {
-                channel.setName(value);
-                Messaging.send(sender, "Name changed.");
-            }
-        } else if (setting.equals("nick")) {
+        if (setting.equals("nick")) {
             if (channelMngr.hasChannel(value)) {
                 Messaging.send(sender, "Identifier taken.");
             } else {

@@ -2,44 +2,60 @@ package com.dthielke.herochat;
 
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatterManager {
-    private List<Chatter> chatters = new ArrayList<Chatter>();
+    private Map<Player, Chatter> chatters = new HashMap<Player, Chatter>();
+    private ChatterStorage storage;
 
-    public List<Chatter> getChatters() {
-        return chatters;
+    public ChatterStorage getStorage() {
+        return storage;
     }
 
-    public boolean addChatter(Chatter chatter) {
-        if (chatters.contains(chatter))
-            return false;
+    public void setStorage(ChatterStorage storage) {
+        this.storage = storage;
+    }
 
-        chatters.add(chatter);
-        return true;
+    public void addChatter(Player player) {
+        if (chatters.containsKey(player))
+            return;
+
+        Chatter chatter = storage.load(player.getName());
+        storage.addChatter(chatter);
+        chatters.put(player, chatter);
+    }
+
+    public void addChatter(Chatter chatter) {
+        chatters.put(chatter.getPlayer(), chatter);
+        storage.addChatter(chatter);
     }
 
     public Chatter getChatter(Player player) {
-        for (Chatter chatter : chatters)
-            if (player.equals(chatter.getPlayer()))
-                return chatter;
-        return null;
+        return chatters.get(player);
     }
 
     public Chatter getChatter(String name) {
-        for (Chatter chatter : chatters)
+        for (Chatter chatter : chatters.values())
             if (name.equalsIgnoreCase(chatter.getName()))
                 return chatter;
 
         return null;
     }
 
-    public boolean removeChatter(Chatter chatter) {
-        if (!chatters.contains(chatter))
-            return false;
+    public Collection<Chatter> getChatters() {
+        return chatters.values();
+    }
 
-        chatters.remove(chatter);
-        return true;
+    public void removeChatter(Chatter chatter) {
+        chatters.remove(chatter.getPlayer());
+        storage.removeChatter(chatter);
+        for (Channel channel : chatter.getChannels().toArray(new Channel[0]))
+            channel.removeMember(chatter, true);
+    }
+
+    public void removeChatter(Player player) {
+        removeChatter(chatters.get(player));
     }
 }
