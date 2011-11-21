@@ -41,11 +41,14 @@ public class YMLChatterStorage implements ChatterStorage {
         }
         if (channels.isEmpty())
             channels.add(channelManager.getDefaultChannel());
+        List<String> ignores = config.getStringList("ignores", null);
 
         Chatter chatter = new StandardChatter(this, player);
         chatter.setActiveChannel(activeChannel);
         for (Channel channel : channels)
             channel.addMember(chatter, false);
+        for (String ignore : ignores)
+            chatter.setIgnore(ignore, true);
         addChatter(chatter);
         return chatter;
     }
@@ -76,12 +79,6 @@ public class YMLChatterStorage implements ChatterStorage {
     }
 
     @Override
-    public void update() {
-        for (Chatter chatter : updates.toArray(new Chatter[0]))
-            update(chatter);
-    }
-
-    @Override
     public void update(Chatter chatter) {
         Configuration config = configs.get(chatter);
         if (config != null) {
@@ -91,8 +88,15 @@ public class YMLChatterStorage implements ChatterStorage {
             for (Channel channel : chatter.getChannels())
                 channels.add(channel.getName());
             config.setProperty("channels", channels);
+            config.setProperty("ignores", new ArrayList<String>(chatter.getIgnores()));
             config.save();
         }
         updates.remove(chatter);
+    }
+
+    @Override
+    public void update() {
+        for (Chatter chatter : updates.toArray(new Chatter[0]))
+            update(chatter);
     }
 }

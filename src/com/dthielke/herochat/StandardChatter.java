@@ -10,6 +10,7 @@ public class StandardChatter implements Chatter {
     private Set<Channel> channels = new HashSet<Channel>();
     private Channel activeChannel;
     private ChatterStorage storage;
+    private Set<String> ignores = new HashSet<String>();
 
     public StandardChatter(ChatterStorage storage, Player player) {
         this.storage = storage;
@@ -24,6 +25,11 @@ public class StandardChatter implements Chatter {
     @Override
     public Set<Channel> getChannels() {
         return channels;
+    }
+
+    @Override
+    public Set<String> getIgnores() {
+        return ignores;
     }
 
     @Override
@@ -202,6 +208,11 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public boolean isIgnoring(String name) {
+        return ignores.contains(name.toLowerCase());
+    }
+
+    @Override
     public boolean isInRange(Chatter other, int distance) {
         return player.getLocation().distanceSquared(other.getPlayer().getLocation()) <= distance;
     }
@@ -224,6 +235,15 @@ public class StandardChatter implements Chatter {
     @Override
     public void setActiveChannel(Channel channel) {
         activeChannel = channel;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public void setIgnore(String name, boolean ignore) {
+        if (ignore)
+            ignores.add(name.toLowerCase());
+        else
+            ignores.remove(name.toLowerCase());
         storage.flagUpdate(this);
     }
 }

@@ -29,6 +29,8 @@ public interface Chatter {
 
     public Set<Channel> getChannels();
 
+    public Set<String> getIgnores();
+
     public String getName();
 
     public Player getPlayer();
@@ -37,11 +39,15 @@ public interface Chatter {
 
     boolean hasChannel(Channel channel);
 
+    public boolean isIgnoring(String name);
+
     public boolean isInRange(Chatter other, int distance);
 
     public boolean removeChannel(Channel channel, boolean announce);
 
     public void setActiveChannel(Channel channel);
+
+    public void setIgnore(String name, boolean ignore);
 
     public enum Permission {
         JOIN("join"),

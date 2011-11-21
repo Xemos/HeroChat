@@ -12,11 +12,6 @@ public class HCPlayerListener extends PlayerListener {
     }
 
     @Override
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        HeroChat.getChatterManager().removeChatter(event.getPlayer());
-    }
-
-    @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (event.isCancelled())
             return;
@@ -33,5 +28,10 @@ public class HCPlayerListener extends PlayerListener {
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
         HeroChat.getChatterManager().addChatter(event.getPlayer());
+    }
+
+    @Override
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        HeroChat.getChatterManager().removeChatter(event.getPlayer());
     }
 }

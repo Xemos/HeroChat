@@ -41,6 +41,7 @@ public class MessageHandler {
         }
 
         // trim the recipient list
+        String senderName = player.getName();
         Set<Player> recipients = event.getRecipients();
         Set<Chatter> intendedRecipients = channel.getMembers();
         for (Iterator<Player> iter = recipients.iterator(); iter.hasNext(); ) {
@@ -50,6 +51,8 @@ public class MessageHandler {
             } else if (channel.isLocal() && !sender.isInRange(recipient, channel.getDistance())) {
                 iter.remove();
             } else if (!channel.hasWorld(recipient.getPlayer().getWorld())) {
+                iter.remove();
+            } else if (recipient.isIgnoring(senderName)) {
                 iter.remove();
             }
         }
