@@ -11,7 +11,7 @@ public interface Chatter {
 
     public Result canBan(Channel channel);
 
-    public Result canJoin(Channel channel);
+    public Result canJoin(Channel channel, String password);
 
     public Result canKick(Channel channel);
 
@@ -94,6 +94,7 @@ public interface Chatter {
         BANNED,
         MUTED,
         ALLOWED,
-        BAD_WORLD
+        BAD_WORLD,
+        BAD_PASSWORD
     }
 }

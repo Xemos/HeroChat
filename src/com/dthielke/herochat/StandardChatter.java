@@ -99,7 +99,7 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public Result canJoin(Channel channel) {
+    public Result canJoin(Channel channel, String password) {
         if (channel.isMember(this))
             return Result.INVALID;
 
@@ -108,6 +108,9 @@ public class StandardChatter implements Chatter {
 
         if (channel.isBanned(player.getName()))
             return Result.BANNED;
+
+        if (!password.equals(channel.getPassword()))
+            return Result.BAD_PASSWORD;
 
         return Result.ALLOWED;
     }

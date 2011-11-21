@@ -13,6 +13,7 @@ public class StandardChannel implements Channel {
     private final String name;
     private String nick;
     private String format;
+    private String password;
     private ChatColor color;
     private int distance;
     private boolean shortcutAllowed;
@@ -31,6 +32,7 @@ public class StandardChannel implements Channel {
         this.distance = 0;
         this.shortcutAllowed = false;
         this.format = MESSAGE_FORMAT;
+        this.password = "";
     }
 
     @Override
@@ -76,6 +78,11 @@ public class StandardChannel implements Channel {
     @Override
     public String getNick() {
         return nick;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -307,6 +314,12 @@ public class StandardChannel implements Channel {
     @Override
     public void setNick(String nick) {
         this.nick = nick;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
         storage.flagUpdate(this);
     }
 

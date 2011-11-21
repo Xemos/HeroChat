@@ -44,6 +44,8 @@ public interface Channel {
 
     public String getNick();
 
+    public String getPassword();
+
     public ChannelStorage getStorage();
 
     public Set<String> getWorlds();
@@ -89,6 +91,8 @@ public interface Channel {
     public void setMutes(Set<String> mutes);
 
     public void setNick(String nick);
+
+    public void setPassword(String password);
 
     public void setShortcutAllowed(boolean shortcutAllowed);
 

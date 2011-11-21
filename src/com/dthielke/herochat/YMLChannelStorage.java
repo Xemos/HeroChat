@@ -35,6 +35,7 @@ public class YMLChannelStorage implements ChannelStorage {
 
         String nick = config.getString("nick", name);
         String format = config.getString("format", StandardChannel.MESSAGE_FORMAT);
+        String password = config.getString("password", "");
         ChatColor color;
         try {
             color = ChatColor.valueOf(config.getString("color", "WHITE"));
@@ -50,6 +51,7 @@ public class YMLChannelStorage implements ChannelStorage {
 
         Channel channel = new StandardChannel(this, name, nick);
         channel.setFormat(format);
+        channel.setPassword(password);
         channel.setColor(color);
         channel.setDistance(distance);
         channel.setShortcutAllowed(shortcutAllowed);
@@ -99,6 +101,7 @@ public class YMLChannelStorage implements ChannelStorage {
             config.setProperty("name", channel.getName());
             config.setProperty("nick", channel.getNick());
             config.setProperty("format", channel.getFormat());
+            config.setProperty("password", channel.getPassword());
             config.setProperty("color", channel.getColor().name());
             config.setProperty("distance", channel.getDistance());
             config.setProperty("shortcutAllowed", channel.isShortcutAllowed());

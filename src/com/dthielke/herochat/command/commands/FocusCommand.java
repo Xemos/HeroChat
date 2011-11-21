@@ -18,8 +18,8 @@ public class FocusCommand extends BasicCommand {
     public FocusCommand() {
         super("Focus");
         setDescription("Changes your active channel");
-        setUsage("/ch §8<channel>");
-        setArgumentRange(1, 1);
+        setUsage("/ch §8<channel> [password]");
+        setArgumentRange(1, 2);
         setIdentifiers("ch");
     }
 
@@ -36,9 +36,13 @@ public class FocusCommand extends BasicCommand {
             return true;
         }
 
+        String password = "";
+        if (args.length == 2)
+            password = args[1];
+
         Chatter chatter = HeroChat.getChatterManager().getChatter(player);
         if (!chatter.hasChannel(channel)) {
-            Result result = chatter.canJoin(channel);
+            Result result = chatter.canJoin(channel, password);
             switch (result) {
                 case NO_PERMISSION:
                     Messaging.send(sender, "Insufficient permission.");
@@ -46,7 +50,11 @@ public class FocusCommand extends BasicCommand {
                 case BANNED:
                     Messaging.send(sender, "You are banned from this channel.");
                     return true;
+                case BAD_PASSWORD:
+                    Messaging.send(sender, "Wrong password.");
+                    return true;
             }
+
             channel.addMember(chatter, true);
         }
 

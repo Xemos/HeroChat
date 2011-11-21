@@ -18,8 +18,8 @@ public class JoinCommand extends BasicCommand {
     public JoinCommand() {
         super("Join");
         setDescription("Joins a channel");
-        setUsage("/ch join §8<channel>");
-        setArgumentRange(1, 1);
+        setUsage("/ch join §8<channel> [password]");
+        setArgumentRange(1, 2);
         setIdentifiers("ch join");
     }
 
@@ -36,8 +36,12 @@ public class JoinCommand extends BasicCommand {
             return true;
         }
 
+        String password = "";
+        if (args.length == 2)
+            password = args[1];
+
         Chatter chatter = HeroChat.getChatterManager().getChatter(player);
-        Result result = chatter.canJoin(channel);
+        Result result = chatter.canJoin(channel, password);
         switch (result) {
             case INVALID:
                 Messaging.send(sender, "You are already in this channel.");
@@ -47,6 +51,9 @@ public class JoinCommand extends BasicCommand {
                 return true;
             case BANNED:
                 Messaging.send(sender, "You are banned from this channel.");
+                return true;
+            case BAD_PASSWORD:
+                Messaging.send(sender, "Wrong password.");
                 return true;
         }
 
