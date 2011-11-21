@@ -17,11 +17,11 @@ import org.bukkit.entity.Player;
 public class MuteCommand extends BasicCommand {
     public MuteCommand() {
         super("Mute");
-        setDescription("Mutes a user in a channel");
+        setDescription("Mutes a user");
         setUsage("/ch mute §8[channel] <player>");
         setArgumentRange(1, 2);
         setIdentifiers("ch mute");
-        setNotes("\u00a7cNote:\u00a7e If no channel is given, your active", "      channel is used.");
+        setNotes("\u00a7cNote:\u00a7e If no channel is given, user is", "      globally muted.");
     }
 
     @Override
@@ -34,40 +34,55 @@ public class MuteCommand extends BasicCommand {
             chatter = HeroChat.getChatterManager().getChatter(player);
         }
 
-        if (args.length == 1) {
-            if (chatter != null) {
-                channel = chatter.getActiveChannel();
-            } else {
-                channel = HeroChat.getChannelManager().getDefaultChannel();
-            }
-        } else {
-            channel = HeroChat.getChannelManager().getChannel(args[0]);
-            if (channel == null) {
-                Messaging.send(sender, "Channel not found.");
-                return true;
-            }
-        }
-
-        if (chatter != null && chatter.canMute(channel) != Result.ALLOWED) {
-            Messaging.send(sender, "Insufficient permission.");
-            return true;
-        }
-
         String targetName = args[args.length - 1];
         Player targetPlayer = Bukkit.getServer().getPlayer(targetName);
         if (targetPlayer != null)
             targetName = targetPlayer.getName();
 
-        if (channel.isMuted(targetName)) {
-            channel.setMuted(targetName, false);
-            Messaging.send(sender, "Player unmuted.");
-            if (targetPlayer != null)
-                Messaging.send(targetPlayer, "Unmuted in $1.", channel.getName());
+        if (args.length == 2) {
+            channel = HeroChat.getChannelManager().getChannel(args[0]);
+            if (channel == null) {
+                Messaging.send(sender, "Channel not found.");
+                return true;
+            }
+
+            if (chatter != null && chatter.canMute(channel) != Result.ALLOWED) {
+                Messaging.send(sender, "Insufficient permission.");
+                return true;
+            }
+
+            if (channel.isMuted(targetName)) {
+                channel.setMuted(targetName, false);
+                Messaging.send(sender, "Player unmuted in $1.", channel.getName());
+                if (targetPlayer != null)
+                    Messaging.send(targetPlayer, "Unmuted in $1.", channel.getName());
+            } else {
+                channel.setMuted(targetName, true);
+                Messaging.send(sender, "Player muted in $1.", channel.getName());
+                if (targetPlayer != null)
+                    Messaging.send(targetPlayer, "Muted in $1.", channel.getName());
+            }
         } else {
-            channel.setMuted(targetName, true);
-            Messaging.send(sender, "Player muted.");
-            if (targetPlayer != null)
-                Messaging.send(targetPlayer, "Muted in $1.", channel.getName());
+            if (chatter != null && !chatter.getPlayer().hasPermission("herochat.globalmute")) {
+                Messaging.send(sender, "Insufficient permission.");
+                return true;
+            }
+
+            if (targetPlayer == null) {
+                Messaging.send(sender, "Player not found.");
+                return true;
+            }
+
+            Chatter targetChatter = HeroChat.getChatterManager().getChatter(targetPlayer);
+            if (targetChatter.isMuted()) {
+                targetChatter.setMuted(false);
+                Messaging.send(sender, "Player unmuted.");
+                Messaging.send(targetPlayer, "No longer globally muted.");
+            } else {
+                targetChatter.setMuted(true);
+                Messaging.send(sender, "Player muted.");
+                Messaging.send(targetPlayer, "Globally muted.");
+            }
         }
 
         return true;

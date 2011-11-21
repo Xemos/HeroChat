@@ -42,6 +42,7 @@ public class YMLChatterStorage implements ChatterStorage {
         if (channels.isEmpty())
             channels.add(channelManager.getDefaultChannel());
         List<String> ignores = config.getStringList("ignores", null);
+        boolean muted = config.getBoolean("muted", false);
 
         Chatter chatter = new StandardChatter(this, player);
         chatter.setActiveChannel(activeChannel);
@@ -49,6 +50,7 @@ public class YMLChatterStorage implements ChatterStorage {
             channel.addMember(chatter, false);
         for (String ignore : ignores)
             chatter.setIgnore(ignore, true);
+        chatter.setMuted(muted);
         addChatter(chatter);
         return chatter;
     }
@@ -89,6 +91,7 @@ public class YMLChatterStorage implements ChatterStorage {
                 channels.add(channel.getName());
             config.setProperty("channels", channels);
             config.setProperty("ignores", new ArrayList<String>(chatter.getIgnores()));
+            config.setProperty("muted", chatter.isMuted());
             config.save();
         }
         updates.remove(chatter);

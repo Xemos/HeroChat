@@ -49,6 +49,10 @@ public interface Chatter {
 
     public void setIgnore(String name, boolean ignore);
 
+    public boolean isMuted();
+
+    public void setMuted(boolean muted);
+
     public enum Permission {
         JOIN("join"),
         LEAVE("leave"),

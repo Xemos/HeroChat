@@ -11,6 +11,7 @@ public class StandardChatter implements Chatter {
     private Channel activeChannel;
     private ChatterStorage storage;
     private Set<String> ignores = new HashSet<String>();
+    private boolean muted = false;
 
     public StandardChatter(ChatterStorage storage, Player player) {
         this.storage = storage;
@@ -40,6 +41,11 @@ public class StandardChatter implements Chatter {
     @Override
     public ChatterStorage getStorage() {
         return storage;
+    }
+
+    @Override
+    public boolean isMuted() {
+        return muted;
     }
 
     @Override
@@ -244,6 +250,12 @@ public class StandardChatter implements Chatter {
             ignores.add(name.toLowerCase());
         else
             ignores.remove(name.toLowerCase());
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public void setMuted(boolean muted) {
+        this.muted = muted;
         storage.flagUpdate(this);
     }
 }
