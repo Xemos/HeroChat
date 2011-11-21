@@ -7,8 +7,12 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MessageHandler {
+    private static final Pattern msgPattern = Pattern.compile("(.*)<(.*)%1\\$s(.*)> %2\\$s");
+
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
@@ -58,19 +62,26 @@ public class MessageHandler {
         }
 
         // apply channel formatting
-        event.setFormat(format(channel));
+        String format = event.getFormat();
+        Matcher matcher = msgPattern.matcher(format);
+        if (matcher.groupCount() == 3)
+            event.setFormat(format(channel, matcher.group(1) + matcher.group(2), matcher.group(3)));
+        else
+            event.setFormat(format(channel, "", ""));
     }
 
-    public static String format(Channel channel) {
-        return format(channel, channel.getFormat());
+    public static String format(Channel channel, String preExtras, String postExtras) {
+        return format(channel, channel.getFormat(), preExtras, postExtras);
     }
 
-    public static String format(Channel channel, String format) {
+    public static String format(Channel channel, String format, String preExtras, String postExtras) {
+        System.out.println(preExtras + postExtras);
+
         // default minecraft format is <%1$s> %2$s
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
         format = format.replace("#color", channel.getColor().toString());
-        format = format.replace("#sender", "%1$s");
+        format = format.replace("#sender", preExtras + "%1$s" + postExtras);
         format = format.replace("#msg", "%2$s");
         format = format.replace("&", "\u00a7");
         return format;
