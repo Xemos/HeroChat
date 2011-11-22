@@ -64,21 +64,24 @@ public class MessageHandler {
         // apply channel formatting
         String format = event.getFormat();
         Matcher matcher = msgPattern.matcher(format);
-        if (matcher.groupCount() == 3)
-            event.setFormat(format(channel, matcher.group(1) + matcher.group(2), matcher.group(3)));
-        else
-            event.setFormat(format(channel, "", ""));
+        String channelFormat = channel.getFormat();
+        String world = player.getWorld().getName();
+        String preExtras = "";
+        String postExtras = "";
+        if (matcher.groupCount() == 3) {
+            preExtras = matcher.group(1) + matcher.group(2);
+            postExtras = matcher.group(3);
+        }
+        format = format(channel, channelFormat, world, preExtras, postExtras);
+        event.setFormat(format);
     }
 
-    public static String format(Channel channel, String preExtras, String postExtras) {
-        return format(channel, channel.getFormat(), preExtras, postExtras);
-    }
-
-    public static String format(Channel channel, String format, String preExtras, String postExtras) {
+    public static String format(Channel channel, String format, String world, String preExtras, String postExtras) {
         // default minecraft format is <%1$s> %2$s
         format = format.replace("#name", channel.getName());
         format = format.replace("#nick", channel.getNick());
         format = format.replace("#color", channel.getColor().toString());
+        format = format.replace("#world", world);
         format = format.replace("#sender", preExtras + "%1$s" + postExtras);
         format = format.replace("#msg", "%2$s");
         format = format.replace("&", "\u00a7");

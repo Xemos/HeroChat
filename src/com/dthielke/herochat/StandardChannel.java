@@ -143,7 +143,7 @@ public class StandardChannel implements Channel {
 
     @Override
     public void announce(String message) {
-        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT, "", "").replace("%2$s", message);
+        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT, "", "", "").replace("%2$s", message);
         for (Chatter member : members) {
             member.getPlayer().sendMessage(message);
         }
