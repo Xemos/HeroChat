@@ -2,13 +2,19 @@ package com.dthielke.herochat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChatEvent;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StandardChannel implements Channel {
     public static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
     public static final String MESSAGE_FORMAT = "#color[#nick] &f#sender#color: #msg";
+    private static final Pattern msgPattern = Pattern.compile("(.*)<(.*)%1\\$s(.*)> %2\\$s");
 
     private final String name;
     private String nick;
@@ -143,7 +149,7 @@ public class StandardChannel implements Channel {
 
     @Override
     public void announce(String message) {
-        message = MessageHandler.format(this, ANNOUNCEMENT_FORMAT, "", "", "").replace("%2$s", message);
+        message = applyFormat(ANNOUNCEMENT_FORMAT, "", null).replace("%2$s", message);
         for (Chatter member : members) {
             member.getPlayer().sendMessage(message);
         }
@@ -155,6 +161,23 @@ public class StandardChannel implements Channel {
             worlds.add(world);
             storage.flagUpdate(this);
         }
+    }
+
+    @Override
+    public String applyFormat(String format, String originalFormat) {
+        format = format.replace("#name", name);
+        format = format.replace("#nick", nick);
+        format = format.replace("#color", color.toString());
+        format = format.replace("#msg", "%2$s");
+
+        Matcher matcher = msgPattern.matcher(originalFormat);
+        if (matcher.groupCount() == 3)
+            format = format.replace("#sender", matcher.group(1) + matcher.group(2) + "%1$s" + matcher.group(3));
+        else
+            format = format.replace("#sender", "%1$s");
+
+        format = format.replace("&", "\u00a7");
+        return format;
     }
 
     @Override
@@ -208,18 +231,18 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean hasWorld(World world) {
-        return worlds.isEmpty() || worlds.contains(world.getName());
-    }
-
-    @Override
     public boolean isBanned(String name) {
         return bans.contains(name.toLowerCase());
     }
 
     @Override
-    public boolean isLocal() {
-        return distance != 0;
+    public boolean isTransient() {
+        return false;
+    }
+
+    @Override
+    public boolean isHidden() {
+        return false;
     }
 
     @Override
@@ -248,6 +271,48 @@ public class StandardChannel implements Channel {
 
         removeMember(chatter, false);
         return true;
+    }
+
+    @Override
+    public void processChat(PlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String senderName = player.getName();
+        Chatter sender = HeroChat.getChatterManager().getChatter(player);
+
+        // trim the recipient list
+        Set<Player> recipients = event.getRecipients();
+        for (Iterator<Player> iter = recipients.iterator(); iter.hasNext(); ) {
+            Chatter recipient = HeroChat.getChatterManager().getChatter(iter.next());
+            if (!members.contains(recipient)) {
+                iter.remove();
+            } else if (isLocal() && !sender.isInRange(recipient, distance)) {
+                iter.remove();
+            } else if (!hasWorld(recipient.getPlayer().getWorld())) {
+                iter.remove();
+            } else if (recipient.isIgnoring(senderName)) {
+                iter.remove();
+            }
+        }
+
+        event.setFormat(applyFormat(MESSAGE_FORMAT, event.getFormat(), player));
+    }
+
+    @Override
+    public boolean isLocal() {
+        return distance != 0;
+    }
+
+    @Override
+    public boolean hasWorld(World world) {
+        return worlds.isEmpty() || worlds.contains(world.getName());
+    }
+
+    @Override
+    public String applyFormat(String format, String originalFormat, Player sender) {
+        format = applyFormat(format, originalFormat);
+        format = format.replace("#world", sender.getWorld().toString());
+        format = format.replace("&", "\u00a7");
+        return format;
     }
 
     @Override

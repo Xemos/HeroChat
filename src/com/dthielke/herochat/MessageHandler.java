@@ -5,13 +5,8 @@ import com.dthielke.herochat.util.Messaging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 
-import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class MessageHandler {
-    private static final Pattern msgPattern = Pattern.compile("(.*)<(.*)%1\\$s(.*)> %2\\$s");
+
 
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
@@ -44,47 +39,6 @@ public class MessageHandler {
             return;
         }
 
-        // trim the recipient list
-        String senderName = player.getName();
-        Set<Player> recipients = event.getRecipients();
-        Set<Chatter> intendedRecipients = channel.getMembers();
-        for (Iterator<Player> iter = recipients.iterator(); iter.hasNext(); ) {
-            Chatter recipient = HeroChat.getChatterManager().getChatter(iter.next());
-            if (!intendedRecipients.contains(recipient)) {
-                iter.remove();
-            } else if (channel.isLocal() && !sender.isInRange(recipient, channel.getDistance())) {
-                iter.remove();
-            } else if (!channel.hasWorld(recipient.getPlayer().getWorld())) {
-                iter.remove();
-            } else if (recipient.isIgnoring(senderName)) {
-                iter.remove();
-            }
-        }
-
-        // apply channel formatting
-        String format = event.getFormat();
-        Matcher matcher = msgPattern.matcher(format);
-        String channelFormat = channel.getFormat();
-        String world = player.getWorld().getName();
-        String preExtras = "";
-        String postExtras = "";
-        if (matcher.groupCount() == 3) {
-            preExtras = matcher.group(1) + matcher.group(2);
-            postExtras = matcher.group(3);
-        }
-        format = format(channel, channelFormat, world, preExtras, postExtras);
-        event.setFormat(format);
-    }
-
-    public static String format(Channel channel, String format, String world, String preExtras, String postExtras) {
-        // default minecraft format is <%1$s> %2$s
-        format = format.replace("#name", channel.getName());
-        format = format.replace("#nick", channel.getNick());
-        format = format.replace("#color", channel.getColor().toString());
-        format = format.replace("#world", world);
-        format = format.replace("#sender", preExtras + "%1$s" + postExtras);
-        format = format.replace("#msg", "%2$s");
-        format = format.replace("&", "\u00a7");
-        return format;
+        channel.processChat(event);
     }
 }

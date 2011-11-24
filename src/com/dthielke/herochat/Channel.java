@@ -2,6 +2,8 @@ package com.dthielke.herochat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChatEvent;
 
 import java.util.Set;
 
@@ -16,11 +18,17 @@ public interface Channel {
     // same guarantee. In this case, the best thing we have to work with are
     // player names.
 
+    public boolean isTransient();
+
     public boolean addMember(Chatter chatter, boolean announce);
 
     public void addWorld(String world);
 
     public void announce(String message);
+
+    public String applyFormat(String format, String originalFormat);
+
+    public String applyFormat(String format, String originalFormat, Player sender);
 
     public void attachStorage(ChannelStorage storage);
 
@@ -56,6 +64,8 @@ public interface Channel {
 
     public boolean isBanned(String name);
 
+    public boolean isHidden();
+
     public boolean isLocal();
 
     public boolean isMember(Chatter chatter);
@@ -67,6 +77,8 @@ public interface Channel {
     public boolean isShortcutAllowed();
 
     public boolean kickMember(Chatter chatter, boolean announce);
+
+    public void processChat(PlayerChatEvent event);
 
     public boolean removeMember(Chatter chatter, boolean announce);
 

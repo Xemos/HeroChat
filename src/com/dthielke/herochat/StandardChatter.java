@@ -9,6 +9,7 @@ public class StandardChatter implements Chatter {
     private final Player player;
     private Set<Channel> channels = new HashSet<Channel>();
     private Channel activeChannel;
+    private Channel lastActiveChannel;
     private ChatterStorage storage;
     private Set<String> ignores = new HashSet<String>();
     private boolean muted = false;
@@ -21,6 +22,11 @@ public class StandardChatter implements Chatter {
     @Override
     public Channel getActiveChannel() {
         return activeChannel;
+    }
+
+    @Override
+    public Channel getLastActiveChannel() {
+        return lastActiveChannel;
     }
 
     @Override
@@ -146,7 +152,7 @@ public class StandardChatter implements Chatter {
             permission = Permission.MODIFY_NAME;
         } else if (setting.equals("nick")) {
             permission = Permission.MODIFY_NICK;
-        } else if (setting.equals("format")) {
+        } else if (setting.equals("applyFormat")) {
             permission = Permission.MODIFY_FORMAT;
         } else if (setting.equals("distance")) {
             permission = Permission.MODIFY_DISTANCE;
@@ -243,6 +249,10 @@ public class StandardChatter implements Chatter {
 
     @Override
     public void setActiveChannel(Channel channel) {
+        if (channel.equals(activeChannel))
+            return;
+
+        lastActiveChannel = activeChannel;
         activeChannel = channel;
         storage.flagUpdate(this);
     }

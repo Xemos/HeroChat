@@ -34,7 +34,7 @@ public class YMLChannelStorage implements ChannelStorage {
         config.load();
 
         String nick = config.getString("nick", name);
-        String format = config.getString("format", StandardChannel.MESSAGE_FORMAT);
+        String format = config.getString("applyFormat", StandardChannel.MESSAGE_FORMAT);
         String password = config.getString("password", "");
         ChatColor color;
         try {
@@ -100,7 +100,7 @@ public class YMLChannelStorage implements ChannelStorage {
         } else {
             config.setProperty("name", channel.getName());
             config.setProperty("nick", channel.getNick());
-            config.setProperty("format", channel.getFormat());
+            config.setProperty("applyFormat", channel.getFormat());
             config.setProperty("password", channel.getPassword());
             config.setProperty("color", channel.getColor().name());
             config.setProperty("distance", channel.getDistance());

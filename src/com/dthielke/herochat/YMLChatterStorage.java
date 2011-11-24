@@ -29,9 +29,10 @@ public class YMLChatterStorage implements ChatterStorage {
             return null;
 
         ChannelManager channelManager = HeroChat.getChannelManager();
+        Channel defaultChannel = channelManager.getDefaultChannel();
         Channel activeChannel = channelManager.getChannel(config.getString("activeChannel", ""));
         if (activeChannel == null)
-            activeChannel = channelManager.getDefaultChannel();
+            activeChannel = defaultChannel;
         Set<Channel> channels = new HashSet<Channel>();
         List<String> channelNames = config.getStringList("channels", null);
         for (String channelName : channelNames) {
@@ -40,12 +41,13 @@ public class YMLChatterStorage implements ChatterStorage {
                 channels.add(channel);
         }
         if (channels.isEmpty())
-            channels.add(channelManager.getDefaultChannel());
+            channels.add(defaultChannel);
         List<String> ignores = config.getStringList("ignores", null);
         boolean muted = config.getBoolean("muted", false);
 
         Chatter chatter = new StandardChatter(this, player);
-        chatter.setActiveChannel(activeChannel);
+        chatter.setActiveChannel(defaultChannel);
+        chatter.setActiveChannel(activeChannel); // done twice to set the last active channel
         for (Channel channel : channels)
             channel.addMember(chatter, false);
         for (String ignore : ignores)
@@ -85,7 +87,10 @@ public class YMLChatterStorage implements ChatterStorage {
         Configuration config = configs.get(chatter);
         if (config != null) {
             config.setProperty("name", chatter.getName());
-            config.setProperty("activeChannel", chatter.getActiveChannel().getName());
+            if (chatter.getActiveChannel().isTransient())
+                config.setProperty("activeChannel", chatter.getLastActiveChannel().getName());
+            else
+                config.setProperty("activeChannel", chatter.getActiveChannel().getName());
             List<String> channels = new ArrayList<String>();
             for (Channel channel : chatter.getChannels())
                 channels.add(channel.getName());

@@ -27,6 +27,8 @@ public interface Chatter {
 
     public Channel getActiveChannel();
 
+    public Channel getLastActiveChannel();
+
     public Set<Channel> getChannels();
 
     public Set<String> getIgnores();
@@ -65,7 +67,7 @@ public interface Chatter {
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
         MODIFY_DISTANCE("modify.distance"),
-        MODIFY_FORMAT("modify.format"),
+        MODIFY_FORMAT("modify.applyFormat"),
         MODIFY_SHORTCUT("modify.shortcut");
 
         private String name;

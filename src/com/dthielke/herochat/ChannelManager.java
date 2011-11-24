@@ -84,6 +84,9 @@ public class ChannelManager {
 
         channels.add(channel);
 
+        if (channel.isTransient())
+            return true;
+
         // add the channel to the wildcard permissions
         for (Chatter.Permission p : Chatter.Permission.values()) {
             Permission perm = wildcardPermissions.get(p);
@@ -107,12 +110,17 @@ public class ChannelManager {
 
         channels.remove(channel);
 
+        if (channel.isTransient())
+            return true;
+
         // remove the channel from the wildcard permissions
         for (Chatter.Permission p : Chatter.Permission.values()) {
             Permission perm = wildcardPermissions.get(p);
             perm.getChildren().remove(p.form(channel));
             perm.recalculatePermissibles();
         }
+
+        storage.removeChannel(channel);
 
         return true;
     }
