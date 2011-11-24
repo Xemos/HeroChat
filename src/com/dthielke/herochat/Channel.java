@@ -109,4 +109,8 @@ public interface Channel {
     public void setShortcutAllowed(boolean shortcutAllowed);
 
     public void setWorlds(Set<String> worlds);
+
+    public int getMinMembers();
+
+    public int getMaxMembers();
 }

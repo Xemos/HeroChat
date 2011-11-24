@@ -6,13 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 
 public class MessageHandler {
-
-
     public static void handle(PlayerChatEvent event) {
         Player player = event.getPlayer();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
-        if (sender == null)
-            throw new RuntimeException("Chatter (" + event.getPlayer().getName() + ") not found.");
+        if (sender == null) throw new RuntimeException("Chatter (" + event.getPlayer().getName() + ") not found.");
 
         Channel channel = sender.getActiveChannel();
         if (channel == null)
