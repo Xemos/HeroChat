@@ -22,7 +22,8 @@ public class FocusCommand extends BasicCommand {
 
     @Override
     public boolean execute(CommandSender sender, String identifier, String[] args) {
-        if (!(sender instanceof Player)) return true;
+        if (!(sender instanceof Player))
+            return true;
         Player player = (Player) sender;
 
         ChannelManager channelMngr = HeroChat.getChannelManager();
@@ -33,7 +34,8 @@ public class FocusCommand extends BasicCommand {
         }
 
         String password = "";
-        if (args.length == 2) password = args[1];
+        if (args.length == 2)
+            password = args[1];
 
         Chatter chatter = HeroChat.getChatterManager().getChatter(player);
         if (!chatter.hasChannel(channel)) {

@@ -108,11 +108,14 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean equals(Object other) {
-        if (other == this) return true;
+        if (other == this)
+            return true;
 
-        if (other == null) return false;
+        if (other == null)
+            return false;
 
-        if (!(other instanceof Channel)) return false;
+        if (!(other instanceof Channel))
+            return false;
 
         Channel channel = (Channel) other;
         return name.equalsIgnoreCase(channel.getName()) || name.equalsIgnoreCase(channel.getNick());
@@ -129,7 +132,8 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean addMember(Chatter chatter, boolean announce) {
-        if (members.contains(chatter)) return false;
+        if (members.contains(chatter))
+            return false;
 
         members.add(chatter);
         if (!chatter.hasChannel(this)) {
@@ -169,7 +173,8 @@ public class StandardChannel implements Channel {
         Matcher matcher = msgPattern.matcher(originalFormat);
         if (matcher.groupCount() == 3)
             format = format.replace("#sender", matcher.group(1) + matcher.group(2) + "%1$s" + matcher.group(3));
-        else format = format.replace("#sender", "%1$s");
+        else
+            format = format.replace("#sender", "%1$s");
 
         format = format.replace("&", "\u00a7");
         return format;
@@ -182,7 +187,8 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean banMember(Chatter chatter, boolean announce) {
-        if (!members.contains(chatter)) return false;
+        if (!members.contains(chatter))
+            return false;
 
         if (announce) {
             announce(chatter.getPlayer().getName() + " has been banned.");
@@ -195,7 +201,8 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean removeMember(Chatter chatter, boolean announce) {
-        if (!members.contains(chatter)) return false;
+        if (!members.contains(chatter))
+            return false;
 
         if (announce) {
             announce(chatter.getPlayer().getName() + " has left the channel.");
@@ -211,8 +218,10 @@ public class StandardChannel implements Channel {
 
     @Override
     public void setBanned(String name, boolean banned) {
-        if (banned) bans.add(name.toLowerCase());
-        else bans.remove(name.toLowerCase());
+        if (banned)
+            bans.add(name.toLowerCase());
+        else
+            bans.remove(name.toLowerCase());
         storage.flagUpdate(this);
     }
 
@@ -263,7 +272,8 @@ public class StandardChannel implements Channel {
 
     @Override
     public boolean kickMember(Chatter chatter, boolean announce) {
-        if (!members.contains(chatter)) return false;
+        if (!members.contains(chatter))
+            return false;
 
         if (announce) {
             announce(chatter.getPlayer().getName() + " has been kicked.");
@@ -348,8 +358,10 @@ public class StandardChannel implements Channel {
 
     @Override
     public void setModerator(String name, boolean moderator) {
-        if (moderator) moderators.add(name.toLowerCase());
-        else moderators.remove(name.toLowerCase());
+        if (moderator)
+            moderators.add(name.toLowerCase());
+        else
+            moderators.remove(name.toLowerCase());
         storage.flagUpdate(this);
     }
 
@@ -361,8 +373,10 @@ public class StandardChannel implements Channel {
 
     @Override
     public void setMuted(String name, boolean muted) {
-        if (muted) mutes.add(name.toLowerCase());
-        else mutes.remove(name.toLowerCase());
+        if (muted)
+            mutes.add(name.toLowerCase());
+        else
+            mutes.remove(name.toLowerCase());
         storage.flagUpdate(this);
     }
 

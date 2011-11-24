@@ -25,11 +25,6 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public Channel getLastActiveChannel() {
-        return lastActiveChannel;
-    }
-
-    @Override
     public Set<Channel> getChannels() {
         return channels;
     }
@@ -37,6 +32,11 @@ public class StandardChatter implements Chatter {
     @Override
     public Set<String> getIgnores() {
         return ignores;
+    }
+
+    @Override
+    public Channel getLastActiveChannel() {
+        return lastActiveChannel;
     }
 
     @Override
