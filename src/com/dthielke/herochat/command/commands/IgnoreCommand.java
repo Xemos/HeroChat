@@ -18,7 +18,7 @@ public class IgnoreCommand extends BasicCommand {
         setDescription("Ignores a user");
         setUsage("/ch ignore §8[player]");
         setArgumentRange(0, 1);
-        setIdentifiers("ch ignore");
+        setIdentifiers("ignore", "ch ignore");
     }
 
     @Override

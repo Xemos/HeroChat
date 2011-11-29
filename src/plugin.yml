@@ -9,3 +9,11 @@ commands:
     aliases: ['ch']
     description: Root HeroChat command
     usage: /<command>
+  msg:
+    aliases: ['tell']
+    description: Private messaging command
+    usage: /<command> <player> <message>
+  ignore:
+    aliases: ['ignore']
+    description: Ignores a player
+    usage: /<command> <player>

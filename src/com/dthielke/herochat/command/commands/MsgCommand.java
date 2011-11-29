@@ -17,7 +17,7 @@ public class MsgCommand extends BasicCommand {
         setDescription("Starts a private conversation with another player");
         setUsage("/msg §8<player> [message]");
         setArgumentRange(1, Integer.MAX_VALUE);
-        setIdentifiers("msg", "ch msg");
+        setIdentifiers("msg", "tell", "ch msg");
     }
 
     @Override
