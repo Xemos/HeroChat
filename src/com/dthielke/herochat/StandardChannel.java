@@ -47,8 +47,20 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setBans(Set<String> bans) {
+        this.bans = bans;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public ChatColor getColor() {
         return color;
+    }
+
+    @Override
+    public void setColor(ChatColor color) {
+        this.color = color;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -57,8 +69,25 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setDistance(int distance) {
+        this.distance = distance < 0 ? 0 : distance;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public String getFormat() {
         return format;
+    }
+
+    @Override
+    public void setFormat(String format) {
+        this.format = format;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public int getMaxMembers() {
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -67,13 +96,30 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public int getMinMembers() {
+        return 0;
+    }
+
+    @Override
     public Set<String> getModerators() {
         return moderators;
     }
 
     @Override
+    public void setModerators(Set<String> moderators) {
+        this.moderators = moderators;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public Set<String> getMutes() {
         return mutes;
+    }
+
+    @Override
+    public void setMutes(Set<String> mutes) {
+        this.mutes = mutes;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -87,8 +133,20 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setNick(String nick) {
+        this.nick = nick;
+        storage.flagUpdate(this);
+    }
+
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -102,32 +160,35 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public void setWorlds(Set<String> worlds) {
+        this.worlds = worlds;
+        storage.flagUpdate(this);
+    }
+
+    @Override
+    public boolean isHidden() {
+        return false;
+    }
+
+    @Override
+    public boolean isLocal() {
+        return distance != 0;
+    }
+
+    @Override
     public boolean isShortcutAllowed() {
         return shortcutAllowed;
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this)
-            return true;
-
-        if (other == null)
-            return false;
-
-        if (!(other instanceof Channel))
-            return false;
-
-        Channel channel = (Channel) other;
-        return name.equalsIgnoreCase(channel.getName()) || name.equalsIgnoreCase(channel.getNick());
+    public void setShortcutAllowed(boolean shortcutAllowed) {
+        this.shortcutAllowed = shortcutAllowed;
+        storage.flagUpdate(this);
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (name == null ? 0 : name.toLowerCase().hashCode());
-        result = prime * result + (nick == null ? 0 : nick.toLowerCase().hashCode());
-        return result;
+    public boolean isTransient() {
+        return false;
     }
 
     @Override
@@ -227,13 +288,27 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public int getMaxMembers() {
-        return Integer.MAX_VALUE;
+    public boolean equals(Object other) {
+        if (other == this)
+            return true;
+
+        if (other == null)
+            return false;
+
+        if (!(other instanceof Channel))
+            return false;
+
+        Channel channel = (Channel) other;
+        return name.equalsIgnoreCase(channel.getName()) || name.equalsIgnoreCase(channel.getNick());
     }
 
     @Override
-    public int getMinMembers() {
-        return 0;
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (name == null ? 0 : name.toLowerCase().hashCode());
+        result = prime * result + (nick == null ? 0 : nick.toLowerCase().hashCode());
+        return result;
     }
 
     @Override
@@ -244,11 +319,6 @@ public class StandardChannel implements Channel {
     @Override
     public boolean isBanned(String name) {
         return bans.contains(name.toLowerCase());
-    }
-
-    @Override
-    public boolean isHidden() {
-        return false;
     }
 
     @Override
@@ -264,11 +334,6 @@ public class StandardChannel implements Channel {
     @Override
     public boolean isMuted(String name) {
         return mutes.contains(name.toLowerCase());
-    }
-
-    @Override
-    public boolean isTransient() {
-        return false;
     }
 
     @Override
@@ -309,11 +374,6 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public boolean isLocal() {
-        return distance != 0;
-    }
-
-    @Override
     public boolean hasWorld(World world) {
         return worlds.isEmpty() || worlds.contains(world.getName());
     }
@@ -334,30 +394,6 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setBans(Set<String> bans) {
-        this.bans = bans;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setColor(ChatColor color) {
-        this.color = color;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setDistance(int distance) {
-        this.distance = distance < 0 ? 0 : distance;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setFormat(String format) {
-        this.format = format;
-        storage.flagUpdate(this);
-    }
-
-    @Override
     public void setModerator(String name, boolean moderator) {
         if (moderator)
             moderators.add(name.toLowerCase());
@@ -367,47 +403,11 @@ public class StandardChannel implements Channel {
     }
 
     @Override
-    public void setModerators(Set<String> moderators) {
-        this.moderators = moderators;
-        storage.flagUpdate(this);
-    }
-
-    @Override
     public void setMuted(String name, boolean muted) {
         if (muted)
             mutes.add(name.toLowerCase());
         else
             mutes.remove(name.toLowerCase());
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setMutes(Set<String> mutes) {
-        this.mutes = mutes;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setNick(String nick) {
-        this.nick = nick;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setShortcutAllowed(boolean shortcutAllowed) {
-        this.shortcutAllowed = shortcutAllowed;
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setWorlds(Set<String> worlds) {
-        this.worlds = worlds;
         storage.flagUpdate(this);
     }
 }

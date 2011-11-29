@@ -65,12 +65,12 @@ public class ChannelManager {
         return modPermissions.contains(permission);
     }
 
-    public boolean hasChannel(String identifier) {
-        return channels.containsKey(identifier.toLowerCase());
-    }
-
     public Channel getChannel(String identifier) {
         return channels.get(identifier.toLowerCase());
+    }
+
+    public boolean hasChannel(String identifier) {
+        return channels.containsKey(identifier.toLowerCase());
     }
 
     public void loadChannels() {

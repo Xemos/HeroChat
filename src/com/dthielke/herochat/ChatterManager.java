@@ -10,6 +10,10 @@ public class ChatterManager {
     private Map<Player, Chatter> chatters = new HashMap<Player, Chatter>();
     private ChatterStorage storage;
 
+    public Collection<Chatter> getChatters() {
+        return chatters.values();
+    }
+
     public ChatterStorage getStorage() {
         return storage;
     }
@@ -42,10 +46,6 @@ public class ChatterManager {
                 return chatter;
 
         return null;
-    }
-
-    public Collection<Chatter> getChatters() {
-        return chatters.values();
     }
 
     public void removeChatter(Chatter chatter) {

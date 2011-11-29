@@ -8,18 +8,6 @@ import org.bukkit.event.player.PlayerChatEvent;
 import java.util.Set;
 
 public interface Channel {
-    // NOTE TO FUTURE SELF:
-    // You may be wondering why the member functions operate on chatter objects
-    // while ban, mute, and moderator functions operate on strings. A player is
-    // only an active member of a channel when they are online. This restriction
-    // guarantees we will always have a chatter object available for each player
-    // in a channel. Ban, mute and mod statuses, however, should be modifiable
-    // regardless whether a player is online and therefore we don't have the
-    // same guarantee. In this case, the best thing we have to work with are
-    // player names.
-
-    public boolean isTransient();
-
     public boolean addMember(Chatter chatter, boolean announce);
 
     public void addWorld(String world);
@@ -42,7 +30,11 @@ public interface Channel {
 
     public String getFormat();
 
+    public int getMaxMembers();
+
     public Set<Chatter> getMembers();
+
+    public int getMinMembers();
 
     public Set<String> getModerators();
 
@@ -75,6 +67,8 @@ public interface Channel {
     public boolean isMuted(String name);
 
     public boolean isShortcutAllowed();
+
+    public boolean isTransient();
 
     public boolean kickMember(Chatter chatter, boolean announce);
 
@@ -109,8 +103,4 @@ public interface Channel {
     public void setShortcutAllowed(boolean shortcutAllowed);
 
     public void setWorlds(Set<String> worlds);
-
-    public int getMinMembers();
-
-    public int getMaxMembers();
 }

@@ -8,10 +8,10 @@ import java.util.Set;
 
 public class StandardChatter implements Chatter {
     private final Player player;
-    private Set<Channel> channels = new HashSet<Channel>();
     private Channel activeChannel;
     private Channel lastActiveChannel;
     private ChatterStorage storage;
+    private Set<Channel> channels = new HashSet<Channel>();
     private Set<String> ignores = new HashSet<String>();
     private boolean muted = false;
 
@@ -41,6 +41,11 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public String getName() {
+        return player.getName();
+    }
+
+    @Override
     public Player getPlayer() {
         return player;
     }
@@ -56,22 +61,9 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this)
-            return true;
-
-        if (other == null)
-            return false;
-
-        if (!(other instanceof Chatter))
-            return false;
-
-        return player.equals(((Chatter) other).getPlayer());
-    }
-
-    @Override
-    public int hashCode() {
-        return player.hashCode();
+    public void setMuted(boolean muted) {
+        this.muted = muted;
+        storage.flagUpdate(this);
     }
 
     @Override
@@ -216,13 +208,27 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public String getName() {
-        return player.getName();
+    public boolean equals(Object other) {
+        if (other == this)
+            return true;
+
+        if (other == null)
+            return false;
+
+        if (!(other instanceof Chatter))
+            return false;
+
+        return player.equals(((Chatter) other).getPlayer());
     }
 
     @Override
     public boolean hasChannel(Channel channel) {
         return channels.contains(channel);
+    }
+
+    @Override
+    public int hashCode() {
+        return player.hashCode();
     }
 
     @Override
@@ -255,7 +261,8 @@ public class StandardChatter implements Chatter {
         if (channel.equals(activeChannel))
             return;
 
-        lastActiveChannel = activeChannel;
+        if (activeChannel != null && !activeChannel.isTransient())
+            lastActiveChannel = activeChannel;
         activeChannel = channel;
 
         if (announce) {
@@ -271,12 +278,6 @@ public class StandardChatter implements Chatter {
             ignores.add(name.toLowerCase());
         else
             ignores.remove(name.toLowerCase());
-        storage.flagUpdate(this);
-    }
-
-    @Override
-    public void setMuted(boolean muted) {
-        this.muted = muted;
         storage.flagUpdate(this);
     }
 }

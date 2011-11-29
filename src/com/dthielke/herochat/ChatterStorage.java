@@ -3,9 +3,9 @@ package com.dthielke.herochat;
 public interface ChatterStorage {
     public void addChatter(Chatter chatter);
 
-    public Chatter load(String name);
-
     public void flagUpdate(Chatter chatter);
+
+    public Chatter load(String name);
 
     public void removeChatter(Chatter chatter);
 

@@ -31,8 +31,13 @@ public class IgnoreCommand extends BasicCommand {
 
         if (args.length == 0) {
             String msg = "Ignoring";
-            for (String name : chatter.getIgnores())
-                msg += " " + name;
+            if (chatter.getIgnores().isEmpty()) {
+                msg += " no one.";
+            } else {
+                for (String name : chatter.getIgnores()) {
+                    msg += " " + name;
+                }
+            }
             Messaging.send(sender, msg);
         } else {
             String targetName = args[args.length - 1];
@@ -42,10 +47,10 @@ public class IgnoreCommand extends BasicCommand {
 
             if (chatter.isIgnoring(targetName)) {
                 chatter.setIgnore(targetName, false);
-                Messaging.send(sender, "Player unignored.");
+                Messaging.send(sender, "No longer ignoring $1.", targetName);
             } else {
                 chatter.setIgnore(targetName, true);
-                Messaging.send(sender, "Player ignored.");
+                Messaging.send(sender, "Ignoring $1.", targetName);
             }
         }
 

@@ -27,11 +27,11 @@ public interface Chatter {
 
     public Channel getActiveChannel();
 
-    public Channel getLastActiveChannel();
-
     public Set<Channel> getChannels();
 
     public Set<String> getIgnores();
+
+    public Channel getLastActiveChannel();
 
     public String getName();
 
@@ -45,13 +45,13 @@ public interface Chatter {
 
     public boolean isInRange(Chatter other, int distance);
 
+    public boolean isMuted();
+
     public boolean removeChannel(Channel channel, boolean announce);
 
     public void setActiveChannel(Channel channel, boolean announce);
 
     public void setIgnore(String name, boolean ignore);
-
-    public boolean isMuted();
 
     public void setMuted(boolean muted);
 

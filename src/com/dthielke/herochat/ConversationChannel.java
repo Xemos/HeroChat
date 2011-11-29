@@ -2,6 +2,7 @@ package com.dthielke.herochat;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChatEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,12 +13,10 @@ public class ConversationChannel extends StandardChannel {
     public ConversationChannel(Chatter memberOne, Chatter memberTwo) {
         super(new ChannelStorage() {
             @Override
-            public void addChannel(Channel channel) {
-            }
+            public void addChannel(Channel channel) {}
 
             @Override
-            public void flagUpdate(Channel channel) {
-            }
+            public void flagUpdate(Channel channel) {}
 
             @Override
             public Channel load(String name) {
@@ -30,20 +29,17 @@ public class ConversationChannel extends StandardChannel {
             }
 
             @Override
-            public void removeChannel(Channel channel) {
-            }
+            public void removeChannel(Channel channel) {}
 
             @Override
-            public void update() {
-            }
+            public void update() {}
 
             @Override
-            public void update(Channel channel) {
-            }
+            public void update(Channel channel) {}
         }, "convo" + memberOne.getName() + memberTwo.getName(), "convo" + memberTwo.getName() + memberOne.getName());
         addMember(memberOne, false);
         addMember(memberTwo, false);
-        setFormat("#sender->#recipient: #msg");
+        setFormat("&d#convoaddress #convopartner&d: #msg");
         channelCount++;
     }
 
@@ -57,29 +53,12 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
-    public void addWorld(String world) {
-    }
-
-    @Override
-    public String applyFormat(String format, String originalFormat, Player sender) {
-        format = super.applyFormat(format, originalFormat, sender);
-        for (Chatter member : getMembers()) {
-            if (!member.getName().equals(sender.getName())) {
-                format = format.replace("#recipient", member.getPlayer().getDisplayName());
-            }
-        }
-        return format;
-    }
-
-    @Override
-    public boolean banMember(Chatter chatter, boolean announce) {
-        return false;
-    }
-
-    @Override
     public Set<String> getBans() {
         return new HashSet<String>();
     }
+
+    @Override
+    public void setBans(Set<String> bans) {}
 
     @Override
     public int getDistance() {
@@ -92,9 +71,17 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
+    public int getMinMembers() {
+        return 2;
+    }
+
+    @Override
     public Set<String> getModerators() {
         return new HashSet<String>();
     }
+
+    @Override
+    public void setModerators(Set<String> moderators) {}
 
     @Override
     public Set<String> getMutes() {
@@ -102,13 +89,56 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
+    public void setMutes(Set<String> mutes) {}
+
+    @Override
     public String getPassword() {
         return "";
     }
 
     @Override
+    public void setPassword(String password) {}
+
+    @Override
     public Set<String> getWorlds() {
         return new HashSet<String>();
+    }
+
+    @Override
+    public void setWorlds(Set<String> worlds) {}
+
+    @Override
+    public boolean isHidden() {
+        return true;
+    }
+
+    @Override
+    public boolean isLocal() {
+        return false;
+    }
+
+    @Override
+    public boolean isShortcutAllowed() {
+        return false;
+    }
+
+    @Override
+    public void setShortcutAllowed(boolean shortcutAllowed) {}
+
+    @Override
+    public boolean isTransient() {
+        return true;
+    }
+
+    @Override
+    public void setNick(String nick) {}
+
+    @Override
+    public void addWorld(String world) {}
+
+    @Override
+    public boolean banMember(Chatter chatter, boolean announce) {
+        return false;
     }
 
     @Override
@@ -118,16 +148,6 @@ public class ConversationChannel extends StandardChannel {
 
     @Override
     public boolean isBanned(String name) {
-        return false;
-    }
-
-    @Override
-    public boolean isHidden() {
-        return true;
-    }
-
-    @Override
-    public boolean isLocal() {
         return false;
     }
 
@@ -142,18 +162,44 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
-    public boolean isShortcutAllowed() {
-        return false;
-    }
-
-    @Override
-    public boolean isTransient() {
-        return true;
-    }
-
-    @Override
     public boolean kickMember(Chatter chatter, boolean announce) {
         return false;
+    }
+
+    @Override
+    public void processChat(PlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String senderName = player.getName();
+        Chatter sender = HeroChat.getChatterManager().getChatter(player);
+
+        event.setCancelled(true);
+
+        String format = getFormat();
+        format = format.replace("#msg", event.getMessage());
+
+        for (Chatter member : getMembers()) {
+            if (!member.isIgnoring(senderName)) {
+                Player memberPlayer = member.getPlayer();
+                memberPlayer.sendMessage(applyFormat(format, event.getFormat(), player, memberPlayer));
+            }
+        }
+    }
+
+    public String applyFormat(String format, String originalFormat, Player sender, Player recipient) {
+        format = super.applyFormat(format, originalFormat, sender);
+        if (sender.equals(recipient)) {
+            format = format.replace("#convoaddress", "To");
+            for (Chatter member : getMembers()) {
+                if (!member.getPlayer().equals(sender)) {
+                    format = format.replace("#convopartner", member.getPlayer().getName());
+                    break;
+                }
+            }
+        } else {
+            format = format.replace("#convoaddress", "From");
+            format = format.replace("#convopartner", sender.getDisplayName());
+        }
+        return format;
     }
 
     @Override
@@ -164,7 +210,6 @@ public class ConversationChannel extends StandardChannel {
                 Chatter otherMember = getMembers().iterator().next();
                 removeMember(otherMember, false);
                 if (otherMember.getActiveChannel().equals(this)) {
-                    otherMember.setActiveChannel(HeroChat.getChannelManager().getDefaultChannel(), false);
                     otherMember.setActiveChannel(otherMember.getLastActiveChannel(), true);
                 }
             }
@@ -176,51 +221,14 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
-    public int getMinMembers() {
-        return 2;
-    }
+    public void removeWorld(String world) {}
 
     @Override
-    public void removeWorld(String world) {
-    }
+    public void setBanned(String name, boolean banned) {}
 
     @Override
-    public void setBanned(String name, boolean banned) {
-    }
+    public void setModerator(String name, boolean moderator) {}
 
     @Override
-    public void setBans(Set<String> bans) {
-    }
-
-    @Override
-    public void setModerator(String name, boolean moderator) {
-    }
-
-    @Override
-    public void setModerators(Set<String> moderators) {
-    }
-
-    @Override
-    public void setMuted(String name, boolean muted) {
-    }
-
-    @Override
-    public void setMutes(Set<String> mutes) {
-    }
-
-    @Override
-    public void setNick(String nick) {
-    }
-
-    @Override
-    public void setPassword(String password) {
-    }
-
-    @Override
-    public void setShortcutAllowed(boolean shortcutAllowed) {
-    }
-
-    @Override
-    public void setWorlds(Set<String> worlds) {
-    }
+    public void setMuted(String name, boolean muted) {}
 }

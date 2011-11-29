@@ -15,9 +15,9 @@ public class MsgCommand extends BasicCommand {
     public MsgCommand() {
         super("Private Message");
         setDescription("Starts a private conversation with another player");
-        setUsage("/ch msg §8<player> [message]");
+        setUsage("/msg §8<player> [message]");
         setArgumentRange(1, Integer.MAX_VALUE);
-        setIdentifiers("ch msg");
+        setIdentifiers("msg", "ch msg");
     }
 
     @Override
@@ -44,8 +44,8 @@ public class MsgCommand extends BasicCommand {
 
         Channel convo = channelManager.getChannel(channelName);
         if (args.length == 1) {
-            playerChatter.setActiveChannel(convo, true);
-            Messaging.send(player, "You are now chatting with $1.", target.getName());
+            playerChatter.setActiveChannel(convo, false);
+            Messaging.send(player, "Now chatting with $1.", target.getName());
         } else {
             String msg = "";
             for (int i = 1; i < args.length; i++) {
