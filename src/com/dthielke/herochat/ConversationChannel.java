@@ -174,19 +174,16 @@ public class ConversationChannel extends StandardChannel {
 
         event.setCancelled(true);
 
-        String format = getFormat();
-        format = format.replace("#msg", event.getMessage());
-
         for (Chatter member : getMembers()) {
             if (!member.isIgnoring(senderName)) {
                 Player memberPlayer = member.getPlayer();
-                memberPlayer.sendMessage(applyFormat(format, event.getFormat(), player, memberPlayer));
+                memberPlayer.sendMessage(applyFormat(getFormat(), player, memberPlayer).replace("#msg", event.getMessage()));
             }
         }
     }
 
-    public String applyFormat(String format, String originalFormat, Player sender, Player recipient) {
-        format = super.applyFormat(format, originalFormat, sender);
+    public String applyFormat(String format, Player sender, Player recipient) {
+        format = format.replaceAll("&([0-9a-fA-F])", "\u00a7$1");
         if (sender.equals(recipient)) {
             format = format.replace("#convoaddress", "To");
             for (Chatter member : getMembers()) {

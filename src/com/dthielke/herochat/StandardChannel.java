@@ -238,7 +238,7 @@ public class StandardChannel implements Channel {
             format = format.replace("#sender", "%1$s");
         }
 
-        format = format.replace("&", "\u00a7");
+        format = format.replaceAll("&([0-9a-fA-F])", "\u00a7$1");
         return format;
     }
 
