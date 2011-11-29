@@ -47,7 +47,7 @@ public interface Chatter {
 
     public boolean removeChannel(Channel channel, boolean announce);
 
-    public void setActiveChannel(Channel channel);
+    public void setActiveChannel(Channel channel, boolean announce);
 
     public void setIgnore(String name, boolean ignore);
 
@@ -67,8 +67,9 @@ public interface Chatter {
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
         MODIFY_DISTANCE("modify.distance"),
-        MODIFY_FORMAT("modify.applyFormat"),
-        MODIFY_SHORTCUT("modify.shortcut");
+        MODIFY_FORMAT("modify.format"),
+        MODIFY_SHORTCUT("modify.shortcut"),
+        MODIFY_PASSWORD("modify.password");
 
         private String name;
 

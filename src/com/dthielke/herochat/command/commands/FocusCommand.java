@@ -55,8 +55,7 @@ public class FocusCommand extends BasicCommand {
             channel.addMember(chatter, true);
         }
 
-        chatter.setActiveChannel(channel);
-        Messaging.send(player, "Now chatting in $1.", channel.getName());
+        chatter.setActiveChannel(channel, true);
 
         // cleanup conversation channels if no one has them active
         Channel lastChannel = chatter.getLastActiveChannel();

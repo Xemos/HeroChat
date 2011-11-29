@@ -52,8 +52,7 @@ public class RemoveCommand extends BasicCommand {
 
             if (channel.equals(target.getActiveChannel())) {
                 Channel focus = target.getChannels().iterator().next();
-                target.setActiveChannel(focus);
-                Messaging.send(target.getPlayer(), "Now chatting in $1.", focus.getName());
+                target.setActiveChannel(focus, true);
             }
         }
 

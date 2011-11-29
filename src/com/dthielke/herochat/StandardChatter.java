@@ -1,5 +1,6 @@
 package com.dthielke.herochat;
 
+import com.dthielke.herochat.util.Messaging;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -152,7 +153,7 @@ public class StandardChatter implements Chatter {
             permission = Permission.MODIFY_NAME;
         } else if (setting.equals("nick")) {
             permission = Permission.MODIFY_NICK;
-        } else if (setting.equals("applyFormat")) {
+        } else if (setting.equals("format")) {
             permission = Permission.MODIFY_FORMAT;
         } else if (setting.equals("distance")) {
             permission = Permission.MODIFY_DISTANCE;
@@ -160,6 +161,8 @@ public class StandardChatter implements Chatter {
             permission = Permission.MODIFY_COLOR;
         } else if (setting.equals("shortcut")) {
             permission = Permission.MODIFY_SHORTCUT;
+        } else if (setting.equals("password")) {
+            permission = Permission.MODIFY_PASSWORD;
         } else {
             return Result.INVALID;
         }
@@ -248,12 +251,17 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
-    public void setActiveChannel(Channel channel) {
+    public void setActiveChannel(Channel channel, boolean announce) {
         if (channel.equals(activeChannel))
             return;
 
         lastActiveChannel = activeChannel;
         activeChannel = channel;
+
+        if (announce) {
+            Messaging.send(player, "Now chatting in $1.", channel.getColor() + channel.getName());
+        }
+
         storage.flagUpdate(this);
     }
 

@@ -62,6 +62,7 @@ public class HeroChat extends JavaPlugin {
         commandHandler.addCommand(new JoinCommand());
         commandHandler.addCommand(new LeaveCommand());
         commandHandler.addCommand(new QuickMsgCommand());
+        commandHandler.addCommand(new MsgCommand());
         commandHandler.addCommand(new ListCommand());
         commandHandler.addCommand(new WhoCommand());
         commandHandler.addCommand(new CreateCommand());

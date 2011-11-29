@@ -73,8 +73,7 @@ public class KickCommand extends BasicCommand {
 
         if (channel.equals(target.getActiveChannel())) {
             Channel focus = target.getChannels().iterator().next();
-            target.setActiveChannel(focus);
-            Messaging.send(targetPlayer, "Now chatting in $1.", focus.getName());
+            target.setActiveChannel(focus, true);
         }
 
         return true;

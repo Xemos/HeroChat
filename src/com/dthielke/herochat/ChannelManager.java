@@ -6,7 +6,7 @@ import org.bukkit.permissions.Permission;
 import java.util.*;
 
 public class ChannelManager {
-    private List<Channel> channels = new ArrayList<Channel>();
+    private Map<String, Channel> channels = new HashMap<String, Channel>();
     private Channel defaultChannel;
     private Map<Chatter.Permission, Permission> wildcardPermissions = new EnumMap<Chatter.Permission, Permission>(Chatter.Permission.class);
     private Set<Chatter.Permission> modPermissions = EnumSet.noneOf(Chatter.Permission.class);
@@ -26,7 +26,11 @@ public class ChannelManager {
     }
 
     public List<Channel> getChannels() {
-        return channels;
+        List<Channel> list = new ArrayList<Channel>();
+        for (Channel channel : channels.values())
+            if (!list.contains(channel))
+                list.add(channel);
+        return list;
     }
 
     public Channel getDefaultChannel() {
@@ -62,15 +66,11 @@ public class ChannelManager {
     }
 
     public boolean hasChannel(String identifier) {
-        return getChannel(identifier) != null;
+        return channels.containsKey(identifier.toLowerCase());
     }
 
     public Channel getChannel(String identifier) {
-        for (Channel channel : channels)
-            if (identifier.equalsIgnoreCase(channel.getName()) || identifier.equalsIgnoreCase(channel.getNick()))
-                return channel;
-
-        return null;
+        return channels.get(identifier.toLowerCase());
     }
 
     public void loadChannels() {
@@ -78,14 +78,9 @@ public class ChannelManager {
             addChannel(channel);
     }
 
-    public boolean addChannel(Channel channel) {
-        if (channels.contains(channel))
-            return false;
-
-        channels.add(channel);
-
-        if (channel.isTransient())
-            return true;
+    public void addChannel(Channel channel) {
+        channels.put(channel.getName().toLowerCase(), channel);
+        channels.put(channel.getNick().toLowerCase(), channel);
 
         // add the channel to the wildcard permissions
         for (Chatter.Permission p : Chatter.Permission.values()) {
@@ -94,24 +89,18 @@ public class ChannelManager {
             perm.recalculatePermissibles();
         }
 
-        // set the default channel if we don't have one yet
-        if (defaultChannel == null) {
-            defaultChannel = channel;
+
+        if (!channel.isTransient()) {
+            // set the default channel if we don't have one yet
+            if (defaultChannel == null)
+                defaultChannel = channel;
+            storage.addChannel(channel);
         }
-
-        storage.addChannel(channel);
-
-        return true;
     }
 
-    public boolean removeChannel(Channel channel) {
-        if (!channels.contains(channel))
-            return false;
-
-        channels.remove(channel);
-
-        if (channel.isTransient())
-            return true;
+    public void removeChannel(Channel channel) {
+        channels.remove(channel.getName().toLowerCase());
+        channels.remove(channel.getNick().toLowerCase());
 
         // remove the channel from the wildcard permissions
         for (Chatter.Permission p : Chatter.Permission.values()) {
@@ -120,8 +109,7 @@ public class ChannelManager {
             perm.recalculatePermissibles();
         }
 
-        storage.removeChannel(channel);
-
-        return true;
+        if (!channel.isTransient())
+            storage.removeChannel(channel);
     }
 }

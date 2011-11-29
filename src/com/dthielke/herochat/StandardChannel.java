@@ -149,7 +149,7 @@ public class StandardChannel implements Channel {
 
     @Override
     public void announce(String message) {
-        message = applyFormat(ANNOUNCEMENT_FORMAT, "", null).replace("%2$s", message);
+        message = applyFormat(ANNOUNCEMENT_FORMAT, "").replace("%2$s", message);
         for (Chatter member : members) {
             member.getPlayer().sendMessage(message);
         }
@@ -171,10 +171,11 @@ public class StandardChannel implements Channel {
         format = format.replace("#msg", "%2$s");
 
         Matcher matcher = msgPattern.matcher(originalFormat);
-        if (matcher.groupCount() == 3)
+        if (matcher.matches() && matcher.groupCount() == 3) {
             format = format.replace("#sender", matcher.group(1) + matcher.group(2) + "%1$s" + matcher.group(3));
-        else
+        } else {
             format = format.replace("#sender", "%1$s");
+        }
 
         format = format.replace("&", "\u00a7");
         return format;
@@ -304,7 +305,7 @@ public class StandardChannel implements Channel {
             }
         }
 
-        event.setFormat(applyFormat(MESSAGE_FORMAT, event.getFormat(), player));
+        event.setFormat(applyFormat(format, event.getFormat(), player));
     }
 
     @Override

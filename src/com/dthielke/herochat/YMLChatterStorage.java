@@ -46,8 +46,8 @@ public class YMLChatterStorage implements ChatterStorage {
         boolean muted = config.getBoolean("muted", false);
 
         Chatter chatter = new StandardChatter(this, player);
-        chatter.setActiveChannel(defaultChannel);
-        chatter.setActiveChannel(activeChannel); // done twice to set the last active channel
+        chatter.setActiveChannel(defaultChannel, false);
+        chatter.setActiveChannel(activeChannel, false); // done twice to set the last active channel
         for (Channel channel : channels)
             channel.addMember(chatter, false);
         for (String ignore : ignores)

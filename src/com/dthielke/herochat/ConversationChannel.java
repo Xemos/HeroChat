@@ -1,6 +1,5 @@
 package com.dthielke.herochat;
 
-import com.dthielke.herochat.util.Messaging;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -13,10 +12,12 @@ public class ConversationChannel extends StandardChannel {
     public ConversationChannel(Chatter memberOne, Chatter memberTwo) {
         super(new ChannelStorage() {
             @Override
-            public void addChannel(Channel channel) {}
+            public void addChannel(Channel channel) {
+            }
 
             @Override
-            public void flagUpdate(Channel channel) {}
+            public void flagUpdate(Channel channel) {
+            }
 
             @Override
             public Channel load(String name) {
@@ -29,22 +30,26 @@ public class ConversationChannel extends StandardChannel {
             }
 
             @Override
-            public void removeChannel(Channel channel) {}
+            public void removeChannel(Channel channel) {
+            }
 
             @Override
-            public void update() {}
+            public void update() {
+            }
 
             @Override
-            public void update(Channel channel) {}
-        }, "convo" + channelCount, "convo" + channelCount);
+            public void update(Channel channel) {
+            }
+        }, "convo" + memberOne.getName() + memberTwo.getName(), "convo" + memberTwo.getName() + memberOne.getName());
         addMember(memberOne, false);
         addMember(memberTwo, false);
+        setFormat("#sender->#recipient: #msg");
         channelCount++;
     }
 
     @Override
     public boolean addMember(Chatter chatter, boolean announce) {
-        return getMembers().size() < 2 && super.addMember(chatter, false);
+        return getMembers().size() < getMinMembers() && super.addMember(chatter, false);
     }
 
     public ConversationChannel(ChannelStorage storage, String name, String nick) {
@@ -52,14 +57,15 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
-    public void addWorld(String world) {}
+    public void addWorld(String world) {
+    }
 
     @Override
     public String applyFormat(String format, String originalFormat, Player sender) {
         format = super.applyFormat(format, originalFormat, sender);
         for (Chatter member : getMembers()) {
             if (!member.getName().equals(sender.getName())) {
-                format = format.replace("#recipient", sender.getDisplayName());
+                format = format.replace("#recipient", member.getPlayer().getDisplayName());
             }
         }
         return format;
@@ -157,10 +163,12 @@ public class ConversationChannel extends StandardChannel {
             if (count < getMinMembers() && count > 0) {
                 Chatter otherMember = getMembers().iterator().next();
                 removeMember(otherMember, false);
-                otherMember.setActiveChannel(HeroChat.getChannelManager().getDefaultChannel());
-                otherMember.setActiveChannel(otherMember.getLastActiveChannel());
-                Messaging.send(otherMember.getPlayer(), "Now chatting in $1.", otherMember.getLastActiveChannel().getName());
+                if (otherMember.getActiveChannel().equals(this)) {
+                    otherMember.setActiveChannel(HeroChat.getChannelManager().getDefaultChannel(), false);
+                    otherMember.setActiveChannel(otherMember.getLastActiveChannel(), true);
+                }
             }
+            HeroChat.getChannelManager().removeChannel(this);
             return true;
         } else {
             return false;
@@ -173,35 +181,46 @@ public class ConversationChannel extends StandardChannel {
     }
 
     @Override
-    public void removeWorld(String world) {}
+    public void removeWorld(String world) {
+    }
 
     @Override
-    public void setBanned(String name, boolean banned) {}
+    public void setBanned(String name, boolean banned) {
+    }
 
     @Override
-    public void setBans(Set<String> bans) {}
+    public void setBans(Set<String> bans) {
+    }
 
     @Override
-    public void setModerator(String name, boolean moderator) {}
+    public void setModerator(String name, boolean moderator) {
+    }
 
     @Override
-    public void setModerators(Set<String> moderators) {}
+    public void setModerators(Set<String> moderators) {
+    }
 
     @Override
-    public void setMuted(String name, boolean muted) {}
+    public void setMuted(String name, boolean muted) {
+    }
 
     @Override
-    public void setMutes(Set<String> mutes) {}
+    public void setMutes(Set<String> mutes) {
+    }
 
     @Override
-    public void setNick(String nick) {}
+    public void setNick(String nick) {
+    }
 
     @Override
-    public void setPassword(String password) {}
+    public void setPassword(String password) {
+    }
 
     @Override
-    public void setShortcutAllowed(boolean shortcutAllowed) {}
+    public void setShortcutAllowed(boolean shortcutAllowed) {
+    }
 
     @Override
-    public void setWorlds(Set<String> worlds) {}
+    public void setWorlds(Set<String> worlds) {
+    }
 }

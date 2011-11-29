@@ -40,9 +40,9 @@ public class QuickMsgCommand extends BasicCommand {
         }
 
         Channel active = chatter.getActiveChannel();
-        chatter.setActiveChannel(channel);
+        chatter.setActiveChannel(channel, false);
         player.chat(msg.trim());
-        chatter.setActiveChannel(active);
+        chatter.setActiveChannel(active, false);
         return true;
     }
 }
