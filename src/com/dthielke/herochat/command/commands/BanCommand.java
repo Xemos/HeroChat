@@ -60,9 +60,9 @@ public class BanCommand extends BasicCommand {
 
         if (channel.isBanned(targetName)) {
             channel.setBanned(targetName, false);
-            Messaging.send(sender, "Player unbanned.");
+            Messaging.send(sender, "Unbanned $1 from $2.", targetName, channel.getColor() + channel.getName());
             if (targetPlayer != null)
-                Messaging.send(targetPlayer, "Unbanned from $1.", channel.getName());
+                Messaging.send(targetPlayer, "Unbanned from $1.", channel.getColor() + channel.getName());
         } else {
             if (targetPlayer != null) {
                 Chatter target = HeroChat.getChatterManager().getChatter(targetPlayer);
@@ -79,7 +79,7 @@ public class BanCommand extends BasicCommand {
             } else {
                 channel.setBanned(targetName, true);
             }
-            Messaging.send(sender, "Player banned.");
+            Messaging.send(sender, "Banned $1 from $2.", targetName, channel.getColor() + channel.getName());
         }
 
         return true;

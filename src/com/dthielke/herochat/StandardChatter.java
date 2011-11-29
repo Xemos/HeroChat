@@ -90,8 +90,7 @@ public class StandardChatter implements Chatter {
     public Result canBan(Channel channel) {
         if (player.hasPermission(Permission.BAN.form(channel)))
             return Result.ALLOWED;
-
-        if (channel.isModerator(player.getName()))
+        if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.BAN))
             return Result.ALLOWED;
 
         return Result.NO_PERMISSION;
@@ -119,7 +118,7 @@ public class StandardChatter implements Chatter {
         if (player.hasPermission(Permission.KICK.form(channel)))
             return Result.ALLOWED;
 
-        if (channel.isModerator(player.getName()))
+        if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.KICK))
             return Result.ALLOWED;
 
         return Result.NO_PERMISSION;
@@ -141,9 +140,7 @@ public class StandardChatter implements Chatter {
         setting = setting.toLowerCase();
         Permission permission;
 
-        if (setting.equals("name")) {
-            permission = Permission.MODIFY_NAME;
-        } else if (setting.equals("nick")) {
+        if (setting.equals("nick")) {
             permission = Permission.MODIFY_NICK;
         } else if (setting.equals("format")) {
             permission = Permission.MODIFY_FORMAT;
@@ -173,7 +170,7 @@ public class StandardChatter implements Chatter {
         if (player.hasPermission(Permission.MUTE.form(channel)))
             return Result.ALLOWED;
 
-        if (channel.isModerator(player.getName()))
+        if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.BAN))
             return Result.ALLOWED;
 
         return Result.NO_PERMISSION;
@@ -198,7 +195,7 @@ public class StandardChatter implements Chatter {
         if (!player.hasPermission(Permission.SPEAK.form(channel)))
             return Result.NO_PERMISSION;
 
-        if (channel.isMuted(player.getName()))
+        if (muted || channel.isMuted(player.getName()))
             return Result.MUTED;
 
         if (!channel.hasWorld(player.getWorld()))

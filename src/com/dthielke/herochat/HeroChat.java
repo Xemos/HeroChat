@@ -2,7 +2,6 @@ package com.dthielke.herochat;
 
 import com.dthielke.herochat.command.CommandHandler;
 import com.dthielke.herochat.command.commands.*;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
@@ -18,6 +17,8 @@ public class HeroChat extends JavaPlugin {
     private static final CommandHandler commandHandler = new CommandHandler();
     private static final ChannelManager channelManager = new ChannelManager();
     private static final ChatterManager chatterManager = new ChatterManager();
+
+    private final ConfigManager configManager = new ConfigManager();
 
     public static ChannelManager getChannelManager() {
         return channelManager;
@@ -52,6 +53,7 @@ public class HeroChat extends JavaPlugin {
         registerEvents();
 
         setupStorage();
+        configManager.load(new File(getDataFolder(), "config.yml"));
         channelManager.loadChannels();
         for (Player player : getServer().getOnlinePlayers())
             chatterManager.addChatter(player);
@@ -95,11 +97,5 @@ public class HeroChat extends JavaPlugin {
         chatterFolder.mkdirs();
         ChatterStorage chatterStorage = new YMLChatterStorage(chatterFolder);
         chatterManager.setStorage(chatterStorage);
-    }
-
-    private void setupDummyEnvironment() {
-        Channel channel = new StandardChannel(channelManager.getStorage(), "Dummy", "D");
-        channel.setColor(ChatColor.GREEN);
-        channelManager.addChannel(channel);
     }
 }

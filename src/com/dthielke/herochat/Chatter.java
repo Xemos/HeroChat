@@ -63,7 +63,6 @@ public interface Chatter {
         BAN("ban"),
         MUTE("mute"),
         REMOVE("remove"),
-        MODIFY_NAME("modify.name"),
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
         MODIFY_DISTANCE("modify.distance"),

@@ -53,14 +53,14 @@ public class MuteCommand extends BasicCommand {
 
             if (channel.isMuted(targetName)) {
                 channel.setMuted(targetName, false);
-                Messaging.send(sender, "Player unmuted in $1.", channel.getName());
+                Messaging.send(sender, "Unmuted $1 in $2.", targetName, channel.getColor() + channel.getName());
                 if (targetPlayer != null)
-                    Messaging.send(targetPlayer, "Unmuted in $1.", channel.getName());
+                    Messaging.send(targetPlayer, "Unmuted in $1.", channel.getColor() + channel.getName());
             } else {
                 channel.setMuted(targetName, true);
-                Messaging.send(sender, "Player muted in $1.", channel.getName());
+                Messaging.send(sender, "Muted $1 in $2.", targetName, channel.getColor() + channel.getName());
                 if (targetPlayer != null)
-                    Messaging.send(targetPlayer, "Muted in $1.", channel.getName());
+                    Messaging.send(targetPlayer, "Muted in $1.", channel.getColor() + channel.getName());
             }
         } else {
             if (chatter != null && !chatter.getPlayer().hasPermission("herochat.globalmute")) {
@@ -76,11 +76,11 @@ public class MuteCommand extends BasicCommand {
             Chatter targetChatter = HeroChat.getChatterManager().getChatter(targetPlayer);
             if (targetChatter.isMuted()) {
                 targetChatter.setMuted(false);
-                Messaging.send(sender, "Player unmuted.");
+                Messaging.send(sender, "Lifted global mute on $1.", targetPlayer.getName());
                 Messaging.send(targetPlayer, "No longer globally muted.");
             } else {
                 targetChatter.setMuted(true);
-                Messaging.send(sender, "Player muted.");
+                Messaging.send(sender, "Globally muted $1.", targetPlayer.getName());
                 Messaging.send(targetPlayer, "Globally muted.");
             }
         }
