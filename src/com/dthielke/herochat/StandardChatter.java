@@ -235,7 +235,10 @@ public class StandardChatter implements Chatter {
 
     @Override
     public boolean isInRange(Chatter other, int distance) {
-        return player.getLocation().distanceSquared(other.getPlayer().getLocation()) <= distance;
+        Player otherPlayer = other.getPlayer();
+        boolean worldCheck = player.getWorld().equals(otherPlayer.getWorld());
+        boolean distanceCheck = player.getLocation().distanceSquared(otherPlayer.getLocation()) <= distance * distance;
+        return worldCheck && distanceCheck;
     }
 
     @Override
