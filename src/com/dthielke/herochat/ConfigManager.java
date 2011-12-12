@@ -1,5 +1,6 @@
 package com.dthielke.herochat;
 
+import org.bukkit.ChatColor;
 import org.bukkit.util.config.Configuration;
 
 import java.io.File;
@@ -33,6 +34,18 @@ public class ConfigManager {
             channelManager.addModPermission(Chatter.Permission.MODIFY_FORMAT);
         if (config.getBoolean("moderator-permissions.can-modify-shortcut", false))
             channelManager.addModPermission(Chatter.Permission.MODIFY_SHORTCUT);
+
+        // make sure we have at least one channel (create one if we don't)
+        if (channelManager.getChannels().isEmpty()) {
+            Channel defaultChannel = new StandardChannel(channelManager.getStorage(), "Global", "G");
+            defaultChannel.setColor(ChatColor.DARK_GREEN);
+            channelManager.addChannel(defaultChannel);
+        }
+
+        // load default channel
+        String defaultChannel = config.getString("default-channel");
+        if (defaultChannel != null && channelManager.hasChannel(defaultChannel))
+            channelManager.setDefaultChannel(channelManager.getDefaultChannel());
 
         config.save();
     }

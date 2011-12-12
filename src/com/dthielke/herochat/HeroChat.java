@@ -53,8 +53,8 @@ public class HeroChat extends JavaPlugin {
         registerEvents();
 
         setupStorage();
-        configManager.load(new File(getDataFolder(), "config.yml"));
         channelManager.loadChannels();
+        configManager.load(new File(getDataFolder(), "config.yml"));
         for (Player player : getServer().getOnlinePlayers())
             chatterManager.addChatter(player);
     }
