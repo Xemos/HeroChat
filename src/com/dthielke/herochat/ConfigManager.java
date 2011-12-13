@@ -49,6 +49,8 @@ public class ConfigManager {
             channelManager.addModPermission(Chatter.Permission.MODIFY_SHORTCUT);
         if (config.getBoolean("moderator-permissions.can-color-messages", true))
             channelManager.addModPermission(Chatter.Permission.COLOR);
+        if (config.getBoolean("moderator-permissions.can-view-info", true))
+            channelManager.addModPermission(Chatter.Permission.INFO);
 
         // make sure we have at least one channel (create one if we don't)
         if (channelManager.getChannels().isEmpty()) {
@@ -86,6 +88,7 @@ public class ConfigManager {
         config.set("moderator-permissions.can-modify-format", false);
         config.set("moderator-permissions.can-modify-shortcut", false);
         config.set("moderator-permissions.can-color-messages", true);
+        config.set("moderator-permissions.can-view-info", true);
         config.set("default-channel", "Global");
         config.set("censors", new ArrayList<String>());
         return config;

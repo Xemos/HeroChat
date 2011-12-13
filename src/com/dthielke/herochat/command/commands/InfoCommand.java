@@ -13,17 +13,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class WhoCommand extends BasicCommand {
-    public WhoCommand() {
-        super("Who");
-        setDescription("Lists players in a channel");
-        setUsage("/ch who §8[channel]");
+public class InfoCommand extends BasicCommand {
+    public InfoCommand() {
+        super("Info");
+        setDescription("Displays channel information");
+        setUsage("/ch info §8[channel]");
         setArgumentRange(0, 1);
-        setIdentifiers("ch who");
+        setIdentifiers("ch info");
         setNotes("\u00a7cNote:\u00a7e If no channel is given, your active", "      channel is used.");
     }
 
@@ -51,30 +47,20 @@ public class WhoCommand extends BasicCommand {
             }
         }
 
-        List<String> names = new ArrayList<String>();
-        for (Chatter member : channel.getMembers()) {
-            names.add(member.getPlayer().getName());
+        if (chatter != null && chatter.canViewInfo(channel) != Chatter.Result.ALLOWED) {
+            Messaging.send(sender, "Insufficient permission.");
+            return true;
         }
-        Collections.sort(names);
 
         sender.sendMessage(ChatColor.RED + "------------[ " + channel.getColor() + channel.getName() + ChatColor.RED + " ]------------");
-        int count = names.size();
-        int lines = (int) Math.ceil(count / 4.0);
-        for (int i = 0; i < lines; i++) {
-            String line = "";
-            for (int j = 0; j < 4; j++) {
-                if (i * 3 + j < count) {
-                    String name = names.get(i * 3 + j);
-                    String formatted = String.format("%-15s", name);
-                    if (channel.isMuted(name))
-                        formatted = ChatColor.RED + formatted + ChatColor.WHITE;
-                    else if (channel.isModerator(name))
-                        formatted = ChatColor.GREEN + formatted + ChatColor.WHITE;
-                    line += formatted + " ";
-                }
-            }
-            sender.sendMessage(line.trim());
-        }
+        sender.sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.WHITE + channel.getName());
+        sender.sendMessage(ChatColor.YELLOW + "Nick: " + ChatColor.WHITE + channel.getNick());
+        sender.sendMessage(ChatColor.YELLOW + "Format: " + ChatColor.WHITE + channel.getFormat());
+        if (!channel.getPassword().isEmpty())
+            sender.sendMessage(ChatColor.YELLOW + "Password: " + ChatColor.WHITE + channel.getPassword());
+        if (channel.getDistance() > 0)
+            sender.sendMessage(ChatColor.YELLOW + "Distance: " + ChatColor.WHITE + channel.getDistance());
+        sender.sendMessage(ChatColor.YELLOW + "Shortcut Allowed: " + ChatColor.WHITE + (channel.isShortcutAllowed() ? "true" : "false"));
 
         return true;
     }

@@ -213,6 +213,14 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public Result canViewInfo(Channel channel) {
+        if (!HeroChat.getPermissionService().has(player, Permission.INFO.form(channel)))
+            return Result.NO_PERMISSION;
+
+        return Result.ALLOWED;
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (other == this)
             return true;

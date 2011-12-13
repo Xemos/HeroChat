@@ -27,6 +27,8 @@ public interface Chatter {
 
     public Result canColorMessages(Channel channel);
 
+    public Result canViewInfo(Channel channel);
+
     public Channel getActiveChannel();
 
     public Set<Channel> getChannels();
@@ -66,6 +68,7 @@ public interface Chatter {
         MUTE("mute"),
         REMOVE("remove"),
         COLOR("color"),
+        INFO("info"),
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
         MODIFY_DISTANCE("modify.distance"),

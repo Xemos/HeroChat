@@ -13,8 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StandardChannel implements Channel {
-    public static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
-    public static final String MESSAGE_FORMAT = "#color[#nick] &f#prefix#sender#suffix#color: #msg";
+    public static final String ANNOUNCEMENT_FORMAT = "{color}[{nick}] {msg}";
+    public static final String MESSAGE_FORMAT = "{color}[{nick}] &f{prefix}{sender}{suffix}{color}: {msg}";
     private static final Pattern msgPattern = Pattern.compile("(.*)<(.*)%1\\$s(.*)> %2\\$s");
 
     private final String name;
@@ -227,16 +227,16 @@ public class StandardChannel implements Channel {
 
     @Override
     public String applyFormat(String format, String originalFormat) {
-        format = format.replace("#name", name);
-        format = format.replace("#nick", nick);
-        format = format.replace("#color", color.toString());
-        format = format.replace("#msg", "%2$s");
+        format = format.replace("{name}", name);
+        format = format.replace("{nick}", nick);
+        format = format.replace("{color}", color.toString());
+        format = format.replace("{msg}", "%2$s");
 
         Matcher matcher = msgPattern.matcher(originalFormat);
         if (matcher.matches() && matcher.groupCount() == 3) {
-            format = format.replace("#sender", matcher.group(1) + matcher.group(2) + "%1$s" + matcher.group(3));
+            format = format.replace("{sender}", matcher.group(1) + matcher.group(2) + "%1$s" + matcher.group(3));
         } else {
-            format = format.replace("#sender", "%1$s");
+            format = format.replace("{sender}", "%1$s");
         }
 
         format = format.replaceAll("&([0-9a-fA-F])", "\u00a7$1");
@@ -383,10 +383,10 @@ public class StandardChannel implements Channel {
     public String applyFormat(String format, String originalFormat, Player sender) {
         format = applyFormat(format, originalFormat);
         Chat chat = HeroChat.getChatService();
-        format = format.replace("#prefix", chat.getPlayerPrefix(sender));
-        format = format.replace("#suffix", chat.getPlayerSuffix(sender));
-        format = format.replace("#group", chat.getPrimaryGroup(sender));
-        format = format.replace("#world", sender.getWorld().toString());
+        format = format.replace("{prefix}", chat.getPlayerPrefix(sender));
+        format = format.replace("{suffix}", chat.getPlayerSuffix(sender));
+        format = format.replace("{group}", chat.getPrimaryGroup(sender));
+        format = format.replace("{world}", sender.getWorld().toString());
         format = format.replace("&", "\u00a7");
         return format;
     }

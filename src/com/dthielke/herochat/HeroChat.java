@@ -95,6 +95,7 @@ public class HeroChat extends JavaPlugin {
         commandHandler.addCommand(new CreateCommand());
         commandHandler.addCommand(new RemoveCommand());
         commandHandler.addCommand(new SetCommand());
+        commandHandler.addCommand(new InfoCommand());
         commandHandler.addCommand(new MuteCommand());
         commandHandler.addCommand(new KickCommand());
         commandHandler.addCommand(new BanCommand());
@@ -107,7 +108,7 @@ public class HeroChat extends JavaPlugin {
         HCPlayerListener pcl = new HCPlayerListener();
         pm.registerEvent(Type.PLAYER_JOIN, pcl, Priority.Normal, this);
         pm.registerEvent(Type.PLAYER_QUIT, pcl, Priority.Normal, this);
-        pm.registerEvent(Type.PLAYER_CHAT, pcl, Priority.High, this);
+        pm.registerEvent(Type.PLAYER_CHAT, pcl, Priority.Lowest, this);
         pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, pcl, Priority.Normal, this);
     }
 
