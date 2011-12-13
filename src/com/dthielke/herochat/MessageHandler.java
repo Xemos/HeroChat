@@ -36,6 +36,8 @@ public class MessageHandler {
             return;
         }
 
+        if (sender.canColorMessages(channel) == Chatter.Result.ALLOWED)
+            event.setMessage(event.getMessage().replaceAll("&([0-9a-fA-F])", "\u00a7$1"));
         channel.processChat(event);
     }
 }
