@@ -97,6 +97,14 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public Result canColorMessages(Channel channel) {
+        if (!player.hasPermission(Permission.COLOR.form(channel)))
+            return Result.NO_PERMISSION;
+
+        return Result.ALLOWED;
+    }
+
+    @Override
     public Result canJoin(Channel channel, String password) {
         if (channel.isMember(this))
             return Result.INVALID;

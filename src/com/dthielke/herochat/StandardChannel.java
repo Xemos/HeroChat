@@ -371,6 +371,8 @@ public class StandardChannel implements Channel {
         }
 
         event.setFormat(applyFormat(format, event.getFormat(), player));
+        if (sender.canColorMessages(this) == Chatter.Result.ALLOWED)
+            event.setMessage(event.getMessage().replaceAll("&([0-9a-fA-F])", "\u00a7$1"));
     }
 
     @Override
