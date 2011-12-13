@@ -1,5 +1,6 @@
 package com.dthielke.herochat;
 
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class StandardChannel implements Channel {
     public static final String ANNOUNCEMENT_FORMAT = "#color[#nick] #msg";
-    public static final String MESSAGE_FORMAT = "#color[#nick] &f#sender#color: #msg";
+    public static final String MESSAGE_FORMAT = "#color[#nick] &f#prefix#sender#suffix#color: #msg";
     private static final Pattern msgPattern = Pattern.compile("(.*)<(.*)%1\\$s(.*)> %2\\$s");
 
     private final String name;
@@ -381,6 +382,10 @@ public class StandardChannel implements Channel {
     @Override
     public String applyFormat(String format, String originalFormat, Player sender) {
         format = applyFormat(format, originalFormat);
+        Chat chat = HeroChat.getChatService();
+        format = format.replace("#prefix", chat.getPlayerPrefix(sender));
+        format = format.replace("#suffix", chat.getPlayerSuffix(sender));
+        format = format.replace("#group", chat.getPrimaryGroup(sender));
         format = format.replace("#world", sender.getWorld().toString());
         format = format.replace("&", "\u00a7");
         return format;

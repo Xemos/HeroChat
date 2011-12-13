@@ -88,7 +88,7 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canBan(Channel channel) {
-        if (player.hasPermission(Permission.BAN.form(channel)))
+        if (HeroChat.getPermissionService().has(player, Permission.BAN.form(channel)))
             return Result.ALLOWED;
         if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.BAN))
             return Result.ALLOWED;
@@ -98,7 +98,7 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canColorMessages(Channel channel) {
-        if (!player.hasPermission(Permission.COLOR.form(channel)))
+        if (!HeroChat.getPermissionService().has(player, Permission.COLOR.form(channel)))
             return Result.NO_PERMISSION;
 
         return Result.ALLOWED;
@@ -109,7 +109,7 @@ public class StandardChatter implements Chatter {
         if (channel.isMember(this))
             return Result.INVALID;
 
-        if (!player.hasPermission(Permission.JOIN.form(channel)))
+        if (!HeroChat.getPermissionService().has(player, Permission.JOIN.form(channel)))
             return Result.NO_PERMISSION;
 
         if (channel.isBanned(player.getName()))
@@ -123,7 +123,7 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canKick(Channel channel) {
-        if (player.hasPermission(Permission.KICK.form(channel)))
+        if (HeroChat.getPermissionService().has(player, Permission.KICK.form(channel)))
             return Result.ALLOWED;
 
         if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.KICK))
@@ -137,7 +137,7 @@ public class StandardChatter implements Chatter {
         if (!channel.isMember(this))
             return Result.INVALID;
 
-        if (!player.hasPermission(Permission.LEAVE.form(channel)))
+        if (!HeroChat.getPermissionService().has(player, Permission.LEAVE.form(channel)))
             return Result.NO_PERMISSION;
 
         return Result.ALLOWED;
@@ -164,7 +164,7 @@ public class StandardChatter implements Chatter {
             return Result.INVALID;
         }
 
-        if (player.hasPermission(permission.form(channel)))
+        if (HeroChat.getPermissionService().has(player, permission.form(channel)))
             return Result.ALLOWED;
 
         if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(permission))
@@ -175,7 +175,7 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canMute(Channel channel) {
-        if (player.hasPermission(Permission.MUTE.form(channel)))
+        if (HeroChat.getPermissionService().has(player, Permission.MUTE.form(channel)))
             return Result.ALLOWED;
 
         if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.BAN))
@@ -186,7 +186,7 @@ public class StandardChatter implements Chatter {
 
     @Override
     public Result canRemove(Channel channel) {
-        if (player.hasPermission(Permission.REMOVE.form(channel)))
+        if (HeroChat.getPermissionService().has(player, Permission.REMOVE.form(channel)))
             return Result.ALLOWED;
 
         if (channel.isModerator(player.getName()) && HeroChat.getChannelManager().checkModPermission(Permission.REMOVE))
@@ -200,7 +200,7 @@ public class StandardChatter implements Chatter {
         if (!channel.isMember(this))
             return Result.INVALID;
 
-        if (!player.hasPermission(Permission.SPEAK.form(channel)))
+        if (!HeroChat.getPermissionService().has(player, Permission.SPEAK.form(channel)))
             return Result.NO_PERMISSION;
 
         if (muted || channel.isMuted(player.getName()))

@@ -34,6 +34,11 @@ public class MsgCommand extends BasicCommand {
             return true;
         }
 
+        if (target.equals(player)) {
+            Messaging.send(sender, "This plugin does not support crazies.");
+            return true;
+        }
+
         Chatter targetChatter = HeroChat.getChatterManager().getChatter(target);
         ChannelManager channelManager = HeroChat.getChannelManager();
         String channelName = "convo" + player.getName() + target.getName();

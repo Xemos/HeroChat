@@ -2,11 +2,14 @@ package com.dthielke.herochat;
 
 import com.dthielke.herochat.command.CommandHandler;
 import com.dthielke.herochat.command.commands.*;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -18,8 +21,18 @@ public class HeroChat extends JavaPlugin {
     private static final ChannelManager channelManager = new ChannelManager();
     private static final ChatterManager chatterManager = new ChatterManager();
     private static final MessageHandler messageHandler = new MessageHandler();
+    private static Chat chatService;
+    private static Permission permissionService;
 
     private final ConfigManager configManager = new ConfigManager();
+
+    public static Chat getChatService() {
+        return chatService;
+    }
+
+    public static Permission getPermissionService() {
+        return permissionService;
+    }
 
     public static ChannelManager getChannelManager() {
         return channelManager;
@@ -46,8 +59,10 @@ public class HeroChat extends JavaPlugin {
     public void onDisable() {
         log.info(getDescription().getName() + " version " + getDescription().getVersion() + " is disabled.");
 
-        channelManager.getStorage().update();
-        chatterManager.getStorage().update();
+        if (channelManager.getStorage() != null)
+            channelManager.getStorage().update();
+        if (chatterManager.getStorage() != null)
+            chatterManager.getStorage().update();
     }
 
     @Override
@@ -56,7 +71,11 @@ public class HeroChat extends JavaPlugin {
 
         registerCommands();
         registerEvents();
-
+        if (!setupChat() || !setupPermissions()) {
+            log.severe("[HeroChat] Vault not found! Disabling...");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         setupStorage();
         channelManager.loadChannels();
         configManager.load(new File(getDataFolder(), "config.yml"));
@@ -90,6 +109,24 @@ public class HeroChat extends JavaPlugin {
         pm.registerEvent(Type.PLAYER_QUIT, pcl, Priority.Normal, this);
         pm.registerEvent(Type.PLAYER_CHAT, pcl, Priority.High, this);
         pm.registerEvent(Type.PLAYER_COMMAND_PREPROCESS, pcl, Priority.Normal, this);
+    }
+
+    private Boolean setupChat() {
+        RegisteredServiceProvider<Chat> svc = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (svc != null) {
+            chatService = svc.getProvider();
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> svc = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (svc != null) {
+            permissionService = svc.getProvider();
+            return true;
+        }
+        return false;
     }
 
     private void setupStorage() {
