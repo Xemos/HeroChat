@@ -47,6 +47,9 @@ public class ConfigManager {
         if (defaultChannel != null && channelManager.hasChannel(defaultChannel))
             channelManager.setDefaultChannel(channelManager.getDefaultChannel());
 
+        // load censors
+        HeroChat.getMessageHandler().setCensors(config.getStringList("censors", null));
+
         config.save();
     }
 

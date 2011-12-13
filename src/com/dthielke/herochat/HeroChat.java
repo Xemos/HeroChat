@@ -17,6 +17,7 @@ public class HeroChat extends JavaPlugin {
     private static final CommandHandler commandHandler = new CommandHandler();
     private static final ChannelManager channelManager = new ChannelManager();
     private static final ChatterManager chatterManager = new ChatterManager();
+    private static final MessageHandler messageHandler = new MessageHandler();
 
     private final ConfigManager configManager = new ConfigManager();
 
@@ -30,6 +31,10 @@ public class HeroChat extends JavaPlugin {
 
     public static CommandHandler getCommandHandler() {
         return commandHandler;
+    }
+
+    public static MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 
     @Override
