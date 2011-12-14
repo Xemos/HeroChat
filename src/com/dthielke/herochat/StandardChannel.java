@@ -380,7 +380,7 @@ public class StandardChannel implements Channel {
                     visibleRecipients++;
             }
 
-            if (visibleRecipients <= 1 && isLocal()) {
+            if (visibleRecipients <= 1) {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HeroChat.getPlugin(), new Runnable() {
                     @Override
                     public void run() {
