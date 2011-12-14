@@ -388,7 +388,7 @@ public class StandardChannel implements Channel {
         if (isLocal()) {
             int visibleRecipients = 0;
             for (Player recipient : recipients) {
-                if (!HeroChat.getPermissionService().has(player, "herochat.admin.stealth"))
+                if (!HeroChat.getPermissionService().has(recipient, "herochat.admin.stealth") && !recipient.equals(player))
                     visibleRecipients++;
             }
 
