@@ -26,6 +26,7 @@ public class StandardChannel implements Channel {
     private ChatColor color;
     private int distance;
     private boolean shortcutAllowed;
+    private boolean verbose;
     private Set<Chatter> members = new HashSet<Chatter>();
     private Set<String> worlds = new HashSet<String>();
     private Set<String> bans = new HashSet<String>();
@@ -40,6 +41,7 @@ public class StandardChannel implements Channel {
         this.color = ChatColor.WHITE;
         this.distance = 0;
         this.shortcutAllowed = false;
+        this.verbose = true;
         this.format = MESSAGE_FORMAT;
         this.password = "";
     }
@@ -195,6 +197,16 @@ public class StandardChannel implements Channel {
     }
 
     @Override
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    @Override
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    @Override
     public boolean addMember(Chatter chatter, boolean announce) {
         if (members.contains(chatter))
             return false;
@@ -204,7 +216,7 @@ public class StandardChannel implements Channel {
             chatter.addChannel(this, announce);
         }
 
-        if (announce) {
+        if (announce && verbose) {
             announce(chatter.getPlayer().getName() + " has joined the channel.");
         }
 
@@ -269,7 +281,7 @@ public class StandardChannel implements Channel {
         if (!members.contains(chatter))
             return false;
 
-        if (announce) {
+        if (announce && verbose) {
             announce(chatter.getPlayer().getName() + " has left the channel.");
         }
 
@@ -402,6 +414,7 @@ public class StandardChannel implements Channel {
     public String applyFormat(String format, String originalFormat, Player sender) {
         format = applyFormat(format, originalFormat);
         Chat chat = HeroChat.getChatService();
+        format = format.replace("{plainsender}", sender.getName());
         format = format.replace("{prefix}", chat.getPlayerPrefix(sender));
         format = format.replace("{suffix}", chat.getPlayerSuffix(sender));
         format = format.replace("{group}", chat.getPrimaryGroup(sender));

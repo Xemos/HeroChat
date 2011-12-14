@@ -22,7 +22,7 @@ public class SetCommand extends BasicCommand {
         setUsage("/ch set §8<channel> <setting> <value>");
         setArgumentRange(3, 3);
         setIdentifiers("ch set");
-        setNotes("\u00a7cSettings:\u00a7e nick, format, password, distance, color, qm");
+        setNotes("\u00a7cSettings:\u00a7e nick, format, password, distance, color, shortcut, verbose");
     }
 
     @Override
@@ -85,6 +85,14 @@ public class SetCommand extends BasicCommand {
             } else {
                 channel.setShortcutAllowed(true);
                 Messaging.send(sender, "Quick messaging enabled.");
+            }
+        } else if (setting.equals("verbose")) {
+            if (value.equals("0")) {
+                channel.setVerbose(false);
+                Messaging.send(sender, "Join and leave messages disabled.");
+            } else {
+                channel.setVerbose(true);
+                Messaging.send(sender, "Join and leave messages enabled.");
             }
         }
 

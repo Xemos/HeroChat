@@ -53,6 +53,7 @@ public class YMLChannelStorage implements ChannelStorage {
         }
         int distance = config.getInt("distance", 0);
         boolean shortcutAllowed = config.getBoolean("shortcutAllowed", false);
+        boolean verbose = config.getBoolean("verbose", true);
         config.addDefault("worlds", new ArrayList<String>());
         config.addDefault("bans", new ArrayList<String>());
         config.addDefault("mutes", new ArrayList<String>());
@@ -68,6 +69,7 @@ public class YMLChannelStorage implements ChannelStorage {
         channel.setColor(color);
         channel.setDistance(distance);
         channel.setShortcutAllowed(shortcutAllowed);
+        channel.setVerbose(verbose);
         channel.setWorlds(worlds);
         channel.setBans(bans);
         channel.setMutes(mutes);
@@ -126,6 +128,7 @@ public class YMLChannelStorage implements ChannelStorage {
             config.set("color", channel.getColor().name());
             config.set("distance", channel.getDistance());
             config.set("shortcutAllowed", channel.isShortcutAllowed());
+            config.set("verbose", channel.isVerbose());
             config.set("worlds", new ArrayList<String>(channel.getWorlds()));
             config.set("bans", new ArrayList<String>(channel.getBans()));
             config.set("mutes", new ArrayList<String>(channel.getMutes()));

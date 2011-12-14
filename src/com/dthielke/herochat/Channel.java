@@ -70,6 +70,9 @@ public interface Channel {
 
     public boolean isTransient();
 
+
+    public boolean isVerbose();
+
     public boolean kickMember(Chatter chatter, boolean announce);
 
     public void processChat(PlayerChatEvent event);
@@ -101,6 +104,8 @@ public interface Channel {
     public void setPassword(String password);
 
     public void setShortcutAllowed(boolean shortcutAllowed);
+
+    public void setVerbose(boolean verbose);
 
     public void setWorlds(Set<String> worlds);
 }
