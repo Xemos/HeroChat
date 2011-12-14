@@ -5,10 +5,12 @@
 package com.dthielke.herochat.command.commands;
 
 import com.dthielke.herochat.Channel;
+import com.dthielke.herochat.Chatter;
 import com.dthielke.herochat.Chatter.Permission;
 import com.dthielke.herochat.HeroChat;
 import com.dthielke.herochat.command.BasicCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,10 @@ public class ListCommand extends BasicCommand {
             }
         }
 
+        Chatter chatter = null;
+        if (sender instanceof Player)
+            chatter = HeroChat.getChatterManager().getChatter((Player) sender);
+
         int numPages = channels.size() / CHANNELS_PER_PAGE;
         if (channels.size() % CHANNELS_PER_PAGE != 0) {
             numPages++;
@@ -59,7 +65,10 @@ public class ListCommand extends BasicCommand {
         }
         for (int c = start; c < end; c++) {
             Channel channel = channels.get(c);
-            sender.sendMessage(channel.getColor() + "  [" + channel.getNick() + "] " + channel.getName());
+            String line = channel.getColor() + "  [" + channel.getNick() + "] " + channel.getName();
+            if (chatter != null && channel.isMember(chatter))
+                line += "*";
+            sender.sendMessage(line);
         }
         return true;
     }

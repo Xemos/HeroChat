@@ -44,12 +44,14 @@ public class YMLChatterStorage implements ChatterStorage {
         if (activeChannel == null)
             activeChannel = defaultChannel;
         Set<Channel> channels = new HashSet<Channel>();
+        config.addDefault("channels", new ArrayList<String>());
         List<String> channelNames = config.getStringList("channels");
         for (String channelName : channelNames) {
             Channel channel = channelManager.getChannel(channelName);
             if (channel != null)
                 channels.add(channel);
         }
+        config.addDefault("ignores", new ArrayList<String>());
         List<String> ignores = config.getStringList("ignores");
         boolean muted = config.getBoolean("muted", false);
 
@@ -86,7 +88,8 @@ public class YMLChatterStorage implements ChatterStorage {
         File file = new File(folder, name + ".yml");
         FileConfiguration config = new YamlConfiguration();
         try {
-            config.load(file);
+            if (file.exists())
+                config.load(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidConfigurationException e) {

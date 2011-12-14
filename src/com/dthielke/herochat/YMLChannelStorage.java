@@ -53,6 +53,10 @@ public class YMLChannelStorage implements ChannelStorage {
         }
         int distance = config.getInt("distance", 0);
         boolean shortcutAllowed = config.getBoolean("shortcutAllowed", false);
+        config.addDefault("worlds", new ArrayList<String>());
+        config.addDefault("bans", new ArrayList<String>());
+        config.addDefault("mutes", new ArrayList<String>());
+        config.addDefault("moderators", new ArrayList<String>());
         Set<String> worlds = new HashSet<String>(config.getStringList("worlds"));
         Set<String> bans = new HashSet<String>(config.getStringList("bans"));
         Set<String> mutes = new HashSet<String>(config.getStringList("mutes"));
