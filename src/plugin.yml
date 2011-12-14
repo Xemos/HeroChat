@@ -11,7 +11,7 @@ commands:
     description: Root HeroChat command
     usage: /<command>
   msg:
-    aliases: ['tell']
+    aliases: ['tell', 'pm']
     description: Private messaging command
     usage: /<command> <player> <message>
   ignore:
