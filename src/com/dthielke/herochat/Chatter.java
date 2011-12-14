@@ -11,6 +11,8 @@ public interface Chatter {
 
     public Result canBan(Channel channel);
 
+    public Result canColorMessages(Channel channel);
+
     public Result canJoin(Channel channel, String password);
 
     public Result canKick(Channel channel);
@@ -24,8 +26,6 @@ public interface Chatter {
     public Result canRemove(Channel channel);
 
     public Result canSpeak(Channel channel);
-
-    public Result canColorMessages(Channel channel);
 
     public Result canViewInfo(Channel channel);
 
@@ -59,6 +59,8 @@ public interface Chatter {
 
     public void setMuted(boolean muted);
 
+    public boolean shouldAutoJoin(Channel channel);
+
     public enum Permission {
         JOIN("join"),
         LEAVE("leave"),
@@ -69,6 +71,7 @@ public interface Chatter {
         REMOVE("remove"),
         COLOR("color"),
         INFO("info"),
+        AUTOJOIN("autojoin"),
         MODIFY_NICK("modify.nick"),
         MODIFY_COLOR("modify.color"),
         MODIFY_DISTANCE("modify.distance"),

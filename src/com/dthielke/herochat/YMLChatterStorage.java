@@ -1,14 +1,17 @@
 package com.dthielke.herochat;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class YMLChatterStorage implements ChatterStorage {
-    private Map<Chatter, Configuration> configs = new HashMap<Chatter, Configuration>();
+    private Map<Chatter, FileConfiguration> configs = new HashMap<Chatter, FileConfiguration>();
     private Set<Chatter> updates = new HashSet<Chatter>();
     private final File chatterFolder;
 
@@ -21,8 +24,15 @@ public class YMLChatterStorage implements ChatterStorage {
         File folder = new File(chatterFolder, name.substring(0, 1).toLowerCase());
         folder.mkdirs();
         File file = new File(folder, name + ".yml");
-        Configuration config = new Configuration(file);
-        config.load();
+        FileConfiguration config = new YamlConfiguration();
+        try {
+            if (file.exists())
+                config.load(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
 
         Player player = Bukkit.getServer().getPlayer(name);
         if (player == null)
@@ -34,18 +44,27 @@ public class YMLChatterStorage implements ChatterStorage {
         if (activeChannel == null)
             activeChannel = defaultChannel;
         Set<Channel> channels = new HashSet<Channel>();
-        List<String> channelNames = config.getStringList("channels", null);
+        List<String> channelNames = config.getStringList("channels");
         for (String channelName : channelNames) {
             Channel channel = channelManager.getChannel(channelName);
             if (channel != null)
                 channels.add(channel);
         }
-        if (channels.isEmpty())
-            channels.add(defaultChannel);
-        List<String> ignores = config.getStringList("ignores", null);
+        List<String> ignores = config.getStringList("ignores");
         boolean muted = config.getBoolean("muted", false);
 
         Chatter chatter = new StandardChatter(this, player);
+        // add "auto" channels on first join
+        if (channels.isEmpty()) {
+            for (Channel channel : channelManager.getChannels()) {
+                if (chatter.shouldAutoJoin(channel)) {
+                    channels.add(channel);
+                }
+            }
+        }
+        // if it's STILL empty, add the default channel
+        if (channels.isEmpty())
+            channels.add(defaultChannel);
         chatter.setActiveChannel(defaultChannel, false);
         chatter.setActiveChannel(activeChannel, false); // done twice to set the last active channel
         for (Channel channel : channels)
@@ -65,8 +84,14 @@ public class YMLChatterStorage implements ChatterStorage {
         File folder = new File(chatterFolder, name.substring(0, 1).toLowerCase());
         folder.mkdirs();
         File file = new File(folder, name + ".yml");
-        Configuration config = new Configuration(file);
-        config.load();
+        FileConfiguration config = new YamlConfiguration();
+        try {
+            config.load(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
         configs.put(chatter, config);
         flagUpdate(chatter);
     }
@@ -84,20 +109,27 @@ public class YMLChatterStorage implements ChatterStorage {
 
     @Override
     public void update(Chatter chatter) {
-        Configuration config = configs.get(chatter);
+        FileConfiguration config = configs.get(chatter);
         if (config != null) {
-            config.setProperty("name", chatter.getName());
+            String name = chatter.getName();
+            config.set("name", name);
             if (chatter.getActiveChannel().isTransient())
-                config.setProperty("activeChannel", chatter.getLastActiveChannel().getName());
+                config.set("activeChannel", chatter.getLastActiveChannel().getName());
             else
-                config.setProperty("activeChannel", chatter.getActiveChannel().getName());
+                config.set("activeChannel", chatter.getActiveChannel().getName());
             List<String> channels = new ArrayList<String>();
             for (Channel channel : chatter.getChannels())
                 channels.add(channel.getName());
-            config.setProperty("channels", channels);
-            config.setProperty("ignores", new ArrayList<String>(chatter.getIgnores()));
-            config.setProperty("muted", chatter.isMuted());
-            config.save();
+            config.set("channels", channels);
+            config.set("ignores", new ArrayList<String>(chatter.getIgnores()));
+            config.set("muted", chatter.isMuted());
+            File folder = new File(chatterFolder, name.substring(0, 1).toLowerCase());
+            File file = new File(folder, name + ".yml");
+            try {
+                config.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         updates.remove(chatter);
     }

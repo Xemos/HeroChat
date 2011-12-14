@@ -61,6 +61,11 @@ public class StandardChatter implements Chatter {
     }
 
     @Override
+    public boolean shouldAutoJoin(Channel channel) {
+        return HeroChat.getPermissionService().has(player, Permission.AUTOJOIN.form(channel));
+    }
+
+    @Override
     public void setMuted(boolean muted) {
         this.muted = muted;
         storage.flagUpdate(this);
