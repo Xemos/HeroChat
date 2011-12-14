@@ -23,8 +23,13 @@ public class HeroChat extends JavaPlugin {
     private static final MessageHandler messageHandler = new MessageHandler();
     private static Chat chatService;
     private static Permission permissionService;
+    private static HeroChat plugin;
 
     private final ConfigManager configManager = new ConfigManager();
+
+    public static HeroChat getPlugin() {
+        return plugin;
+    }
 
     public static Chat getChatService() {
         return chatService;
@@ -68,6 +73,8 @@ public class HeroChat extends JavaPlugin {
     @Override
     public void onEnable() {
         log.info(getDescription().getName() + " version " + getDescription().getVersion() + " is enabled.");
+
+        plugin = this;
 
         registerCommands();
         registerEvents();

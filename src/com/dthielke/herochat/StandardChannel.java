@@ -1,6 +1,8 @@
 package com.dthielke.herochat;
 
+import com.dthielke.herochat.util.Messaging;
 import net.milkbowl.vault.chat.Chat;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -352,7 +354,7 @@ public class StandardChannel implements Channel {
 
     @Override
     public void processChat(PlayerChatEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         String senderName = player.getName();
         Chatter sender = HeroChat.getChatterManager().getChatter(player);
 
@@ -369,6 +371,15 @@ public class StandardChannel implements Channel {
             } else if (recipient.isIgnoring(senderName)) {
                 iter.remove();
             }
+        }
+
+        if (recipients.size() == 1 && isLocal()) {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HeroChat.getPlugin(), new Runnable() {
+                @Override
+                public void run() {
+                    Messaging.send(player, "No one hears you.");
+                }
+            }, 1L);
         }
 
         event.setFormat(applyFormat(format, event.getFormat(), player));
