@@ -373,13 +373,21 @@ public class StandardChannel implements Channel {
             }
         }
 
-        if (recipients.size() == 1 && isLocal()) {
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HeroChat.getPlugin(), new Runnable() {
-                @Override
-                public void run() {
-                    Messaging.send(player, "No one hears you.");
-                }
-            }, 1L);
+        if (isLocal()) {
+            int visibleRecipients = 0;
+            for (Player recipient : recipients) {
+                if (!HeroChat.getPermissionService().has(player, "herochat.admin.stealth"))
+                    visibleRecipients++;
+            }
+
+            if (visibleRecipients <= 1 && isLocal()) {
+                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HeroChat.getPlugin(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Messaging.send(player, "No one hears you.");
+                    }
+                }, 1L);
+            }
         }
 
         event.setFormat(applyFormat(format, event.getFormat(), player));
